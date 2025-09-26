@@ -1,5 +1,5 @@
 package functions;
 
-public interface MuthFunction {
+public interface MathFunction {
     double apply(double x);
 }
