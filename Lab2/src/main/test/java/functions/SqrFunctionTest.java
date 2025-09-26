@@ -1,6 +1,8 @@
-package functions;
+package java.functions;
 
+import functions.SqrFunction;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SqrFunctionTest {
