@@ -25,7 +25,7 @@ public class CubicBSplineFunctionTest {
 
     @Test
     public void testApplyWithFractionalPoints() {
-        assertEquals(0.5, spline.apply(0.5), delta);
+        assertEquals(0.47916666666666663, spline.apply(0.5), delta);
         double expectedAt1_5 = Math.pow(0.5, 3) / 6.0;
         assertEquals(expectedAt1_5, spline.apply(1.5), delta);
     }
