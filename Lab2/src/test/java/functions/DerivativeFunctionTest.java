@@ -1,3 +1,5 @@
+package java.functions;
+
 import functions.DerivativeFunction;
 import functions.MathFunction;
 import functions.SqrFunction;

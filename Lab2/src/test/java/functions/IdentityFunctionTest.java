@@ -1,3 +1,5 @@
+package java.functions;
+
 import functions.IdentityFunction;
 import functions.MathFunction;
 import org.junit.jupiter.api.Test;
