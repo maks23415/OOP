@@ -5,23 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/TabulatedFunction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CompositeFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CompositeFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ConstantFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ConstantFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CubicBSplineFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CubicBSplineFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/DerivativeFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/DerivativeFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/IdentityFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/IdentityFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/MathFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/MathFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/SqrFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/SqrFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/UnitFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/UnitFunctionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ZeroFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ZeroFunctionTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,6 +34,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.CubicBSplineFunctionTest.testApplyWithFractionalPoints.executor": "Debug",
+    "JUnit.DerivativeFunctionTest.executor": "Run",
     "JUnit.java in Lab_2.0.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
