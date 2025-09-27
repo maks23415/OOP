@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-class ConstantFunctionTest {
+public class ConstantFunctionTest {
 
     private ConstantFunction constantFunction;
 

@@ -1,7 +1,7 @@
 package functions;
 
-public class DerivativeFunction implements  MathFunction{
-    private  MathFunction originalFunction;
+public class DerivativeFunction implements MathFunction {
+    private MathFunction originalFunction;
     private double deltaX;
 
     public  DerivativeFunction(MathFunction originalFunction, double deltaX)

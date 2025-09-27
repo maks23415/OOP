@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ZeroFunctionTest {
+public class ZeroFunctionTest {
 
     private ZeroFunction zeroFunction;
 
