@@ -1,4 +1,4 @@
-package java.functions;
+package functions;
 
 import functions.ConstantFunction;
 import functions.DerivativeFunction;

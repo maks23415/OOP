@@ -1,4 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PropertiesComponent">{}</component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CompositeFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CompositeFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ConstantFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ConstantFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CubicBSplineFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/CubicBSplineFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/DerivativeFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/DerivativeFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/IdentityFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/IdentityFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/MathFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/MathFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/SqrFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/SqrFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/UnitFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/UnitFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ZeroFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ZeroFunctionTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="33HhHo7Td3F10kpTHaV67HJ9kkC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.java in Lab_2.0.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="JUnit.java in Lab_2.0">
+    <configuration name="DerivativeFunctionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Lab_2.0" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="functions.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="functions" />
+      <option name="MAIN_CLASS_NAME" value="functions.DerivativeFunctionTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in Lab_2.0" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Lab_2.0" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/LAB_2.0/src/test/java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.java in Lab_2.0" />
+        <item itemvalue="JUnit.DerivativeFunctionTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="" />
+      <created>1758979820419</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758979820419</updated>
+    </task>
+    <servers />
+  </component>
 </project>

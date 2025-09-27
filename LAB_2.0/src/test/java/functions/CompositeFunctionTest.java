@@ -1,3 +1,5 @@
+package functions;
+
 import functions.CompositeFunction;
 import functions.IdentityFunction;
 import functions.MathFunction;

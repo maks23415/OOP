@@ -1,4 +1,4 @@
-package java.functions;
+package functions;
 
 import functions.CubicBSplineFunction;
 import org.junit.jupiter.api.Test;

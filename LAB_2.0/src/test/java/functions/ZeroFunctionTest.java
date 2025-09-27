@@ -1,4 +1,4 @@
-package java.functions;
+package functions;
 
 import functions.ZeroFunction;
 import org.junit.jupiter.api.Assertions;

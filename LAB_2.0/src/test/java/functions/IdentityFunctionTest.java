@@ -1,4 +1,4 @@
-package java.functions;
+package functions;
 
 import functions.IdentityFunction;
 import functions.MathFunction;
