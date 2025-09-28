@@ -2,7 +2,7 @@ package functions;
 
 import java.util.Arrays;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable
 {
     private double[] xValues;
     private double[] yValues;
@@ -250,5 +250,17 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             return leftY;
         }
         return leftY + (x - leftX) * (rightY - leftY) / (rightX - leftX);
+    }
+    @Override
+    public void remove(int index) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+
+        for (int i = index; i < count - 1; i++) {
+            xValues[i] = xValues[i + 1];
+            yValues[i] = yValues[i + 1];
+        }
+        count--;
     }
 }
