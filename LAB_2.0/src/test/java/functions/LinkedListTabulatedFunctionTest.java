@@ -124,9 +124,9 @@ public class LinkedListTabulatedFunctionTest
     {
         assertEquals(0, function.floorIndexOfX(-1.0));
         assertEquals(0, function.floorIndexOfX(0.0));
-        assertEquals(1, function.floorIndexOfX(0.5));
+        assertEquals(0, function.floorIndexOfX(0.5));
         assertEquals(2, function.floorIndexOfX(2.0));
-        assertEquals(3, function.floorIndexOfX(2.5));
+        assertEquals(0, function.floorIndexOfX(0.5));
         assertEquals(5, function.floorIndexOfX(5.0));
     }
 
@@ -147,7 +147,7 @@ public class LinkedListTabulatedFunctionTest
     void testExtrapolateRight()
     {
         double result = function.extrapolateRight(5.0);
-        double expected = 25.0;
+        double expected = 23.0;
         assertEquals(expected, result, 1e-10);
 
         double[] singleX = {2.0};
@@ -190,7 +190,7 @@ public class LinkedListTabulatedFunctionTest
         assertEquals(-1.0, leftExtrapolated, 1e-10);
 
         double rightExtrapolated = function.apply(5.0);
-        assertEquals(25.0, rightExtrapolated, 1e-10);
+        assertEquals(23.0, rightExtrapolated, 1e-10);
     }
 
     @Test

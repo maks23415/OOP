@@ -219,12 +219,12 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction
             }
             if (current.x > x)
             {
-                return i;
+                return i - 1;  // ← ИСПРАВЛЕНИЕ: возвращаем предыдущий индекс
             }
             current = current.next;
         }
 
-        return count;
+        return count - 1;
     }
 
     @Override
