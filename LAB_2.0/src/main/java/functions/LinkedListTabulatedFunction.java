@@ -1,6 +1,6 @@
 package functions;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable
 {
 
     private static class Node
@@ -14,6 +14,8 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction
         {
             this.x = x;
             this.y = y;
+        }
+        public Node() {
         }
     }
 
@@ -270,5 +272,43 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY)
     {
         return leftY + (rightY - leftY) * (x - leftX) / (rightX - leftX);
+    }
+    @Override
+    public void insert(double x, double y) {
+        if (head == null) {
+            addNode(x, y);
+            return;
+        }
+
+        Node current = head;
+        do {
+            if (Math.abs(current.x - x) < 1e-10) {
+                current.y = y;
+                return;
+            }
+            if (current.x > x) {
+                break;
+            }
+            current = current.next;
+        } while (current != head);
+
+        Node newNode = new Node(x, y);
+
+        if (x < head.x) {
+            Node last = head.prev;
+            newNode.next = head;
+            newNode.prev = last;
+            head.prev = newNode;
+            last.next = newNode;
+            head = newNode;
+            count++;
+        } else {
+            Node prevNode = current.prev;
+            newNode.next = current;
+            newNode.prev = prevNode;
+            prevNode.next = newNode;
+            current.prev = newNode;
+            count++;
+        }
     }
 }
