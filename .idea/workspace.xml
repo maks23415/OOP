@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/Insertable.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/Insertable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/LinkedListTabulatedFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/LinkedListTabulatedFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/LinkedListTabulatedFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/LinkedListTabulatedFunctionTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +64,7 @@
       <recent name="functions" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in Lab_2.0">
+  <component name="RunManager" selected="JUnit.java in Lab_2.0">
     <configuration name="All in Lab_2.0" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Lab_2.0" />
       <option name="PACKAGE_NAME" value="" />
@@ -128,9 +129,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.java in Lab_2.0" />
         <item itemvalue="JUnit.All in Lab_2.0" />
         <item itemvalue="JUnit.LinkedListTabulatedFunctionTest" />
-        <item itemvalue="JUnit.java in Lab_2.0" />
         <item itemvalue="JUnit.LinkedListTabulatedFunctionTest.testComplexScenarios" />
         <item itemvalue="JUnit.DerivativeFunctionTest" />
       </list>

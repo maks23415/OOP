@@ -311,4 +311,35 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             count++;
         }
     }
+    @Override
+    public void remove(int index) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("Индекс за пределами допустимого диапазона: " + index);
+        }
+
+        if (count == 1) {
+            head = null;
+            count = 0;
+            return;
+        }
+
+        Node nodeToRemove = getNode(index);
+
+        if (nodeToRemove == head) {
+            head = head.next;
+        }
+
+        Node prevNode = nodeToRemove.prev;
+        Node nextNode = nodeToRemove.next;
+
+        prevNode.next = nextNode;
+        nextNode.prev = prevNode;
+
+        count--;
+
+        if (count == 0) {
+            head = null;
+        }
+    }
+
 }
