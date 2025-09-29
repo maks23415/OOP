@@ -15,8 +15,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             this.x = x;
             this.y = y;
         }
-        public Node() {
-        }
     }
 
     private Node head;
