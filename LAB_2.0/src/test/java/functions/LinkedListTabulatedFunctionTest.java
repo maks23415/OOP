@@ -466,4 +466,66 @@ public class LinkedListTabulatedFunctionTest
         assertEquals(expected, interpolated, 1e-10);
     }
 
+    @Test
+    void testEmptyListScenario() {
+        LinkedListTabulatedFunction empty = new LinkedListTabulatedFunction(new double[0], new double[0]);
+
+        assertEquals(0, empty.getCount());
+        assertEquals(-1, empty.indexOfX(1.0));
+        assertEquals(-1, empty.indexOfY(1.0));
+        assertEquals(0, empty.floorIndexOfX(1.0));
+        assertThrows(IllegalStateException.class, () -> empty.leftBound());
+        assertThrows(IllegalStateException.class, () -> empty.rightBound());
+    }
+
+    @Test
+    void testAllInvalidIndices() {
+        assertThrows(IllegalArgumentException.class, () -> function.getX(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.getX(5));
+        assertThrows(IllegalArgumentException.class, () -> function.getY(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.getY(5));
+        assertThrows(IllegalArgumentException.class, () -> function.setY(-1, 1.0));
+        assertThrows(IllegalArgumentException.class, () -> function.setY(5, 1.0));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(-1));
+        assertThrows(IllegalArgumentException.class, () -> function.remove(5));
+    }
+
+    @Test
+    void testFloorIndexOfXAllBranches() {
+        assertEquals(0, function.floorIndexOfX(-1.0));  // x < head.x
+        assertEquals(0, function.floorIndexOfX(0.0));   // x == head.x
+        assertEquals(4, function.floorIndexOfX(4.0));   // x == last.x
+        assertEquals(5, function.floorIndexOfX(5.0));   // x > last.x
+        assertEquals(2, function.floorIndexOfX(2.0));   // точное совпадение
+        assertEquals(1, function.floorIndexOfX(1.5));   // между узлами
+    }
+
+    @Test
+    void testInterpolateWithInvalidFloorIndex() {
+        assertThrows(IllegalArgumentException.class, () -> function.interpolate(1.5, -1));
+        assertThrows(IllegalArgumentException.class, () -> function.interpolate(1.5, 4));
+        assertThrows(IllegalArgumentException.class, () -> function.interpolate(1.5, 5));
+    }
+
+    @Test
+    void testConstructorWithSinglePointMathFunction() {
+        MathFunction sqr = new SqrFunction();
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(sqr, 2.0, 2.0, 1);
+
+        assertEquals(1, func.getCount());
+        assertEquals(2.0, func.getX(0), 1e-10);
+        assertEquals(4.0, func.getY(0), 1e-10);
+    }
+
+    @Test
+    void testExtrapolateTwoPoints() {
+        double[] twoPointsX = {1.0, 2.0};
+        double[] twoPointsY = {1.0, 2.0};
+        LinkedListTabulatedFunction twoPointFunc = new LinkedListTabulatedFunction(twoPointsX, twoPointsY);
+
+        assertEquals(0.0, twoPointFunc.extrapolateLeft(0.0), 1e-10);
+        assertEquals(3.0, twoPointFunc.extrapolateRight(3.0), 1e-10);
+    }
+
+
 }

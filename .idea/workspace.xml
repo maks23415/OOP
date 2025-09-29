@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/Insertable.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/Insertable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/LinkedListTabulatedFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/LinkedListTabulatedFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/LinkedListTabulatedFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/LinkedListTabulatedFunctionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,13 +37,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All in Lab_2.0.executor": "Run",
+    "JUnit.All in Lab_2.0.executor": "Debug",
+    "JUnit.ArrayTabulatedFunctionTest.executor": "Run",
     "JUnit.CubicBSplineFunctionTest.testApplyWithFractionalPoints.executor": "Debug",
     "JUnit.DerivativeFunctionTest.executor": "Run",
     "JUnit.LinkedListTabulatedFunctionTest.executor": "Run",
     "JUnit.LinkedListTabulatedFunctionTest.testApply.executor": "Debug",
     "JUnit.LinkedListTabulatedFunctionTest.testComplexScenarios.executor": "Run",
-    "JUnit.java in Lab_2.0.executor": "Run",
+    "JUnit.functions in Lab_2.0.executor": "Debug",
+    "JUnit.java in Lab_2.0.executor": "Coverage",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -73,7 +74,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DerivativeFunctionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ArrayTabulatedFunctionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Lab_2.0" />
       <extension name="coverage">
         <pattern>
@@ -82,7 +83,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="functions" />
-      <option name="MAIN_CLASS_NAME" value="functions.DerivativeFunctionTest" />
+      <option name="MAIN_CLASS_NAME" value="functions.ArrayTabulatedFunctionTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -103,18 +104,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LinkedListTabulatedFunctionTest.testComplexScenarios" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="functions in Lab_2.0" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Lab_2.0" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="functions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="functions" />
-      <option name="MAIN_CLASS_NAME" value="functions.LinkedListTabulatedFunctionTest" />
-      <option name="METHOD_NAME" value="testComplexScenarios" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/LAB_2.0/src/test/java/functions" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -130,10 +123,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.java in Lab_2.0" />
+        <item itemvalue="JUnit.ArrayTabulatedFunctionTest" />
+        <item itemvalue="JUnit.functions in Lab_2.0" />
         <item itemvalue="JUnit.All in Lab_2.0" />
         <item itemvalue="JUnit.LinkedListTabulatedFunctionTest" />
-        <item itemvalue="JUnit.LinkedListTabulatedFunctionTest.testComplexScenarios" />
-        <item itemvalue="JUnit.DerivativeFunctionTest" />
       </list>
     </recent_temporary>
   </component>
@@ -146,5 +139,9 @@
       <updated>1758979820419</updated>
     </task>
     <servers />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/OOP$functions_in_Lab_2_0.ic" NAME="functions in Lab_2.0 Coverage Results" MODIFIED="1759155145459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/OOP$java_in_Lab_2_0.ic" NAME="java in Lab_2.0 Coverage Results" MODIFIED="1759157945319" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

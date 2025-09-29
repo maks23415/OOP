@@ -251,16 +251,24 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
         return leftY + (x - leftX) * (rightY - leftY) / (rightX - leftX);
     }
+
     @Override
     public void remove(int index) {
         if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Invalid index");
+            throw new IllegalArgumentException("Invalid index: " + index);
         }
 
-        for (int i = index; i < count - 1; i++) {
-            xValues[i] = xValues[i + 1];
-            yValues[i] = yValues[i + 1];
+        if (index < count - 1) {
+            System.arraycopy(xValues, index + 1, xValues, index, count - index - 1);
+            System.arraycopy(yValues, index + 1, yValues, index, count - index - 1);
         }
+
+        if (count > 0) {
+            xValues[count - 1] = 0;
+            yValues[count - 1] = 0;
+        }
+
+
         count--;
     }
 }
