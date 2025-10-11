@@ -1,8 +1,8 @@
 package functions;
 
 import exceptions.InterpolationException;
-import exceptions.ArrayIsNotSortedException;
-import exceptions.DifferentLengthOfArraysException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable
 {
@@ -342,6 +342,30 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         if (count == 0) {
             head = null;
         }
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private Node currentNode = head;
+            private int elementsReturned = 0;
+
+            @Override
+            public boolean hasNext() {
+                return elementsReturned < count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("Нет элементов");
+                }
+                Point point = new Point(currentNode.x, currentNode.y);
+                currentNode = currentNode.next;
+                elementsReturned++;
+                return point;
+            }
+        };
     }
 
 }

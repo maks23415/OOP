@@ -5,6 +5,7 @@ import exceptions.ArrayIsNotSortedException;
 import exceptions.DifferentLengthOfArraysException;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable
 {
@@ -267,5 +268,9 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
 
         count--;
+    }
+    @Override
+    public Iterator<Point> iterator() {
+        throw new UnsupportedOperationException();
     }
 }
