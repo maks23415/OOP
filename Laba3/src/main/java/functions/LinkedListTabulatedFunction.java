@@ -3,7 +3,7 @@ package functions;
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable
 {
 
-    private static class Node
+    public static class Node
     {
         public double x;
         public double y;
