@@ -1,5 +1,9 @@
 package functions;
 
+import exceptions.InterpolationException;
+import exceptions.ArrayIsNotSortedException;
+import exceptions.DifferentLengthOfArraysException;
+
 import java.util.Arrays;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable
@@ -13,27 +17,19 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues)
     {
-        if (xValues.length < 2)
-        {
-            throw new IllegalArgumentException("Длина таблицы меньше минимальной");
+        if (xValues.length < 2) {
+            throw new IllegalArgumentException("Длина должна быть 2");
         }
-        if (xValues.length != yValues.length)
-        {
-            throw new IllegalArgumentException("Число X должно быть ровно Y");
-        }
-
-        for (int i = 1; i < xValues.length; i++)
-        {
-            if (xValues[i] <= xValues[i - 1])
-            {
-                throw new IllegalArgumentException("Значение X должно увеличиваться");
-            }
-        }
+        checkLengthIsTheSame(xValues, yValues);
+        checkSorted(xValues);
 
         this.count = xValues.length;
         this.capacity = Math.max(count * 2, INITIAL_CAPACITY);
         this.xValues = Arrays.copyOf(xValues, capacity);
         this.yValues = Arrays.copyOf(yValues, capacity);
+        System.arraycopy(xValues, 0, this.xValues, 0, count);
+        System.arraycopy(yValues, 0, this.yValues, 0, count);
+
     }
 
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count)
@@ -235,6 +231,10 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         if (floorIndex < 0 || floorIndex >= count - 1) {
             throw new IllegalArgumentException("Некорректный floorIndex: " + floorIndex);
         }
+        if (x < xValues[floorIndex] || x > xValues[floorIndex + 1]) {
+            throw new InterpolationException("x вышел за пределы interpolation");
+        }
+
         return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
                 yValues[floorIndex], yValues[floorIndex + 1]);
     }

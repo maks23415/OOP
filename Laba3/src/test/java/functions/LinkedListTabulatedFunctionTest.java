@@ -1,5 +1,6 @@
 package functions;
 
+import exceptions.DifferentLengthOfArraysException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +21,7 @@ public class LinkedListTabulatedFunctionTest
 
         double[] shortX = {1.0, 2.0};
         double[] longY = {1.0, 2.0, 3.0};
-        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(shortX, longY));
+        assertThrows(DifferentLengthOfArraysException.class, () -> new LinkedListTabulatedFunction(shortX, longY));
         double[] singleX = {1.0};
         double[] singleY = {2.0};
         assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(singleX, singleY));

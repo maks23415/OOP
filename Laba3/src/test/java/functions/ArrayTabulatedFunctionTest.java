@@ -1,5 +1,7 @@
 package functions;
-
+import exceptions.ArrayIsNotSortedException;
+import exceptions.DifferentLengthOfArraysException;
+import exceptions.InterpolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +45,7 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {2, 1};
         double[] yValues = {2, 3};
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(ArrayIsNotSortedException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
     }
@@ -412,7 +414,7 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {1, 2, 3};
         double[] yValues = {1, 2};
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(DifferentLengthOfArraysException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
     }
@@ -422,7 +424,7 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {1, 3, 2, 4};
         double[] yValues = {1, 2, 3, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(ArrayIsNotSortedException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
     }
@@ -432,7 +434,7 @@ public class ArrayTabulatedFunctionTest {
         double[] xValues = {1, 2, 2, 4};
         double[] yValues = {1, 2, 3, 4};
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(ArrayIsNotSortedException.class, () -> {
             new ArrayTabulatedFunction(xValues, yValues);
         });
     }
@@ -677,7 +679,7 @@ public class ArrayTabulatedFunctionTest {
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
 
         double result = function.extrapolateRight(5.0);
-        double expected = function.interpolate(5.0, 2);
+        double expected = function.interpolate(5.0, 3.0, 4.0, 9.0, 16.0);
         assertEquals(expected, result, 0.0001);
     }
 

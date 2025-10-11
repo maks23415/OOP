@@ -1,5 +1,9 @@
 package functions;
 
+import exceptions.InterpolationException;
+import exceptions.ArrayIsNotSortedException;
+import exceptions.DifferentLengthOfArraysException;
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable
 {
 
@@ -22,18 +26,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues)
     {
-        if (xValues.length<2)
-        {
-            throw new IllegalArgumentException("Длина меньше минимальной 2 точки");
+        if (xValues.length < 2) {
+            throw new IllegalArgumentException("Длина должна быть не менее 2");
         }
+        checkLengthIsTheSame(xValues, yValues);
+        checkSorted(xValues);
 
-        if (xValues.length != yValues.length)
-        {
-            throw new IllegalArgumentException("Должны быть одинаковыми");
-        }
-
-        for (int i = 0; i < xValues.length; i++)
-        {
+        for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
     }
@@ -265,7 +264,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
         Node leftNode = getNode(floorIndex);
         Node rightNode = getNode(floorIndex + 1);
-
+        if (x < leftNode.x || x > rightNode.x) {
+            throw new InterpolationException("x вышел за пределы interpolation");
+        }
         return interpolate(x, leftNode.x, rightNode.x, leftNode.y, rightNode.y);
     }
 
