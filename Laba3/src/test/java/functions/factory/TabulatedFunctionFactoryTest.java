@@ -119,7 +119,7 @@ public class TabulatedFunctionFactoryTest {
         TabulatedFunction func1 = arrayFactory.create(x1, y1);
         TabulatedFunction func2 = arrayFactory.create(x2, y2);
 
-        assertNotSame(func1, func2, "Factory should create new instances each time");
+        assertNotSame(func1, func2, "фабрика должна создавать новые экземпляры");
 
         assertEquals(1.0, func1.getX(0));
         assertEquals(3.0, func2.getX(0));

@@ -60,6 +60,19 @@ public class TabulatedFunctionOperationService {
         return doOperation(a, b, (u, v) -> u - v);
     }
 
+    public TabulatedFunction multiply(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, (u, v) -> u * v);
+    }
+
+    public TabulatedFunction divide(TabulatedFunction a, TabulatedFunction b) {
+        return doOperation(a, b, (u, v) -> {
+            if (Math.abs(v) < 1e-10) {
+                throw new ArithmeticException("Деление на ноль");
+            }
+            return u / v;
+        });
+    }
+
 
     public static Point[] asPoints(TabulatedFunction tabulatedFunction) {
         Point[] points = new Point[tabulatedFunction.getCount()];
