@@ -21,6 +21,13 @@ public class LinkedListTabulatedFunctionTest
         double[] shortX = {1.0, 2.0};
         double[] longY = {1.0, 2.0, 3.0};
         assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(shortX, longY));
+        double[] singleX = {1.0};
+        double[] singleY = {2.0};
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(singleX, singleY));
+
+        double[] emptyX = {};
+        double[] emptyY = {};
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(emptyX, emptyY));
     }
 
     @Test
@@ -35,11 +42,11 @@ public class LinkedListTabulatedFunctionTest
         assertEquals(0.0, func.getY(0));
         assertEquals(16.0, func.getY(4));
 
-        LinkedListTabulatedFunction singlePoint = new LinkedListTabulatedFunction(sqr, 2.0, 2.0, 1);
-        assertEquals(1, singlePoint.getCount());
+        LinkedListTabulatedFunction singlePoint = new LinkedListTabulatedFunction(sqr, 2.0, 4.0, 2);
+        assertEquals(2, singlePoint.getCount());
         assertEquals(2.0, singlePoint.getX(0));
-        assertEquals(4.0, singlePoint.getY(0));
 
+        assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(sqr, 0, 1, 1));
         assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(sqr, 0, 1, 0));
         assertThrows(IllegalArgumentException.class, () -> new LinkedListTabulatedFunction(sqr, 0, 1, -1));
     }
@@ -122,12 +129,18 @@ public class LinkedListTabulatedFunctionTest
     @Test
     void testFloorIndexOfX()
     {
-        assertEquals(0, function.floorIndexOfX(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> function.floorIndexOfX(-1.0));
+
         assertEquals(0, function.floorIndexOfX(0.0));
         assertEquals(0, function.floorIndexOfX(0.5));
+        assertEquals(1, function.floorIndexOfX(1.0));
+        assertEquals(1, function.floorIndexOfX(1.5));
         assertEquals(2, function.floorIndexOfX(2.0));
-        assertEquals(0, function.floorIndexOfX(0.5));
-        assertEquals(5, function.floorIndexOfX(5.0));
+        assertEquals(2, function.floorIndexOfX(2.5));
+        assertEquals(3, function.floorIndexOfX(3.0));
+        assertEquals(3, function.floorIndexOfX(3.5));
+        assertEquals(4, function.floorIndexOfX(4.0));
+        assertEquals(4, function.floorIndexOfX(5.0));
     }
 
     @Test
@@ -137,10 +150,10 @@ public class LinkedListTabulatedFunctionTest
         double expected = -1.0;
         assertEquals(expected, result, 1e-10);
 
-        double[] singleX = {2.0};
-        double[] singleY = {4.0};
+        double[] singleX = {1.0, 2.0};
+        double[] singleY = {1.0, 2.0};
         LinkedListTabulatedFunction singleFunc = new LinkedListTabulatedFunction(singleX, singleY);
-        assertEquals(4.0, singleFunc.extrapolateLeft(1.0));
+        assertEquals(0.0, singleFunc.extrapolateLeft(0.0),1e-10 );
     }
 
     @Test
@@ -150,10 +163,12 @@ public class LinkedListTabulatedFunctionTest
         double expected = 23.0;
         assertEquals(expected, result, 1e-10);
 
-        double[] singleX = {2.0};
-        double[] singleY = {4.0};
-        LinkedListTabulatedFunction singleFunc = new LinkedListTabulatedFunction(singleX, singleY);
-        assertEquals(4.0, singleFunc.extrapolateRight(3.0));
+        double[] twoX = {1.0, 2.0};
+        double[] twoY = {1.0, 4.0};
+        LinkedListTabulatedFunction twoPointFunc = new LinkedListTabulatedFunction(twoX, twoY);
+        double rightResult = twoPointFunc.extrapolateRight(3.0);
+        double rightExpected = 7.0;
+        assertEquals(rightExpected, rightResult, 1e-10);
     }
 
     @Test
@@ -212,18 +227,12 @@ public class LinkedListTabulatedFunctionTest
     }
 
     @Test
-    void testEmptyFunction()
-    {
-        double[] singleX = {1.0};
-        double[] singleY = {2.0};
-        LinkedListTabulatedFunction singleFunc = new LinkedListTabulatedFunction(singleX, singleY);
-        assertEquals(1, singleFunc.getCount());
-        assertEquals(1.0, singleFunc.leftBound());
-        assertEquals(1.0, singleFunc.rightBound());
-    }
-    @Test
     void testInsertIntoEmptyList() {
-        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(new double[0], new double[0]);
+        double[] xValues = {1.0, 3.0};
+        double[] yValues = {1.0, 9.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        function.remove(0);
+        function.remove(0);
         function.insert(2.0, 4.0);
         assertEquals(1, function.getCount());
         assertEquals(2.0, function.getX(0));
@@ -323,15 +332,24 @@ public class LinkedListTabulatedFunctionTest
 
     @Test
     void testRemoveSingleElement() {
-        double[] xValues = {1.0};
-        double[] yValues = {1.0};
+        double[] xValues = {1.0, 2.0};
+        double[] yValues = {1.0, 4.0};
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         function.remove(0);
 
+        assertEquals(1, function.getCount());
+        assertEquals(2.0, function.getX(0), 1e-10);
+        assertEquals(4.0, function.getY(0), 1e-10);
+
+        assertEquals(2.0, function.leftBound(), 1e-10);
+        assertEquals(2.0, function.rightBound(), 1e-10);
+
+        function.remove(0);
+
         assertEquals(0, function.getCount());
-        assertThrows(IllegalStateException.class, () -> function.leftBound());
-        assertThrows(IllegalStateException.class, () -> function.rightBound());
+        assertThrows(IllegalStateException.class, function::leftBound);
+        assertThrows(IllegalStateException.class, function::rightBound);
     }
 
     @Test
@@ -466,17 +484,6 @@ public class LinkedListTabulatedFunctionTest
         assertEquals(expected, interpolated, 1e-10);
     }
 
-    @Test
-    void testEmptyListScenario() {
-        LinkedListTabulatedFunction empty = new LinkedListTabulatedFunction(new double[0], new double[0]);
-
-        assertEquals(0, empty.getCount());
-        assertEquals(-1, empty.indexOfX(1.0));
-        assertEquals(-1, empty.indexOfY(1.0));
-        assertEquals(0, empty.floorIndexOfX(1.0));
-        assertThrows(IllegalStateException.class, () -> empty.leftBound());
-        assertThrows(IllegalStateException.class, () -> empty.rightBound());
-    }
 
     @Test
     void testAllInvalidIndices() {
@@ -492,12 +499,12 @@ public class LinkedListTabulatedFunctionTest
 
     @Test
     void testFloorIndexOfXAllBranches() {
-        assertEquals(0, function.floorIndexOfX(-1.0));  // x < head.x
-        assertEquals(0, function.floorIndexOfX(0.0));   // x == head.x
-        assertEquals(4, function.floorIndexOfX(4.0));   // x == last.x
-        assertEquals(5, function.floorIndexOfX(5.0));   // x > last.x
-        assertEquals(2, function.floorIndexOfX(2.0));   // точное совпадение
-        assertEquals(1, function.floorIndexOfX(1.5));   // между узлами
+        assertThrows(IllegalArgumentException.class, () -> function.floorIndexOfX(-1.0));
+        assertEquals(0, function.floorIndexOfX(0.0));
+        assertEquals(4, function.floorIndexOfX(4.0));
+        assertEquals(4, function.floorIndexOfX(5.0));
+        assertEquals(2, function.floorIndexOfX(2.0));
+        assertEquals(1, function.floorIndexOfX(1.5));
     }
 
     @Test
@@ -510,11 +517,13 @@ public class LinkedListTabulatedFunctionTest
     @Test
     void testConstructorWithSinglePointMathFunction() {
         MathFunction sqr = new SqrFunction();
-        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(sqr, 2.0, 2.0, 1);
+        LinkedListTabulatedFunction func = new LinkedListTabulatedFunction(sqr, 2.0, 2.0, 2);
 
-        assertEquals(1, func.getCount());
+        assertEquals(2, func.getCount());
         assertEquals(2.0, func.getX(0), 1e-10);
+        assertEquals(4.0, func.getY(1), 1e-10);
         assertEquals(4.0, func.getY(0), 1e-10);
+        assertEquals(4.0, func.getY(1), 1e-10);
     }
 
     @Test
@@ -525,6 +534,12 @@ public class LinkedListTabulatedFunctionTest
 
         assertEquals(0.0, twoPointFunc.extrapolateLeft(0.0), 1e-10);
         assertEquals(3.0, twoPointFunc.extrapolateRight(3.0), 1e-10);
+    }
+
+    @Test
+    void testInterpolateWithLastIndex() {
+        assertThrows(IllegalArgumentException.class, () ->
+                function.interpolate(4.5, 4));
     }
 
 

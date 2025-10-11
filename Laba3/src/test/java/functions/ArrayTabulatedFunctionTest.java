@@ -94,9 +94,13 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testFloorIndexOfX() {
+        assertEquals(0, arrayFunction.floorIndexOfX(1.5));
+        assertEquals(0, arrayFunction.floorIndexOfX(1.5));
+        assertEquals(1, arrayFunction.floorIndexOfX(2.0));
         assertEquals(1, arrayFunction.floorIndexOfX(2.5));
-        assertEquals(0, arrayFunction.floorIndexOfX(0.5));
-        assertEquals(3, arrayFunction.floorIndexOfX(5));
+        assertEquals(2, arrayFunction.floorIndexOfX(3.0));
+        assertEquals(3, arrayFunction.floorIndexOfX(4.0));
+        assertEquals(3, arrayFunction.floorIndexOfX(5.0));
     }
 
     @Test
@@ -128,17 +132,17 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testInvalidSetYIndex() {
-        assertThrows(IndexOutOfBoundsException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 arrayFunction.setY(-1, 5));
-        assertThrows(IndexOutOfBoundsException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 arrayFunction.setY(10, 5));
     }
 
     @Test
     public void testInvalidGetIndex() {
-        assertThrows(IndexOutOfBoundsException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 arrayFunction.getX(-1));
-        assertThrows(IndexOutOfBoundsException.class, () ->
+        assertThrows(IllegalArgumentException.class, () ->
                 arrayFunction.getY(10));
     }
 
@@ -284,22 +288,23 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testInsertIntoSinglePointFunction() {
-        double[] singleX = {1.0};
-        double[] singleY = {10.0};
-        ArrayTabulatedFunction singleFunction = new ArrayTabulatedFunction(singleX, singleY);
+        double[] initialX = {1.0, 3.0};
+        double[] initialY = {10.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(initialX, initialY);
 
-        singleFunction.insert(2.0, 20.0);
-        assertEquals(2, singleFunction.getCount());
-        assertEquals(1.0, singleFunction.getX(0), 0.0001);
-        assertEquals(10.0, singleFunction.getY(0), 0.0001);
-        assertEquals(2.0, singleFunction.getX(1), 0.0001);
-        assertEquals(20.0, singleFunction.getY(1), 0.0001);
+        function.insert(2.0, 20.0);
+        assertEquals(3, function.getCount());
+        assertEquals(1.0, function.getX(0), 0.0001);
+        assertEquals(10.0, function.getY(0), 0.0001);
+        assertEquals(2.0, function.getX(1), 0.0001);
+        assertEquals(20.0, function.getY(1), 0.0001);
 
-        singleFunction.insert(1.5, 15.0);
-        assertEquals(3, singleFunction.getCount());
-        assertEquals(1.0, singleFunction.getX(0), 0.0001);
-        assertEquals(1.5, singleFunction.getX(1), 0.0001);
-        assertEquals(2.0, singleFunction.getX(2), 0.0001);
+        function.insert(1.5, 15.0);
+        assertEquals(4, function.getCount());
+        assertEquals(1.0, function.getX(0), 0.0001);
+        assertEquals(1.5, function.getX(1), 0.0001);
+        assertEquals(2.0, function.getX(2), 0.0001);
+        assertEquals(3.0, function.getX(3), 0.0001);
     }
 
     @Test
@@ -314,7 +319,9 @@ public class ArrayTabulatedFunctionTest {
         assertEquals(1, arrayFunction.indexOfX(2.0));
         assertEquals(3, arrayFunction.indexOfY(6.0));
 
-        assertEquals(0, arrayFunction.floorIndexOfX(0.5));
+        assertEquals(0, arrayFunction.floorIndexOfX(1.0));
+        assertEquals(0, arrayFunction.floorIndexOfX(1.5));
+        assertEquals(4, arrayFunction.floorIndexOfX(4.0));
         assertEquals(4, arrayFunction.floorIndexOfX(5.0));
     }
     @Test
@@ -374,15 +381,20 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     void testRemoveSingleElement() {
-        double[] xValues = {1.0};
-        double[] yValues = {2.0};
+        double[] xValues = {1.0, 2.0};
+        double[] yValues = {2.0, 4.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
 
         function.remove(0);
 
+        assertEquals(1, function.getCount());
+        assertEquals(2.0, function.getX(0), 1e-10);
+        assertEquals(4.0, function.getY(0), 1e-10);
+
+        function.remove(0);
         assertEquals(0, function.getCount());
-        // Проверим, что попытка получить элемент вызывает исключение
-        assertThrows(IndexOutOfBoundsException.class, () -> function.getX(0));
+
+        assertThrows(IllegalArgumentException.class, () -> function.getX(0));
     }
 
     @Test
@@ -463,28 +475,32 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testCapacityExpansionOnMultipleInsertions() {
-        double[] xValues = {1.0};
-        double[] yValues = {10.0};
+        double[] xValues = {1.0, 2.0};
+        double[] yValues = {10.0, 20.0};
         ArrayTabulatedFunction smallFunction = new ArrayTabulatedFunction(xValues, yValues);
 
-        for (int i = 2; i <= 20; i++) {
+        for (int i = 3; i <= 20; i++) {
             smallFunction.insert(i * 1.0, i * 10.0);
         }
 
         assertEquals(20, smallFunction.getCount());
         assertEquals(1.0, smallFunction.getX(0), 0.0001);
         assertEquals(20.0, smallFunction.getX(19), 0.0001);
+        assertEquals(10.0, smallFunction.getY(0), 0.0001);
+        assertEquals(200.0, smallFunction.getY(19), 0.0001);
     }
 
     @Test
     public void testApplyWithSinglePointFunction() {
-        double[] xValues = {5.0};
-        double[] yValues = {10.0};
-        ArrayTabulatedFunction singlePointFunction = new ArrayTabulatedFunction(xValues, yValues);
+        double[] xValues = {2.0, 5.0};
+        double[] yValues = {4.0, 10.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
 
-        assertEquals(10.0, singlePointFunction.apply(0), 0.0001);
-        assertEquals(10.0, singlePointFunction.apply(10), 0.0001);
-        assertEquals(10.0, singlePointFunction.apply(5), 0.0001);
+        assertEquals(4.0, function.apply(2.0), 0.0001);
+        assertEquals(10.0, function.apply(5.0), 0.0001);
+        assertEquals(7.0, function.apply(3.5), 0.0001);
+        assertEquals(0.0, function.apply(0.0), 0.0001);
+        assertEquals(16.0, function.apply(8.0), 0.0001);
     }
 
     @Test
@@ -506,30 +522,32 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testExtrapolateWithSinglePoint() {
-        double[] xValues = {5.0};
-        double[] yValues = {10.0};
-        ArrayTabulatedFunction singlePointFunction = new ArrayTabulatedFunction(xValues, yValues);
+        double[] xValues = {1.0, 2.0};
+        double[] yValues = {1.0, 2.0};
+        ArrayTabulatedFunction function  = new ArrayTabulatedFunction(xValues, yValues);
 
-        assertEquals(10.0, singlePointFunction.extrapolateLeft(0), 0.0001);
-        assertEquals(10.0, singlePointFunction.extrapolateRight(10), 0.0001);
+        assertEquals(0.0, function .extrapolateLeft(0.0), 0.0001);
+        assertEquals(-1.0, function .extrapolateRight(-1.0), 0.0001);
+        assertEquals(3.0, function.extrapolateRight(3.0), 0.0001);
+        assertEquals(4.0, function.extrapolateRight(4.0), 0.0001);
     }
 
     @Test
     public void testGetXWithInvalidIndex() {
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.getX(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.getX(10));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.getX(-1));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.getX(10));
     }
 
     @Test
     public void testGetYWithInvalidIndex() {
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.getY(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.getY(10));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.getY(-1));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.getY(10));
     }
 
     @Test
     public void testSetYWithInvalidIndex() {
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.setY(-1, 5));
-        assertThrows(IndexOutOfBoundsException.class, () -> arrayFunction.setY(10, 5));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.setY(-1, 5));
+        assertThrows(IllegalArgumentException.class, () -> arrayFunction.setY(10, 5));
     }
 
 
@@ -544,11 +562,15 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testFloorIndexOfXBoundaryCases() {
-        assertEquals(0, arrayFunction.floorIndexOfX(0.5));
-        assertEquals(1, arrayFunction.floorIndexOfX(2.5));
+        assertEquals(0, arrayFunction.floorIndexOfX(1.0));
+        assertEquals(0, arrayFunction.floorIndexOfX(1.5));
         assertEquals(1, arrayFunction.floorIndexOfX(2.0));
-        assertEquals(3, arrayFunction.floorIndexOfX(5.0));
+        assertEquals(1, arrayFunction.floorIndexOfX(2.5));
+        assertEquals(2, arrayFunction.floorIndexOfX(3.0));
+        assertEquals(2, arrayFunction.floorIndexOfX(3.5));
+        assertEquals(3, arrayFunction.floorIndexOfX(4.0));
         assertEquals(3, arrayFunction.floorIndexOfX(4.0001));
+        assertEquals(3, arrayFunction.floorIndexOfX(5.0));
     }
 
     @Test
@@ -562,8 +584,8 @@ public class ArrayTabulatedFunctionTest {
 
         assertEquals(0, function.getCount());
 
-        assertThrows(IndexOutOfBoundsException.class, () -> function.getX(0));
-        assertThrows(IndexOutOfBoundsException.class, () -> function.getY(0));
+        assertThrows(IllegalArgumentException.class, () -> function.getX(0));
+        assertThrows(IllegalArgumentException.class, () -> function.getY(0));
 
     }
 
@@ -583,10 +605,12 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testApplyWithEmptyFunction() {
-        double[] xValues = {1.0};
-        double[] yValues = {2.0};
+        double[] xValues = {1.0, 2.0};
+        double[] yValues = {2.0, 4.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
         function.remove(0);
+        function.remove(0);
+        assertEquals(0, function.getCount());
 
         assertThrows(Exception.class, () -> function.apply(1.0));
     }
@@ -626,16 +650,18 @@ public class ArrayTabulatedFunctionTest {
 
     @Test
     public void testSingleElementConstructor() {
-        double[] xValues = {1.0};
-        double[] yValues = {2.0};
-        ArrayTabulatedFunction singleFunction = new ArrayTabulatedFunction(xValues, yValues);
+        double[] xValues = {1.0, 3.0};
+        double[] yValues = {2.0, 6.0};
+        ArrayTabulatedFunction  minFunction = new ArrayTabulatedFunction(xValues, yValues);
 
-        assertEquals(1, singleFunction.getCount());
-        assertEquals(1.0, singleFunction.leftBound(), 0.0001);
-        assertEquals(1.0, singleFunction.rightBound(), 0.0001);
-        assertEquals(2.0, singleFunction.apply(1.0), 0.0001);
-        assertEquals(2.0, singleFunction.apply(0.0), 0.0001);
-        assertEquals(2.0, singleFunction.apply(5.0), 0.0001);
+        assertEquals(2,  minFunction.getCount());
+        assertEquals(1.0,  minFunction.leftBound(), 0.0001);
+        assertEquals(3.0,  minFunction.rightBound(), 0.0001);
+        assertEquals(2.0,  minFunction.apply(1.0), 0.0001);
+        assertEquals(6.0,  minFunction.apply(3.0), 0.0001);
+        assertEquals(0.0,  minFunction.apply(0.0), 0.0001);
+        assertEquals(8.0, minFunction.apply(4.0), 0.0001);
+        assertEquals(4.0, minFunction.apply(2.0), 0.0001);
     }
 
     @Test

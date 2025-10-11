@@ -13,9 +13,9 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues)
     {
-        if (xValues.length == 0)
+        if (xValues.length < 2)
         {
-            throw new IllegalArgumentException("Должны указать хотя бы 1 значение");
+            throw new IllegalArgumentException("Длина таблицы меньше минимальной");
         }
         if (xValues.length != yValues.length)
         {
@@ -136,7 +136,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     {
         if (index < 0 || index >= count)
         {
-            throw new IndexOutOfBoundsException("Индекс за пределами допустимого");
+            throw new IllegalArgumentException("Индекс за пределами допустимого");
         }
         return xValues[index];
     }
@@ -146,7 +146,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     {
         if (index < 0 || index >= count)
         {
-            throw new IndexOutOfBoundsException("Индекс за пределами допустимого");
+            throw new IllegalArgumentException("Индекс за пределами допустимого");
         }
         return yValues[index];
     }
@@ -156,7 +156,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     {
         if (index < 0 || index >= count)
         {
-            throw new IndexOutOfBoundsException("Индекс за пределами допустимого");
+            throw new IllegalArgumentException("Индекс за пределами допустимого");
         }
         yValues[index] = value;
     }
@@ -204,7 +204,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     {
         if (x < xValues[0])
         {
-            return 0;
+            throw new IllegalArgumentException("x меньше левой границы: " + x);
         }
         for (int i = 1; i < count; i++)
         {
@@ -219,14 +219,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     @Override
     protected double extrapolateLeft(double x)
     {
-        if (count == 1) return yValues[0];
         return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     protected double extrapolateRight(double x)
     {
-        if (count == 1) return yValues[0];
         return interpolate(x, xValues[count - 2], xValues[count - 1],
                 yValues[count - 2], yValues[count - 1]);
     }
@@ -234,9 +232,8 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     @Override
     protected double interpolate(double x, int floorIndex)
     {
-        if (count == 1) return yValues[0];
         if (floorIndex < 0 || floorIndex >= count - 1) {
-            throw new IllegalArgumentException("Неверный индекс этажа");
+            throw new IllegalArgumentException("Некорректный floorIndex: " + floorIndex);
         }
         return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
                 yValues[floorIndex], yValues[floorIndex + 1]);
@@ -255,7 +252,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     @Override
     public void remove(int index) {
         if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Invalid index: " + index);
+            throw new IllegalArgumentException("Индекс выходит за границы: " + index);
         }
 
         if (index < count - 1) {
