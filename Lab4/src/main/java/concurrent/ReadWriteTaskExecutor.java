@@ -11,8 +11,10 @@ public class ReadWriteTaskExecutor {
                 new ConstantFunction(-1), 1, 1000, 1000
         );
 
-        ReadTask readTask = new ReadTask(function);
-        WriteTask writeTask = new WriteTask(function, 0.5);
+        Object lock = new Object();
+
+        ReadTask readTask = new ReadTask(function, lock);
+        WriteTask writeTask = new WriteTask(function, 0.5, lock);
 
         Thread readThread = new Thread(readTask);
         Thread writeThread = new Thread(writeTask);
