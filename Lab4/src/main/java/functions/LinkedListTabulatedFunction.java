@@ -13,6 +13,10 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     @Serial
     private static final long serialVersionUID = 7380647716575850766L;
 
+    public LinkedListTabulatedFunction(ArrayTabulatedFunction points) {
+        super();
+    }
+
     public static class Node
     {
         public double x;
