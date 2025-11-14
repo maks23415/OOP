@@ -1,0 +1,48 @@
+package com.example.lab5.manual.dto;
+
+import java.time.LocalDateTime;
+
+public class UserDTO {
+    private Long id;
+    private String login;
+    private String role;
+    private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public UserDTO() {}
+
+    public UserDTO(String login, String role, String password) {
+        this.login = login;
+        this.role = role;
+        this.password = password;
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getLogin() { return login; }
+    public void setLogin(String login) { this.login = login; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", role='" + role + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+}
