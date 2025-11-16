@@ -24,6 +24,12 @@ public class Function {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    public Function(long userId, String name, String type) {
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+    }
+
     // Геттеры и сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
