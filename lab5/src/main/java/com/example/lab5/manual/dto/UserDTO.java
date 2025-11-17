@@ -7,8 +7,7 @@ public class UserDTO {
     private String login;
     private String role;
     private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public UserDTO() {}
 
@@ -30,11 +29,6 @@ public class UserDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString() {
@@ -42,7 +36,6 @@ public class UserDTO {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", role='" + role + '\'' +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }

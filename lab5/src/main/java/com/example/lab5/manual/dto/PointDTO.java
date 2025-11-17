@@ -7,7 +7,6 @@ public class PointDTO {
     private Long functionId;
     private Double xValue;
     private Double yValue;
-    private LocalDateTime createdAt;
 
     public PointDTO() {}
 
@@ -28,9 +27,6 @@ public class PointDTO {
 
     public Double getYValue() { return yValue; }
     public void setYValue(Double yValue) { this.yValue = yValue; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     @Override
     public String toString() {

@@ -182,8 +182,7 @@ public class UserDAO {
         user.setLogin(rs.getString("login"));
         user.setRole(rs.getString("role"));
         user.setPassword(rs.getString("password"));
-        user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+
         return user;
     }
 }

@@ -11,30 +11,11 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    // Поиск по логину
     Optional<User> findByLogin(String login);
+    List<User> findByRole(String role);
 
-    // Поиск по email
-    Optional<User> findByEmail(String email);
+    @Query("SELECT u FROM User u WHERE u.login LIKE %:keyword% OR u.role LIKE %:keyword%")
+    List<User> findByLoginOrRoleContaining(@Param("keyword") String keyword);
 
-    // Проверка существования
     boolean existsByLogin(String login);
-    boolean existsByEmail(String email);
-
-    // Поиск по части логина
-    List<User> findByLoginContainingIgnoreCase(String loginPart);
-
-    // Поиск по части email
-    List<User> findByEmailContainingIgnoreCase(String emailPart);
-
-    // Сортировка по дате создания
-    List<User> findAllByOrderByCreatedAtDesc();
-    List<User> findAllByOrderByCreatedAtAsc();
-
-    // Поиск пользователей созданных после указанной даты
-    List<User> findByCreatedAtAfter(java.time.LocalDateTime date);
-
-    // Поиск по нескольким логинам
-    List<User> findByLoginIn(List<String> logins);
 }

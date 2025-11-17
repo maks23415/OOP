@@ -242,7 +242,6 @@ public class PointDAO {
         point.setFunctionId(rs.getLong("f_id"));
         point.setXValue(rs.getDouble("x_value"));
         point.setYValue(rs.getDouble("y_value"));
-        point.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         return point;
     }
 }

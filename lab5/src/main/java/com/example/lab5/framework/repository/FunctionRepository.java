@@ -1,38 +1,23 @@
 package com.example.lab5.framework.repository;
 
 import com.example.lab5.framework.entity.Function;
+import com.example.lab5.framework.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
 public interface FunctionRepository extends JpaRepository<Function, Long> {
+    List<Function> findByUser(User user);
+    List<Function> findByNameContaining(String name);
+    List<Function> findBySignatureContaining(String signature);
 
-    // Поиск по ID пользователя
-    List<Function> findByUserId(Long userId);
+    @Query("SELECT f FROM Function f WHERE f.user.login = :login")
+    List<Function> findByUserLogin(@Param("login") String login);
 
-    // Поиск по типу функции
-    List<Function> findByType(String type);
-
-    // Поиск по имени (регистронезависимый)
-    List<Function> findByNameContainingIgnoreCase(String name);
-
-    // Поиск по типу и пользователю
-    List<Function> findByUserIdAndType(Long userId, String type);
-
-    // Подсчет функций пользователя
-    long countByUserId(Long userId);
-
-    // Поиск функций созданных после указанной даты
-    List<Function> findByCreatedAtAfter(java.time.LocalDateTime date);
-
-    // Нативный запрос для поиска функций с количеством точек
-    @Query("SELECT f FROM Function f WHERE SIZE(f.points) > :minPointsCount")
-    List<Function> findFunctionsWithMinimumPoints(@Param("minPointsCount") int minPointsCount);
-
-    // Сортировка по различным полям
-    List<Function> findAllByOrderByNameAsc();
-    List<Function> findAllByOrderByCreatedAtDesc();
+    @Query("SELECT f FROM Function f WHERE f.name LIKE %:keyword% OR f.signature LIKE %:keyword%")
+    List<Function> findByNameOrSignatureContaining(@Param("keyword") String keyword);
 }

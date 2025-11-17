@@ -209,8 +209,6 @@ public class FunctionDAO {
         function.setUserId(rs.getLong("u_id"));
         function.setName(rs.getString("name"));
         function.setSignature(rs.getString("signature"));
-        function.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        function.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
         return function;
     }
 }
