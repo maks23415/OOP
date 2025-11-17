@@ -1,13 +1,12 @@
 package com.example.lab5.manual.dto;
 
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class UserDTO {
     private Long id;
     private String login;
     private String role;
     private String password;
-
 
     public UserDTO() {}
 
@@ -29,6 +28,20 @@ public class UserDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id) &&
+                Objects.equals(login, userDTO.login) &&
+                Objects.equals(role, userDTO.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, role);
+    }
 
     @Override
     public String toString() {

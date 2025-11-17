@@ -1,6 +1,5 @@
 package com.example.lab5.manual.dto;
 
-import java.time.LocalDateTime;
 
 public class PointDTO {
     private Long id;
