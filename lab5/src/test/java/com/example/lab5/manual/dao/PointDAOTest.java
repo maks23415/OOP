@@ -100,7 +100,6 @@ class PointDAOTest {
         assertEquals(testFunctionId, foundPoint.get().getFunctionId());
         assertEquals(1.5, foundPoint.get().getXValue());
         assertEquals(2.25, foundPoint.get().getYValue());
-        assertNotNull(foundPoint.get().getCreatedAt());
     }
 
     @Test

@@ -29,7 +29,6 @@ public class FunctionDTO {
     public String getSignature() { return signature; }
     public void setSignature(String signature) { this.signature = signature; }
 
-
     @Override
     public String toString() {
         return "FunctionDTO{" +

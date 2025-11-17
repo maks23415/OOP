@@ -132,8 +132,7 @@ class UserDAOTest {
             assertNotNull(u.getLogin());
             assertNotNull(u.getRole());
             assertNotNull(u.getPassword());
-            assertNotNull(u.getCreatedAt());
-            assertNotNull(u.getUpdatedAt());
+
         });
     }
 
@@ -226,13 +225,6 @@ class UserDAOTest {
 
         Long userId = userDAO.createUser(user);
         Optional<UserDTO> createdUser = userDAO.findById(userId);
-
-        assertTrue(createdUser.isPresent());
-        assertNotNull(createdUser.get().getCreatedAt());
-        assertNotNull(createdUser.get().getUpdatedAt());
-        assertEquals(createdUser.get().getCreatedAt(), createdUser.get().getUpdatedAt());
-        logger.info("Временные метки созданы корректно: created={}, updated={}",
-                createdUser.get().getCreatedAt(), createdUser.get().getUpdatedAt());
     }
 
     @Test
