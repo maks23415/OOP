@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/main/java/functions/ArrayTabulatedFunction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/LAB_2.0/src/test/java/functions/ArrayTabulatedFunctionTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="0b09a2bb-7ecd-4171-b508-51b550a8ef50" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,27 +31,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.All in Lab_2.0.executor": "Debug",
-    "JUnit.ArrayTabulatedFunctionTest.executor": "Run",
-    "JUnit.CubicBSplineFunctionTest.testApplyWithFractionalPoints.executor": "Debug",
-    "JUnit.DerivativeFunctionTest.executor": "Run",
-    "JUnit.LinkedListTabulatedFunctionTest.executor": "Run",
-    "JUnit.LinkedListTabulatedFunctionTest.testApply.executor": "Debug",
-    "JUnit.LinkedListTabulatedFunctionTest.testComplexScenarios.executor": "Run",
-    "JUnit.functions in Lab_2.0.executor": "Debug",
-    "JUnit.java in Lab_2.0.executor": "Coverage",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.All in Lab_2.0.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ArrayTabulatedFunctionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CubicBSplineFunctionTest.testApplyWithFractionalPoints.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.DerivativeFunctionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LinkedListTabulatedFunctionTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.LinkedListTabulatedFunctionTest.testApply.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.LinkedListTabulatedFunctionTest.testComplexScenarios.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.functions in Lab_2.0.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.java in Lab_2.0.executor&quot;: &quot;Coverage&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
