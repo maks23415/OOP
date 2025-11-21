@@ -1,3 +1,4 @@
+
 package com.example.lab5.framework.entity;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Function> functions = new ArrayList<>();
 
     // Конструкторы
@@ -47,4 +48,14 @@ public class User {
 
     public List<Function> getFunctions() { return functions; }
     public void setFunctions(List<Function> functions) { this.functions = functions; }
+
+    public void addFunction(Function function) {
+        functions.add(function);
+        function.setUser(this);
+    }
+
+    public void removeFunction(Function function) {
+        functions.remove(function);
+        function.setUser(null);
+    }
 }

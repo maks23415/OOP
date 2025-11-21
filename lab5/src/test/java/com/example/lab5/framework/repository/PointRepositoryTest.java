@@ -1,3 +1,4 @@
+
 package com.example.lab5.framework.repository;
 
 import com.example.lab5.framework.entity.Function;

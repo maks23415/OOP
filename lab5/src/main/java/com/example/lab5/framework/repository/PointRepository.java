@@ -21,7 +21,6 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     @Query("SELECT p FROM Point p WHERE p.function.user.login = :userLogin")
     List<Point> findByUserLogin(@Param("userLogin") String userLogin);
 
-    // ЗАМЕНИ derived queries на явные @Query
     @Query("SELECT p FROM Point p WHERE p.xValue BETWEEN :minX AND :maxX")
     List<Point> findByXValueBetween(@Param("minX") Double minX, @Param("maxX") Double maxX);
 
@@ -32,4 +31,9 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     @Transactional
     @Query("DELETE FROM Point p WHERE p.function.id = :functionId")
     void deleteByFunctionId(@Param("functionId") Long functionId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Point p WHERE p.function IN (SELECT f FROM Function f WHERE f.user.login = :userLogin)")
+    void deleteByUserLogin(@Param("userLogin") String userLogin);
 }

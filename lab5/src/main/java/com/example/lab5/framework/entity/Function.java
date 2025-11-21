@@ -21,7 +21,7 @@ public class Function {
     @JoinColumn(name = "u_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "function", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "function", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Point> points = new ArrayList<>();
 
     // Конструкторы
@@ -48,4 +48,14 @@ public class Function {
 
     public List<Point> getPoints() { return points; }
     public void setPoints(List<Point> points) { this.points = points; }
+
+    public void addPoint(Point point) {
+        points.add(point);
+        point.setFunction(this);
+    }
+
+    public void removePoint(Point point) {
+        points.remove(point);
+        point.setFunction(null);
+    }
 }
