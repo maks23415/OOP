@@ -70,10 +70,7 @@ class FrameworkPerformanceComparisonServiceTest {
     private void saveResultsToFile(FrameworkPerformanceComparisonService.PerformanceResults results, long generationTime) {
         try {
             // Сохранение в Markdown с временем генерации
-            String markdownContent = "# Spring Data JPA Performance (РЕАЛЬНЫЕ ДАННЫЕ - 10,000+ записей)\n\n" +
-                    "**ВАЖНО: Тестирование проводилось на заполненной базе данных**\n\n" +
-                    results.toMarkdownTable() +
-                    String.format("\n**Время генерации 10,000+ записей:** %.3f мс", generationTime / 1_000_000.0);
+            String markdownContent = results.toMarkdownTable();
 
             java.nio.file.Files.write(
                     java.nio.file.Paths.get("framework_performance_10k_results.md"),
