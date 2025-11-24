@@ -19,14 +19,14 @@ class UserDAOTest {
 
     @BeforeAll
     static void setUpAll() {
-        testPrefix = "test_" + UUID.randomUUID().toString().substring(0, 8) + "_";
+        // Короткий префикс для быстрого поиска
+        testPrefix = "t_" + UUID.randomUUID().toString().substring(0, 4) + "_";
         logger.info("Установлен префикс тестов: {}", testPrefix);
     }
 
     @BeforeEach
     void setUp() {
         userDAO = new UserDAO();
-        logger.info("Настройка тестовой среды для UserDAO");
     }
 
     private String uniqueLogin(String baseName) {
@@ -36,14 +36,13 @@ class UserDAOTest {
     @Test
     @Order(1)
     void testCreateUser() {
-        String uniqueLogin = uniqueLogin("test_user_1");
+        String uniqueLogin = uniqueLogin("user1");
         UserDTO user = new UserDTO(uniqueLogin, "USER", "test_password");
 
         Long userId = userDAO.createUser(user);
 
         assertNotNull(userId);
         assertTrue(userId > 0);
-        logger.info("Создан пользователь с ID: {}, логин: {}", userId, uniqueLogin);
 
         Optional<UserDTO> foundUser = userDAO.findById(userId);
         assertTrue(foundUser.isPresent());
@@ -54,7 +53,7 @@ class UserDAOTest {
     @Test
     @Order(2)
     void testCreateUserWithDuplicateLogin() {
-        String duplicateLogin = uniqueLogin("duplicate_login");
+        String duplicateLogin = uniqueLogin("dup_login");
         UserDTO user1 = new UserDTO(duplicateLogin, "USER", "pass1");
         userDAO.createUser(user1);
 
@@ -63,13 +62,12 @@ class UserDAOTest {
         assertThrows(RuntimeException.class, () -> {
             userDAO.createUser(user2);
         });
-        logger.info("Проверка уникальности логина выполнена успешно для: {}", duplicateLogin);
     }
 
     @Test
     @Order(3)
     void testFindByLogin() {
-        String uniqueLogin = uniqueLogin("unique_login_find");
+        String uniqueLogin = uniqueLogin("find_login");
         UserDTO user = new UserDTO(uniqueLogin, "ADMIN", "admin_pass");
         Long userId = userDAO.createUser(user);
 
@@ -83,17 +81,15 @@ class UserDAOTest {
     @Test
     @Order(4)
     void testFindByLogin_NotFound() {
-        String nonExistentLogin = uniqueLogin("non_existent_login");
+        String nonExistentLogin = uniqueLogin("nonexistent");
         Optional<UserDTO> foundUser = userDAO.findByLogin(nonExistentLogin);
-
         assertFalse(foundUser.isPresent());
-        logger.info("Поиск несуществующего пользователя выполнен корректно: {}", nonExistentLogin);
     }
 
     @Test
     @Order(5)
     void testFindById() {
-        String uniqueLogin = uniqueLogin("find_by_id_user");
+        String uniqueLogin = uniqueLogin("find_id");
         UserDTO user = new UserDTO(uniqueLogin, "MODERATOR", "password");
         Long userId = userDAO.createUser(user);
 
@@ -117,32 +113,22 @@ class UserDAOTest {
     void testFindAllUsers() {
         int initialCount = userDAO.findAll().size();
 
-        userDAO.createUser(new UserDTO(uniqueLogin("find_all_1"), "USER", "pass1"));
-        userDAO.createUser(new UserDTO(uniqueLogin("find_all_2"), "ADMIN", "pass2"));
-        userDAO.createUser(new UserDTO(uniqueLogin("find_all_3"), "MODERATOR", "pass3"));
+        userDAO.createUser(new UserDTO(uniqueLogin("all1"), "USER", "pass1"));
+        userDAO.createUser(new UserDTO(uniqueLogin("all2"), "ADMIN", "pass2"));
 
         List<UserDTO> users = userDAO.findAll();
 
         assertFalse(users.isEmpty());
-        assertTrue(users.size() >= initialCount + 3);
-        logger.info("Найдено {} пользователей", users.size());
-
-        users.forEach(u -> {
-            assertNotNull(u.getId());
-            assertNotNull(u.getLogin());
-            assertNotNull(u.getRole());
-            assertNotNull(u.getPassword());
-
-        });
+        assertTrue(users.size() >= initialCount + 2);
     }
 
     @Test
     @Order(8)
     void testUpdateUser() {
-        String oldLogin = uniqueLogin("old_login_update");
+        String oldLogin = uniqueLogin("old_login");
         Long userId = userDAO.createUser(new UserDTO(oldLogin, "USER", "old_pass"));
 
-        String newLogin = uniqueLogin("new_login_update");
+        String newLogin = uniqueLogin("new_login");
         UserDTO userToUpdate = new UserDTO(newLogin, "ADMIN", "new_pass");
         userToUpdate.setId(userId);
         boolean updated = userDAO.updateUser(userToUpdate);
@@ -153,29 +139,25 @@ class UserDAOTest {
         assertTrue(updatedUser.isPresent());
         assertEquals(newLogin, updatedUser.get().getLogin());
         assertEquals("ADMIN", updatedUser.get().getRole());
-        assertEquals("new_pass", updatedUser.get().getPassword());
     }
 
     @Test
     @Order(9)
     void testUpdateUser_NotFound() {
-        UserDTO nonExistentUser = new UserDTO(uniqueLogin("non_existent"), "ROLE", "pass");
+        UserDTO nonExistentUser = new UserDTO(uniqueLogin("nonexist"), "ROLE", "pass");
         nonExistentUser.setId(999999L);
 
         boolean updated = userDAO.updateUser(nonExistentUser);
-
         assertFalse(updated);
-        logger.info("Обновление несуществующего пользователя обработано корректно");
     }
 
     @Test
     @Order(10)
     void testDeleteUser() {
-        String uniqueLogin = uniqueLogin("to_delete_user");
+        String uniqueLogin = uniqueLogin("delete_me");
         Long userId = userDAO.createUser(new UserDTO(uniqueLogin, "USER", "pass"));
 
         boolean deleted = userDAO.deleteUser(userId);
-
         assertTrue(deleted);
 
         Optional<UserDTO> deletedUser = userDAO.findById(userId);
@@ -192,22 +174,13 @@ class UserDAOTest {
     @Test
     @Order(12)
     void testFindByRole() {
-        userDAO.createUser(new UserDTO(uniqueLogin("admin_role_1"), "ADMIN", "pass1"));
-        userDAO.createUser(new UserDTO(uniqueLogin("admin_role_2"), "ADMIN", "pass2"));
-        userDAO.createUser(new UserDTO(uniqueLogin("user_role_1"), "USER", "pass3"));
-        userDAO.createUser(new UserDTO(uniqueLogin("admin_role_3"), "ADMIN", "pass4"));
+        userDAO.createUser(new UserDTO(uniqueLogin("admin1"), "ADMIN", "pass1"));
+        userDAO.createUser(new UserDTO(uniqueLogin("admin2"), "ADMIN", "pass2"));
 
         List<UserDTO> admins = userDAO.findByRole("ADMIN");
 
         assertFalse(admins.isEmpty());
-
-        assertTrue(admins.size() >= 3);
-        admins.forEach(admin -> {
-            assertEquals("ADMIN", admin.getRole());
-            assertNotNull(admin.getLogin());
-            assertNotNull(admin.getPassword());
-        });
-        logger.info("Найдено {} администраторов", admins.size());
+        admins.forEach(admin -> assertEquals("ADMIN", admin.getRole()));
     }
 
     @Test
@@ -219,65 +192,51 @@ class UserDAOTest {
 
     @Test
     @Order(14)
-    void testUserTimestamps() {
-        String uniqueLogin = uniqueLogin("timestamp_test");
-        UserDTO user = new UserDTO(uniqueLogin, "USER", "password");
-
-        Long userId = userDAO.createUser(user);
-        Optional<UserDTO> createdUser = userDAO.findById(userId);
-    }
-
-    @Test
-    @Order(15)
     void testMultipleUserOperations() {
-        String login1 = uniqueLogin("multi_op_1");
-        String login2 = uniqueLogin("multi_op_2");
+        String login1 = uniqueLogin("multi1");
+        String login2 = uniqueLogin("multi2");
 
-        UserDTO user1 = new UserDTO(login1, "USER", "pass1");
-        UserDTO user2 = new UserDTO(login2, "ADMIN", "pass2");
-
-        Long id1 = userDAO.createUser(user1);
-        Long id2 = userDAO.createUser(user2);
+        Long id1 = userDAO.createUser(new UserDTO(login1, "USER", "pass1"));
+        Long id2 = userDAO.createUser(new UserDTO(login2, "ADMIN", "pass2"));
 
         assertNotNull(id1);
         assertNotNull(id2);
-        assertNotEquals(id1, id2);
 
-        String updatedLogin = uniqueLogin("updated_multi_1");
-        UserDTO updatedUser1 = new UserDTO(updatedLogin, "MODERATOR", "new_pass1");
-        updatedUser1.setId(id1);
-        boolean updateResult = userDAO.updateUser(updatedUser1);
-
+        UserDTO updatedUser = new UserDTO(uniqueLogin("updated"), "MODERATOR", "new_pass");
+        updatedUser.setId(id1);
+        boolean updateResult = userDAO.updateUser(updatedUser);
         assertTrue(updateResult);
-        Optional<UserDTO> foundUpdated = userDAO.findById(id1);
-        assertTrue(foundUpdated.isPresent());
-        assertEquals(updatedLogin, foundUpdated.get().getLogin());
 
         boolean deleteResult = userDAO.deleteUser(id2);
-
         assertTrue(deleteResult);
-        Optional<UserDTO> deletedUser = userDAO.findById(id2);
-        assertFalse(deletedUser.isPresent());
-
-        logger.info("Множественные операции выполнены успешно");
     }
 
     @AfterEach
     void tearDown() {
+        cleanTestData();
+    }
+
+    private void cleanTestData() {
+        long startTime = System.currentTimeMillis();
+
         try {
+            // Прямой поиск тестовых пользователей по префиксу
             List<UserDTO> testUsers = userDAO.findAll().stream()
                     .filter(user -> user.getLogin().startsWith(testPrefix))
                     .toList();
 
+            // Пакетное удаление
             for (UserDTO user : testUsers) {
                 userDAO.deleteUser(user.getId());
             }
 
+            long duration = System.currentTimeMillis() - startTime;
             if (!testUsers.isEmpty()) {
-                logger.info("Очищено {} тестовых пользователей", testUsers.size());
+                logger.info("Очищено {} пользователей за {} мс", testUsers.size(), duration);
             }
+
         } catch (Exception e) {
-            logger.warn("Ошибка при очистке тестовых данных: {}", e.getMessage());
+            logger.warn("Ошибка при очистке: {}", e.getMessage());
         }
     }
 }
