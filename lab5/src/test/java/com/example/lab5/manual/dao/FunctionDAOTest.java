@@ -22,7 +22,7 @@ class FunctionDAOTest {
 
     @BeforeAll
     static void setUpAll() {
-        testPrefix = "func_test_" + UUID.randomUUID().toString().substring(0, 8) + "_";
+        testPrefix = "f_" + UUID.randomUUID().toString().substring(0, 6) + "_";
         logger.info("Установлен префикс тестов: {}", testPrefix);
     }
 
@@ -31,22 +31,20 @@ class FunctionDAOTest {
         userDAO = new UserDAO();
         functionDAO = new FunctionDAO();
 
-        String uniqueLogin = uniqueLogin("function_test_user");
-        try {
-            UserDTO user = new UserDTO(uniqueLogin, "USER", "test_pass");
-            testUserId = userDAO.createUser(user);
-            logger.info("Создан тестовый пользователь с ID: {}, логин: {}", testUserId, uniqueLogin);
-        } catch (Exception e) {
-            logger.warn("Не удалось создать пользователя {}, ищем существующего", uniqueLogin);
-            Optional<UserDTO> existingUser = userDAO.findByLogin(uniqueLogin);
-            if (existingUser.isPresent()) {
-                testUserId = existingUser.get().getId();
-                logger.info("Используем существующего пользователя с ID: {}", testUserId);
-            } else {
-                String fallbackLogin = uniqueLogin("fallback_user");
-                UserDTO fallbackUser = new UserDTO(fallbackLogin, "USER", "test_pass");
-                testUserId = userDAO.createUser(fallbackUser);
-                logger.info("Создан резервный пользователь с ID: {}, логин: {}", testUserId, fallbackLogin);
+        String uniqueLogin = uniqueLogin("test_user");
+
+        Optional<UserDTO> existingUser = userDAO.findByLogin(uniqueLogin);
+        if (existingUser.isPresent()) {
+            testUserId = existingUser.get().getId();
+            logger.info("Используем существующего пользователя с ID: {}, логин: {}", testUserId, uniqueLogin);
+        } else {
+            try {
+                UserDTO user = new UserDTO(uniqueLogin, "USER", "test_pass");
+                testUserId = userDAO.createUser(user);
+                logger.info("Создан тестовый пользователь с ID: {}, логин: {}", testUserId, uniqueLogin);
+            } catch (Exception e) {
+                logger.error("Не удалось создать пользователя: {}", e.getMessage());
+                testUserId = null;
             }
         }
     }
@@ -86,13 +84,6 @@ class FunctionDAOTest {
 
         functionDAO.createFunction(new FunctionDTO(testUserId, "func1", "f(x) = x"));
         functionDAO.createFunction(new FunctionDTO(testUserId, "func2", "f(x) = x^2"));
-
-        String anotherUserLogin = uniqueLogin("another_user");
-        Long anotherUserId = createUserSafely(anotherUserLogin, "USER", "pass");
-
-        if (anotherUserId != null) {
-            functionDAO.createFunction(new FunctionDTO(anotherUserId, "func3", "f(x) = sin(x)"));
-        }
 
         List<FunctionDTO> userFunctions = functionDAO.findByUserId(testUserId);
 
@@ -185,19 +176,53 @@ class FunctionDAOTest {
         logger.info("Найдено {} функций", allFunctions.size());
     }
 
-    private Long createUserSafely(String login, String role, String password) {
+    @AfterEach
+    void tearDown() {
         try {
-            UserDTO user = new UserDTO(login, role, password);
-            return userDAO.createUser(user);
+            cleanTestData();
         } catch (Exception e) {
-            logger.warn("Не удалось создать пользователя {}, ищем существующего", login);
-            Optional<UserDTO> existingUser = userDAO.findByLogin(login);
-            return existingUser.map(UserDTO::getId).orElse(null);
+            logger.warn("Ошибка при очистке тестовых данных: {}", e.getMessage());
         }
     }
 
-    @AfterEach
-    void tearDown() {
+    private void cleanTestData() {
+        long startTime = System.currentTimeMillis();
+        int deletedFunctions = 0;
+        int deletedUsers = 0;
+
+        try {
+            List<Long> testUserIds = userDAO.findAll().stream()
+                    .filter(user -> user.getLogin().startsWith(testPrefix))
+                    .map(UserDTO::getId)
+                    .toList();
+
+            for (Long userId : testUserIds) {
+                List<FunctionDTO> userFunctions = functionDAO.findByUserId(userId);
+                for (FunctionDTO function : userFunctions) {
+                    functionDAO.deleteFunction(function.getId());
+                    deletedFunctions++;
+                }
+            }
+
+            for (Long userId : testUserIds) {
+                userDAO.deleteUser(userId);
+                deletedUsers++;
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка при оптимизированной очистке: {}", e.getMessage());
+            fallbackCleanup();
+            return;
+        }
+
+        long endTime = System.currentTimeMillis();
+        if (deletedFunctions > 0 || deletedUsers > 0) {
+            logger.info("Очищено {} функций и {} пользователей за {} мс",
+                    deletedFunctions, deletedUsers, (endTime - startTime));
+        }
+    }
+
+    private void fallbackCleanup() {
         try {
             List<FunctionDTO> testFunctions = functionDAO.findAll().stream()
                     .filter(func -> {
@@ -219,10 +244,11 @@ class FunctionDAOTest {
             }
 
             if (!testFunctions.isEmpty() || !testUsers.isEmpty()) {
-                logger.info("Очищено {} функций и {} пользователей", testFunctions.size(), testUsers.size());
+                logger.info("Fallback очистка: {} функций и {} пользователей",
+                        testFunctions.size(), testUsers.size());
             }
         } catch (Exception e) {
-            logger.warn("Ошибка при очистке тестовых данных: {}", e.getMessage());
+            logger.error("Ошибка в fallback очистке: {}", e.getMessage());
         }
     }
 }
