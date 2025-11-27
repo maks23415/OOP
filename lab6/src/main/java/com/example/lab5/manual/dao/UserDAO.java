@@ -14,28 +14,22 @@ public class UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     public Long createUser(UserDTO user) {
-        String sql = "INSERT INTO users (login, role, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (login, role, password) VALUES (?, ?, ?) RETURNING id";
 
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getLogin());
             stmt.setString(2, user.getRole());
             stmt.setString(3, user.getPassword());
 
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Создание пользователя не удалось, нет affected rows");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    Long id = generatedKeys.getLong(1);
-                    logger.info("Создан пользователь с ID: {}, логин: {}", id, user.getLogin());
-                    return id;
-                } else {
-                    throw new SQLException("Создание пользователя не удалось, ID не получен");
-                }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Long id = rs.getLong(1);
+                logger.info("Создан пользователь с ID: {}, логин: {}", id, user.getLogin());
+                return id;
+            } else {
+                throw new SQLException("Создание пользователя не удалось, ID не получен");
             }
         } catch (SQLException e) {
             logger.error("Ошибка при создании пользователя: {}", user.getLogin(), e);
@@ -44,7 +38,7 @@ public class UserDAO {
     }
 
     public Optional<UserDTO> findById(Long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT id, login, role, password FROM users WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -66,7 +60,7 @@ public class UserDAO {
     }
 
     public Optional<UserDTO> findByLogin(String login) {
-        String sql = "SELECT * FROM users WHERE login = ?";
+        String sql = "SELECT id, login, role, password FROM users WHERE login = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -88,7 +82,7 @@ public class UserDAO {
     }
 
     public List<UserDTO> findAll() {
-        String sql = "SELECT * FROM users ORDER BY id";
+        String sql = "SELECT id, login, role, password FROM users ORDER BY id";
         List<UserDTO> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -107,7 +101,7 @@ public class UserDAO {
     }
 
     public List<UserDTO> findByRole(String role) {
-        String sql = "SELECT * FROM users WHERE role = ? ORDER BY login";
+        String sql = "SELECT id, login, role, password FROM users WHERE role = ? ORDER BY login";
         List<UserDTO> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -175,14 +169,12 @@ public class UserDAO {
         }
     }
 
-
     private UserDTO mapResultSetToUser(ResultSet rs) throws SQLException {
         UserDTO user = new UserDTO();
         user.setId(rs.getLong("id"));
         user.setLogin(rs.getString("login"));
         user.setRole(rs.getString("role"));
         user.setPassword(rs.getString("password"));
-
         return user;
     }
 }
