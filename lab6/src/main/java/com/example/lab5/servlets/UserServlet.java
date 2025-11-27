@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,16 +14,15 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 @WebServlet("/users/*")
-public class UserServlet extends HttpServlet {
-    private UserService userService;
-    private ObjectMapper objectMapper;
+public class UserServlet extends BaseAuthServlet {
     private static final Logger logger = Logger.getLogger(UserServlet.class.getName());
+    private ObjectMapper objectMapper;
 
     @Override
     public void init() throws ServletException {
-        this.userService = new UserService();
+        super.init();
         this.objectMapper = new ObjectMapper();
-        logger.info("UserServlet initialized");
+        logger.info("UserServlet initialized with Basic Auth");
     }
 
     @Override
@@ -36,20 +34,38 @@ public class UserServlet extends HttpServlet {
 
         logger.info("GET request for path: " + pathInfo);
 
+        // Аутентификация
+        Optional<UserDTO> currentUser = authenticate(req);
+        if (currentUser.isEmpty()) {
+            sendUnauthorized(resp, "Authentication required");
+            return;
+        }
+
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /users - получить всех пользователей
+                // GET /users - получить всех пользователей (только для ADMIN)
+                if (!checkPermission(currentUser.get(), "ADMIN", null)) {
+                    sendForbidden(resp, "Admin access required");
+                    return;
+                }
+
                 List<UserDTO> users = userService.getAllUsers();
-                logger.info("Retrieved " + users.size() + " users");
+                logger.info("Admin " + currentUser.get().getLogin() + " retrieved " + users.size() + " users");
                 objectMapper.writeValue(resp.getWriter(), users);
 
             } else if (pathInfo.startsWith("/login/")) {
                 // GET /users/login/{login} - получить пользователя по логину
                 String login = pathInfo.substring(7);
-                Optional<UserDTO> user = userService.getUserByLogin(login);
 
+                // USER может видеть только свой профиль, ADMIN - любой
+                if (!checkPermission(currentUser.get(), "ADMIN", login)) {
+                    sendForbidden(resp, "Access denied to user data");
+                    return;
+                }
+
+                Optional<UserDTO> user = userService.getUserByLogin(login);
                 if (user.isPresent()) {
-                    logger.info("Found user by login: " + login);
+                    logger.info("User " + currentUser.get().getLogin() + " accessed user: " + login);
                     objectMapper.writeValue(resp.getWriter(), user.get());
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -58,10 +74,15 @@ public class UserServlet extends HttpServlet {
                 }
 
             } else if (pathInfo.startsWith("/role/")) {
-                // GET /users/role/{role} - получить пользователей по роли
+                // GET /users/role/{role} - получить пользователей по роли (только ADMIN)
+                if (!checkPermission(currentUser.get(), "ADMIN", null)) {
+                    sendForbidden(resp, "Admin access required");
+                    return;
+                }
+
                 String role = pathInfo.substring(6);
                 List<UserDTO> users = userService.getUsersByRole(role);
-                logger.info("Found " + users.size() + " users with role: " + role);
+                logger.info("Admin " + currentUser.get().getLogin() + " found " + users.size() + " users with role: " + role);
                 objectMapper.writeValue(resp.getWriter(), users);
 
             } else {
@@ -70,7 +91,13 @@ public class UserServlet extends HttpServlet {
                 Optional<UserDTO> user = userService.getUserById(id);
 
                 if (user.isPresent()) {
-                    logger.info("Found user: " + user.get().getLogin());
+                    // Проверка прав доступа
+                    if (!checkPermission(currentUser.get(), "ADMIN", user.get().getLogin())) {
+                        sendForbidden(resp, "Access denied to user data");
+                        return;
+                    }
+
+                    logger.info("User " + currentUser.get().getLogin() + " accessed user ID: " + id);
                     objectMapper.writeValue(resp.getWriter(), user.get());
                 } else {
                     logger.warning("User not found with ID: " + id);
@@ -98,6 +125,7 @@ public class UserServlet extends HttpServlet {
 
         resp.setContentType("application/json;charset=UTF-8");
 
+        // Регистрация нового пользователя - доступна без аутентификации
         try {
             UserDTO user = objectMapper.readValue(req.getInputStream(), UserDTO.class);
             logger.info("Creating new user: " + user.getLogin());
@@ -117,8 +145,21 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
+            // По умолчанию роль USER, если не указана
+            if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+                user.setRole("USER");
+            }
+
+            // Проверка валидности роли
+            if (!authService.isValidRole(user.getRole())) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                objectMapper.writeValue(resp.getWriter(),
+                        new ErrorResponse("Invalid role. Allowed roles: USER, ADMIN"));
+                return;
+            }
+
             Long userId = userService.createUser(user.getLogin(), user.getRole(), user.getPassword());
-            logger.info("User created successfully with ID: " + userId);
+            logger.info("User created successfully with ID: " + userId + " and role: " + user.getRole());
 
             resp.setStatus(HttpServletResponse.SC_CREATED);
             objectMapper.writeValue(resp.getWriter(),
@@ -141,6 +182,13 @@ public class UserServlet extends HttpServlet {
 
         logger.info("PUT request for path: " + pathInfo);
 
+        // Аутентификация
+        Optional<UserDTO> currentUser = authenticate(req);
+        if (currentUser.isEmpty()) {
+            sendUnauthorized(resp, "Authentication required");
+            return;
+        }
+
         if (pathInfo == null || pathInfo.equals("/")) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             objectMapper.writeValue(resp.getWriter(),
@@ -150,11 +198,30 @@ public class UserServlet extends HttpServlet {
 
         try {
             Long id = Long.parseLong(pathInfo.substring(1));
-            UserDTO user = objectMapper.readValue(req.getInputStream(), UserDTO.class);
+            UserDTO userUpdates = objectMapper.readValue(req.getInputStream(), UserDTO.class);
 
-            logger.info("Updating user with ID: " + id);
+            // Получаем пользователя для обновления
+            Optional<UserDTO> targetUser = userService.getUserById(id);
+            if (targetUser.isEmpty()) {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                objectMapper.writeValue(resp.getWriter(),
+                        new ErrorResponse("User not found with ID: " + id));
+                return;
+            }
 
-            boolean updated = userService.updateUser(id, user.getLogin(), user.getRole(), user.getPassword());
+            // Проверка прав: USER может обновлять только себя, ADMIN - любого
+            if (!checkPermission(currentUser.get(), "ADMIN", targetUser.get().getLogin())) {
+                sendForbidden(resp, "Access denied to update user data");
+                return;
+            }
+
+            logger.info("User " + currentUser.get().getLogin() + " updating user ID: " + id);
+
+            boolean updated = userService.updateUser(id,
+                    userUpdates.getLogin(),
+                    userUpdates.getRole(),
+                    userUpdates.getPassword());
+
             if (updated) {
                 logger.info("User updated successfully: " + id);
                 objectMapper.writeValue(resp.getWriter(),
@@ -188,6 +255,13 @@ public class UserServlet extends HttpServlet {
 
         logger.info("DELETE request for path: " + pathInfo);
 
+        // Аутентификация
+        Optional<UserDTO> currentUser = authenticate(req);
+        if (currentUser.isEmpty()) {
+            sendUnauthorized(resp, "Authentication required");
+            return;
+        }
+
         if (pathInfo == null || pathInfo.equals("/")) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             objectMapper.writeValue(resp.getWriter(),
@@ -197,7 +271,23 @@ public class UserServlet extends HttpServlet {
 
         try {
             Long id = Long.parseLong(pathInfo.substring(1));
-            logger.info("Deleting user with ID: " + id);
+
+            // Получаем пользователя для удаления
+            Optional<UserDTO> targetUser = userService.getUserById(id);
+            if (targetUser.isEmpty()) {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                objectMapper.writeValue(resp.getWriter(),
+                        new ErrorResponse("User not found with ID: " + id));
+                return;
+            }
+
+            // Проверка прав: только ADMIN может удалять пользователей
+            if (!checkPermission(currentUser.get(), "ADMIN", null)) {
+                sendForbidden(resp, "Admin access required to delete users");
+                return;
+            }
+
+            logger.info("Admin " + currentUser.get().getLogin() + " deleting user ID: " + id);
 
             boolean deleted = userService.deleteUser(id);
             if (deleted) {
@@ -222,33 +312,5 @@ public class UserServlet extends HttpServlet {
             objectMapper.writeValue(resp.getWriter(),
                     new ErrorResponse("Internal server error"));
         }
-    }
-
-    // Вспомогательные классы для стандартизированных ответов
-    private static class SuccessResponse {
-        private String message;
-        private Long id;
-        private boolean success = true;
-
-        public SuccessResponse(String message, Long id) {
-            this.message = message;
-            this.id = id;
-        }
-
-        public String getMessage() { return message; }
-        public Long getId() { return id; }
-        public boolean isSuccess() { return success; }
-    }
-
-    private static class ErrorResponse {
-        private String error;
-        private boolean success = false;
-
-        public ErrorResponse(String error) {
-            this.error = error;
-        }
-
-        public String getError() { return error; }
-        public boolean isSuccess() { return success; }
     }
 }
