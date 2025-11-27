@@ -1,6 +1,7 @@
 package com.example.lab5.servlets;
 
 import com.example.lab5.manual.dto.UserDTO;
+import com.example.lab5.manual.logging.SecurityLogger;
 import com.example.lab5.manual.service.AuthService;
 import com.example.lab5.manual.service.UserService;
 import org.slf4j.Logger;
@@ -26,11 +27,16 @@ public abstract class BaseAuthServlet extends HttpServlet {
 
     protected Optional<UserDTO> authenticate(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-        return authService.authenticate(authHeader);
+        return authService.authenticate(authHeader, request);
     }
 
+    protected boolean checkPermission(UserDTO user, String requiredRole, String resourceOwner, String action, String resource) {
+        return authService.hasPermission(user, requiredRole, resourceOwner, action, resource);
+    }
+
+    // Перегруженный метод для обратной совместимости
     protected boolean checkPermission(UserDTO user, String requiredRole, String resourceOwner) {
-        return authService.hasPermission(user, requiredRole, resourceOwner);
+        return authService.hasPermission(user, requiredRole, resourceOwner, "access", "resource");
     }
 
     protected void sendUnauthorized(HttpServletResponse response, String message) throws IOException {
@@ -43,6 +49,7 @@ public abstract class BaseAuthServlet extends HttpServlet {
 
     protected void sendForbidden(HttpServletResponse response, String message) throws IOException {
         logger.warn("Forbidden access: {}", message);
+        SecurityLogger.logSecurityEvent("FORBIDDEN_ACCESS", message);
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setContentType("application/json");
         response.getWriter().write("{\"error\": \"Forbidden\", \"message\": \"" + message + "\"}");
@@ -57,6 +64,12 @@ public abstract class BaseAuthServlet extends HttpServlet {
         public SuccessResponse(String message, Long id) {
             this.message = message;
             this.id = id;
+        }
+
+        // Конструктор для int значений
+        public SuccessResponse(String message, int count) {
+            this.message = message;
+            this.id = (long) count;
         }
 
         public String getMessage() { return message; }

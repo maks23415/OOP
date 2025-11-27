@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -16,13 +17,41 @@
         </encoder>
     </appender>
 
+    <!-- Security logging - отдельный файл для безопасности -->
+    <appender name="SECURITY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/security.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/security.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <!-- Manual package logging -->
     <logger name="com.example.lab5.manual" level="DEBUG" />
     <logger name="com.example.lab5.manual.dao" level="DEBUG" />
     <logger name="com.example.lab5.manual.service" level="INFO" />
 
+    <!-- Security and Authentication logging -->
+    <logger name="com.example.lab5.manual.service.AuthService" level="INFO" additivity="false">
+        <appender-ref ref="SECURITY_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- Servlet logging with security -->
+    <logger name="com.example.lab5.servlets" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
     <!-- Database logging -->
     <logger name="com.example.lab5.manual.config" level="INFO" />
+
+    <!-- HTTP request logging -->
+    <logger name="org.apache.catalina" level="INFO" />
+    <logger name="org.springframework.security" level="INFO" />
 
     <!-- Root logger -->
     <root level="INFO">
