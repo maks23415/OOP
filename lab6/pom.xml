@@ -17,6 +17,7 @@
         <servlet.version>4.0.1</servlet.version>
         <junit.version>5.10.2</junit.version>
         <hikaricp.version>5.1.0</hikaricp.version>
+        <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -108,6 +109,27 @@
                 <version>3.4.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- Tomcat Maven Plugin for easy deployment -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat7-maven-plugin.version}</version>
+                <configuration>
+                    <!-- Automatic embedded Tomcat -->
+                    <port>8080</port>
+                    <path>/lab5</path>
+                    <uriEncoding>UTF-8</uriEncoding>
+
+                    <!-- For external Tomcat (uncomment if needed) -->
+                    <!--
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>tomcat-server</server>
+                    <username>admin</username>
+                    <password>admin</password>
+                    -->
                 </configuration>
             </plugin>
         </plugins>
