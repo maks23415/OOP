@@ -199,32 +199,77 @@ public class FrameworkPerformanceComparisonService {
         private double complexQueryTime;
 
         // Getters and Setters
-        public double getUserCreateTime() { return userCreateTime; }
-        public void setUserCreateTime(double userCreateTime) { this.userCreateTime = userCreateTime; }
+        public double getUserCreateTime() {
+            return userCreateTime;
+        }
 
-        public double getUserReadTime() { return userReadTime; }
-        public void setUserReadTime(double userReadTime) { this.userReadTime = userReadTime; }
+        public void setUserCreateTime(double userCreateTime) {
+            this.userCreateTime = userCreateTime;
+        }
 
-        public double getUserUpdateTime() { return userUpdateTime; }
-        public void setUserUpdateTime(double userUpdateTime) { this.userUpdateTime = userUpdateTime; }
+        public double getUserReadTime() {
+            return userReadTime;
+        }
 
-        public double getUserDeleteTime() { return userDeleteTime; }
-        public void setUserDeleteTime(double userDeleteTime) { this.userDeleteTime = userDeleteTime; }
+        public void setUserReadTime(double userReadTime) {
+            this.userReadTime = userReadTime;
+        }
 
-        public double getFunctionCreateTime() { return functionCreateTime; }
-        public void setFunctionCreateTime(double functionCreateTime) { this.functionCreateTime = functionCreateTime; }
+        public double getUserUpdateTime() {
+            return userUpdateTime;
+        }
 
-        public double getFunctionReadTime() { return functionReadTime; }
-        public void setFunctionReadTime(double functionReadTime) { this.functionReadTime = functionReadTime; }
+        public void setUserUpdateTime(double userUpdateTime) {
+            this.userUpdateTime = userUpdateTime;
+        }
 
-        public double getPointCreateTime() { return pointCreateTime; }
-        public void setPointCreateTime(double pointCreateTime) { this.pointCreateTime = pointCreateTime; }
+        public double getUserDeleteTime() {
+            return userDeleteTime;
+        }
 
-        public double getPointReadTime() { return pointReadTime; }
-        public void setPointReadTime(double pointReadTime) { this.pointReadTime = pointReadTime; }
+        public void setUserDeleteTime(double userDeleteTime) {
+            this.userDeleteTime = userDeleteTime;
+        }
 
-        public double getComplexQueryTime() { return complexQueryTime; }
-        public void setComplexQueryTime(double complexQueryTime) { this.complexQueryTime = complexQueryTime; }
+        public double getFunctionCreateTime() {
+            return functionCreateTime;
+        }
+
+        public void setFunctionCreateTime(double functionCreateTime) {
+            this.functionCreateTime = functionCreateTime;
+        }
+
+        public double getFunctionReadTime() {
+            return functionReadTime;
+        }
+
+        public void setFunctionReadTime(double functionReadTime) {
+            this.functionReadTime = functionReadTime;
+        }
+
+        public double getPointCreateTime() {
+            return pointCreateTime;
+        }
+
+        public void setPointCreateTime(double pointCreateTime) {
+            this.pointCreateTime = pointCreateTime;
+        }
+
+        public double getPointReadTime() {
+            return pointReadTime;
+        }
+
+        public void setPointReadTime(double pointReadTime) {
+            this.pointReadTime = pointReadTime;
+        }
+
+        public double getComplexQueryTime() {
+            return complexQueryTime;
+        }
+
+        public void setComplexQueryTime(double complexQueryTime) {
+            this.complexQueryTime = complexQueryTime;
+        }
 
         public String toMarkdownTable() {
             return String.format(
@@ -272,31 +317,6 @@ public class FrameworkPerformanceComparisonService {
                     pointCreateTime,
                     pointReadTime,
                     complexQueryTime
-            );
-        }
-
-        public String toComparisonMarkdownTable(com.example.lab5.manual.service.PerformanceComparisonService.PerformanceResults manualResults) {
-            return String.format(
-                    "| Операция | JDBC (мс) | Spring Data JPA (мс) | Разница |\n" +
-                            "|----------|-----------|---------------------|---------|\n" +
-                            "| Создание пользователя | %.3f | %.3f | %+.3f |\n" +
-                            "| Чтение пользователя | %.3f | %.3f | %+.3f |\n" +
-                            "| Обновление пользователя | %.3f | %.3f | %+.3f |\n" +
-                            "| Удаление пользователя | %.3f | %.3f | %+.3f |\n" +
-                            "| Создание функции | %.3f | %.3f | %+.3f |\n" +
-                            "| Чтение функции | %.3f | %.3f | %+.3f |\n" +
-                            "| Создание точек | %.3f | %.3f | %+.3f |\n" +
-                            "| Чтение точек | %.3f | %.3f | %+.3f |\n" +
-                            "| Сложные запросы | %.3f | %.3f | %+.3f |\n",
-                    manualResults.getUserCreateTime(), userCreateTime, userCreateTime - manualResults.getUserCreateTime(),
-                    manualResults.getUserReadTime(), userReadTime, userReadTime - manualResults.getUserReadTime(),
-                    manualResults.getUserUpdateTime(), userUpdateTime, userUpdateTime - manualResults.getUserUpdateTime(),
-                    manualResults.getUserDeleteTime(), userDeleteTime, userDeleteTime - manualResults.getUserDeleteTime(),
-                    manualResults.getFunctionCreateTime(), functionCreateTime, functionCreateTime - manualResults.getFunctionCreateTime(),
-                    manualResults.getFunctionReadTime(), functionReadTime, functionReadTime - manualResults.getFunctionReadTime(),
-                    manualResults.getPointCreateTime(), pointCreateTime, pointCreateTime - manualResults.getPointCreateTime(),
-                    manualResults.getPointReadTime(), pointReadTime, pointReadTime - manualResults.getPointReadTime(),
-                    manualResults.getComplexQueryTime(), complexQueryTime, complexQueryTime - manualResults.getComplexQueryTime()
             );
         }
     }
