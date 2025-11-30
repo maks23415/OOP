@@ -1,11 +1,8 @@
-# API Контракт для Framework (Spring Boot)
+## Базовые настройки
+- Базовый URL: /api/v1
+- Формат: JSON
 
-## Общие настройки
-- **Базовый URL**: `/api/v1`
-- **Формат**: JSON
-- **Content-Type**: `application/json`
-
-## Эндпоинты 
+## Эндпоинты
 
 ### Пользователи (Users)
 - `GET    /api/v1/users` - получить всех пользователей
@@ -30,37 +27,54 @@
 - `PUT    /api/v1/points/{id}` - обновить точку
 - `DELETE /api/v1/points/{id}` - удалить точку
 
-## Entity структуры (с учетом связей JPA)
+## DTO структуры
 
-### User Entity
+### User DTOs
 ```json
+// CreateUserRequest
+{
+  "login": "string",
+  "password": "string", 
+  "role": "string"
+}
+
+// UserResponse  
 {
   "id": "long",
   "login": "string",
-  "password": "string",
-  "role": "string",
-  "functions": []  // массив функций (только при явном запросе)
+  "role": "string"
 }
 
-  Function Entity
-  "id": "long", 
+### Function DTOs
+
+// CreateFunctionRequest
+{
+  "userId": "long",
   "name": "string",
-  "signature": "string",
-  "user": {
-    "id": "long",
-    "login": "string",
-    "role": "string"
-  },
-  "points": []  // массив точек (только при явном запросе)
+  "signature": "string"
 }
-  Point Entity
+
+// FunctionResponse
+{
+  "id": "long", 
+  "userId": "long",
+  "name": "string",
+  "signature": "string"
+}
+
+### Point DTOs
+
+// CreatePointRequest
+{
+  "functionId": "long",
+  "xValue": "number",
+  "yValue": "number"
+}
+
+// PointResponse
 {
   "id": "long",
+  "functionId": "long", 
   "xValue": "number",
-  "yValue": "number", 
-  "function": {
-    "id": "long",
-    "name": "string",
-    "signature": "string"
-  }
+  "yValue": "number"
 }
