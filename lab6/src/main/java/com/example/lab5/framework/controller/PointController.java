@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/points")
+@RequestMapping("/api/v1")  // ← ИЗМЕНЕНО!
 public class PointController {
 
     private static final Logger logger = LoggerFactory.getLogger(PointController.class);
@@ -30,7 +30,7 @@ public class PointController {
         return dto;
     }
 
-    @GetMapping
+    @GetMapping("/points")  // → /api/v1/points
     public List<PointDTO> getAllPoints() {
         logger.info("GET /api/v1/points - получение всех точек");
         List<PointDTO> result = pointService.getAllPoints().stream()
@@ -40,7 +40,7 @@ public class PointController {
         return result;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/points/{id}")  // → /api/v1/points/{id}
     public ResponseEntity<PointDTO> getPointById(@PathVariable Long id) {
         logger.info("GET /api/v1/points/{} - получение точки по ID", id);
         return pointService.getPointById(id)
@@ -54,9 +54,9 @@ public class PointController {
                 });
     }
 
-    @GetMapping("/function/{functionId}")
+    @GetMapping("/functions/{functionId}/points")  // → /api/v1/functions/{functionId}/points ✅
     public List<PointDTO> getPointsByFunction(@PathVariable Long functionId) {
-        logger.info("GET /api/v1/points/function/{} - получение точек функции", functionId);
+        logger.info("GET /api/v1/functions/{}/points - получение точек функции", functionId);
         List<PointDTO> result = pointService.getPointsByFunctionId(functionId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -64,7 +64,7 @@ public class PointController {
         return result;
     }
 
-    @PostMapping
+    @PostMapping("/points")  // → /api/v1/points
     public PointDTO createPoint(@RequestBody PointDTO pointDTO) {
         logger.info("POST /api/v1/points - создание точки для функции {}", pointDTO.getFunctionId());
         Point created = pointService.createPoint(
@@ -76,7 +76,36 @@ public class PointController {
         return toDTO(created);
     }
 
-    @PostMapping("/generate/{functionId}")
+    @PutMapping("/points/{id}")  // → /api/v1/points/{id}
+    public ResponseEntity<PointDTO> updatePoint(@PathVariable Long id, @RequestBody PointDTO pointDTO) {
+        logger.info("PUT /api/v1/points/{} - обновление точки", id);
+        // Нужно добавить этот метод в PointService
+        Point updated = pointService.updatePoint(
+                id,
+                pointDTO.getFunctionId(),
+                pointDTO.getXValue(),
+                pointDTO.getYValue()
+        );
+        if (updated != null) {
+            logger.info("Точка с ID {} обновлена", id);
+            return ResponseEntity.ok(toDTO(updated));
+        }
+        logger.warn("Точка с ID {} не найдена для обновления", id);
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/points/{id}")  // → /api/v1/points/{id}
+    public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
+        logger.info("DELETE /api/v1/points/{} - удаление точки", id);
+        if (pointService.deletePoint(id)) {
+            logger.info("Точка с ID {} удалена", id);
+            return ResponseEntity.noContent().build();
+        }
+        logger.warn("Точка с ID {} не найдена для удаления", id);
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/points/generate/{functionId}")  // → /api/v1/points/generate/{functionId}
     public ResponseEntity<String> generatePoints(
             @PathVariable Long functionId,
             @RequestParam String functionType,

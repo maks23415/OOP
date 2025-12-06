@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/functions")
+@RequestMapping("/api/v1")  // ← ИЗМЕНЕНО!
 public class FunctionController {
 
     private static final Logger logger = LoggerFactory.getLogger(FunctionController.class);
@@ -30,7 +30,7 @@ public class FunctionController {
         return dto;
     }
 
-    @GetMapping
+    @GetMapping("/functions")  // → /api/v1/functions
     public List<FunctionDTO> getAllFunctions() {
         logger.info("GET /api/v1/functions - получение всех функций");
         List<FunctionDTO> result = functionService.getAllFunctions().stream()
@@ -40,7 +40,7 @@ public class FunctionController {
         return result;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/functions/{id}")  // → /api/v1/functions/{id}
     public ResponseEntity<FunctionDTO> getFunctionById(@PathVariable Long id) {
         logger.info("GET /api/v1/functions/{} - получение функции по ID", id);
         return functionService.getFunctionById(id)
@@ -54,9 +54,9 @@ public class FunctionController {
                 });
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}/functions")  // → /api/v1/users/{userId}/functions ✅
     public List<FunctionDTO> getFunctionsByUser(@PathVariable Long userId) {
-        logger.info("GET /api/v1/functions/user/{} - получение функций пользователя", userId);
+        logger.info("GET /api/v1/users/{}/functions - получение функций пользователя", userId);
         List<FunctionDTO> result = functionService.getFunctionsByUserId(userId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -64,7 +64,7 @@ public class FunctionController {
         return result;
     }
 
-    @PostMapping
+    @PostMapping("/functions")  // → /api/v1/functions
     public FunctionDTO createFunction(@RequestBody FunctionDTO functionDTO) {
         logger.info("POST /api/v1/functions - создание функции: name={}, userId={}",
                 functionDTO.getName(), functionDTO.getUserId());
@@ -77,7 +77,7 @@ public class FunctionController {
         return toDTO(created);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/functions/{id}")  // → /api/v1/functions/{id}
     public ResponseEntity<FunctionDTO> updateFunction(@PathVariable Long id, @RequestBody FunctionDTO functionDTO) {
         logger.info("PUT /api/v1/functions/{} - обновление функции", id);
         Function updated = functionService.updateFunction(
@@ -94,7 +94,7 @@ public class FunctionController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/functions/{id}")  // → /api/v1/functions/{id}
     public ResponseEntity<Void> deleteFunction(@PathVariable Long id) {
         logger.info("DELETE /api/v1/functions/{} - удаление функции", id);
         if (functionService.deleteFunction(id)) {
