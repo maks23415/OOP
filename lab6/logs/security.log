@@ -78,3 +78,5 @@
 2025-12-04 00:08:43.895 [http-bio-8080-exec-3] WARN  c.e.lab5.manual.service.AuthService - Missing or invalid Authorization header from IP: 0:0:0:0:0:0:0:1
 2025-12-04 00:08:43.988 [http-bio-8080-exec-3] WARN  c.e.lab5.manual.service.AuthService - Missing or invalid Authorization header from IP: 0:0:0:0:0:0:0:1
 2025-12-04 00:08:44.084 [http-bio-8080-exec-3] WARN  c.e.lab5.manual.service.AuthService - Missing or invalid Authorization header from IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:51:00.699 [http-bio-8080-exec-8] WARN  c.e.lab5.manual.service.AuthService - Missing or invalid Authorization header from IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:51:11.567 [http-bio-8080-exec-8] WARN  c.e.lab5.manual.service.AuthService - User not found: admin from IP: 0:0:0:0:0:0:0:1
