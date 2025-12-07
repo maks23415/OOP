@@ -7,13 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")  // ← ИЗМЕНЕНО!
+@RequestMapping("/api/v1")
 public class PointController {
 
     private static final Logger logger = LoggerFactory.getLogger(PointController.class);
@@ -30,7 +31,8 @@ public class PointController {
         return dto;
     }
 
-    @GetMapping("/points")  // → /api/v1/points
+    @GetMapping("/points")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<PointDTO> getAllPoints() {
         logger.info("GET /api/v1/points - получение всех точек");
         List<PointDTO> result = pointService.getAllPoints().stream()
@@ -40,7 +42,8 @@ public class PointController {
         return result;
     }
 
-    @GetMapping("/points/{id}")  // → /api/v1/points/{id}
+    @GetMapping("/points/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<PointDTO> getPointById(@PathVariable Long id) {
         logger.info("GET /api/v1/points/{} - получение точки по ID", id);
         return pointService.getPointById(id)
@@ -54,7 +57,8 @@ public class PointController {
                 });
     }
 
-    @GetMapping("/functions/{functionId}/points")  // → /api/v1/functions/{functionId}/points ✅
+    @GetMapping("/functions/{functionId}/points")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<PointDTO> getPointsByFunction(@PathVariable Long functionId) {
         logger.info("GET /api/v1/functions/{}/points - получение точек функции", functionId);
         List<PointDTO> result = pointService.getPointsByFunctionId(functionId).stream()
@@ -64,7 +68,8 @@ public class PointController {
         return result;
     }
 
-    @PostMapping("/points")  // → /api/v1/points
+    @PostMapping("/points")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public PointDTO createPoint(@RequestBody PointDTO pointDTO) {
         logger.info("POST /api/v1/points - создание точки для функции {}", pointDTO.getFunctionId());
         Point created = pointService.createPoint(
@@ -76,10 +81,10 @@ public class PointController {
         return toDTO(created);
     }
 
-    @PutMapping("/points/{id}")  // → /api/v1/points/{id}
+    @PutMapping("/points/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<PointDTO> updatePoint(@PathVariable Long id, @RequestBody PointDTO pointDTO) {
         logger.info("PUT /api/v1/points/{} - обновление точки", id);
-        // Нужно добавить этот метод в PointService
         Point updated = pointService.updatePoint(
                 id,
                 pointDTO.getFunctionId(),
@@ -94,7 +99,8 @@ public class PointController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/points/{id}")  // → /api/v1/points/{id}
+    @DeleteMapping("/points/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
         logger.info("DELETE /api/v1/points/{} - удаление точки", id);
         if (pointService.deletePoint(id)) {
@@ -105,7 +111,8 @@ public class PointController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/points/generate/{functionId}")  // → /api/v1/points/generate/{functionId}
+    @PostMapping("/points/generate/{functionId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<String> generatePoints(
             @PathVariable Long functionId,
             @RequestParam String functionType,

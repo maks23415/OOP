@@ -7,13 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1")  // ← ИЗМЕНЕНО!
+@RequestMapping("/api/v1")
 public class FunctionController {
 
     private static final Logger logger = LoggerFactory.getLogger(FunctionController.class);
@@ -30,7 +31,8 @@ public class FunctionController {
         return dto;
     }
 
-    @GetMapping("/functions")  // → /api/v1/functions
+    @GetMapping("/functions")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<FunctionDTO> getAllFunctions() {
         logger.info("GET /api/v1/functions - получение всех функций");
         List<FunctionDTO> result = functionService.getAllFunctions().stream()
@@ -40,7 +42,8 @@ public class FunctionController {
         return result;
     }
 
-    @GetMapping("/functions/{id}")  // → /api/v1/functions/{id}
+    @GetMapping("/functions/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<FunctionDTO> getFunctionById(@PathVariable Long id) {
         logger.info("GET /api/v1/functions/{} - получение функции по ID", id);
         return functionService.getFunctionById(id)
@@ -54,7 +57,8 @@ public class FunctionController {
                 });
     }
 
-    @GetMapping("/users/{userId}/functions")  // → /api/v1/users/{userId}/functions ✅
+    @GetMapping("/users/{userId}/functions")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<FunctionDTO> getFunctionsByUser(@PathVariable Long userId) {
         logger.info("GET /api/v1/users/{}/functions - получение функций пользователя", userId);
         List<FunctionDTO> result = functionService.getFunctionsByUserId(userId).stream()
@@ -64,7 +68,8 @@ public class FunctionController {
         return result;
     }
 
-    @PostMapping("/functions")  // → /api/v1/functions
+    @PostMapping("/functions")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public FunctionDTO createFunction(@RequestBody FunctionDTO functionDTO) {
         logger.info("POST /api/v1/functions - создание функции: name={}, userId={}",
                 functionDTO.getName(), functionDTO.getUserId());
@@ -77,7 +82,8 @@ public class FunctionController {
         return toDTO(created);
     }
 
-    @PutMapping("/functions/{id}")  // → /api/v1/functions/{id}
+    @PutMapping("/functions/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<FunctionDTO> updateFunction(@PathVariable Long id, @RequestBody FunctionDTO functionDTO) {
         logger.info("PUT /api/v1/functions/{} - обновление функции", id);
         Function updated = functionService.updateFunction(
@@ -94,7 +100,8 @@ public class FunctionController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/functions/{id}")  // → /api/v1/functions/{id}
+    @DeleteMapping("/functions/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> deleteFunction(@PathVariable Long id) {
         logger.info("DELETE /api/v1/functions/{} - удаление функции", id);
         if (functionService.deleteFunction(id)) {
