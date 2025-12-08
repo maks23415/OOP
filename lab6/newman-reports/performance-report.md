@@ -1,7 +1,7 @@
 # Manual API Performance Report
 
 **Environment**: Tomcat + Java Servlets  
-**Test Date**: 04.12.2025, 00:08:44  
+**Test Date**: 08.12.2025, 16:18:46  
 **Iterations**: 10  
 
 ## Response Time Statistics (ms)
@@ -13,32 +13,32 @@
 
 | Endpoint | Min | Max | Avg | Median | Std Dev |
 |----------|-----|-----|-----|--------|----------|
-| POST Create User | 65 | 179 | 86 | 72 | 34 |
-| GET All Users | 4 | 12 | 5 | 4 | 2 |
-| GET User by ID | 3 | 8 | 4 | 4 | 1 |
-| PUT Update User | 2 | 6 | 4 | 4 | 1 |
-| DELETE User | 2 | 12 | 5 | 3 | 3 |
-| GET Functions by User ID | 2 | 5 | 4 | 4 | 1 |
+| POST Create User | 47 | 159 | 61 | 50 | 33 |
+| GET All Users | 2 | 5 | 3 | 3 | 1 |
+| GET User by ID | 2 | 5 | 3 | 3 | 1 |
+| PUT Update User | 2 | 7 | 5 | 5 | 2 |
+| DELETE User | 2 | 18 | 5 | 4 | 5 |
+| GET Functions by User ID | 2 | 5 | 3 | 4 | 1 |
 
 ### Functions
 
 | Endpoint | Min | Max | Avg | Median | Std Dev |
 |----------|-----|-----|-----|--------|----------|
-| POST Create Function | 2 | 15 | 5 | 4 | 4 |
-| GET All Functions | 4 | 6 | 4 | 4 | 1 |
-| GET Function by ID | 2 | 5 | 4 | 4 | 1 |
+| POST Create Function | 1 | 4 | 3 | 3 | 1 |
+| GET All Functions | 2 | 5 | 3 | 2 | 1 |
+| GET Function by ID | 1 | 6 | 4 | 4 | 1 |
 
 ### Other
 
 | Endpoint | Min | Max | Avg | Median | Std Dev |
 |----------|-----|-----|-----|--------|----------|
-| 🏠 Health Check | 2 | 38 | 7 | 4 | 11 |
+| Health Check | 2 | 18 | 5 | 4 | 5 |
 
 ## Summary
 
 | Metric | Value |
 |--------|-------|
 | Total Requests Tested | 10 |
-| Average Response Time | 13 ms |
-| Fastest Endpoint | GET User by ID (4 ms) |
-| Slowest Endpoint | POST Create User (86 ms) |
+| Average Response Time | 10 ms |
+| Fastest Endpoint | GET All Users (3 ms) |
+| Slowest Endpoint | POST Create User (61 ms) |
