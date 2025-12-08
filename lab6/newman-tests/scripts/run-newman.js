@@ -124,10 +124,6 @@ function analyzePerformance(summary, timestamp) {
         const avgSquareDiff = squareDiffs.reduce((a, b) => a + b, 0) / times.length;
         const stdDev = Math.sqrt(avgSquareDiff);
 
-        // Процент успешных запросов
-        const successCount = data.statusCodes.filter(code => code >= 200 && code < 300).length;
-        const successRate = ((successCount / data.statusCodes.length) * 100).toFixed(1) + '%';
-
         performanceStats[key] = {
             request: data.name,
             method: data.method,
@@ -137,8 +133,7 @@ function analyzePerformance(summary, timestamp) {
             max: Math.round(max),
             average: Math.round(avg),
             median: Math.round(median),
-            stdDev: Math.round(stdDev),
-            successRate: successRate
+            stdDev: Math.round(stdDev)
         };
     });
 
@@ -150,35 +145,22 @@ function analyzePerformance(summary, timestamp) {
     console.log('='.repeat(80));
 
     // Выводим таблицу в консоль
-    console.log('\n| Метод | Эндпоинт | Ср. время (мс) | Мин | Макс | Итераций | Успех |');
-    console.log('|-------|----------|----------------|-----|------|----------|-------|');
+    console.log('\n| Метод | Эндпоинт | Ср. время (мс) | Мин | Макс | Итераций |');
+    console.log('|-------|----------|----------------|-----|------|----------|');
 
     Object.values(performanceStats).forEach(stat => {
-        console.log('| ' + stat.method + ' | ' + stat.endpoint + ' | ' + stat.average + ' | ' + stat.min + ' | ' + stat.max + ' | ' + stat.iterations + ' | ' + stat.successRate + ' |');
+        console.log('| ' + stat.method + ' | ' + stat.endpoint + ' | ' + stat.average + ' | ' + stat.min + ' | ' + stat.max + ' | ' + stat.iterations + ' |');
     });
-
-    // Общая статистика
-    const allTimes = executions.map(exec => exec.response.responseTime);
-    const totalAvg = allTimes.reduce((a, b) => a + b, 0) / allTimes.length;
-    const totalMin = Math.min(...allTimes);
-    const totalMax = Math.max(...allTimes);
-
-    console.log('\nОБЩАЯ СТАТИСТИКА:');
-    console.log('   Всего запросов: ' + executions.length);
-    console.log('   Среднее время ответа: ' + Math.round(totalAvg) + ' мс');
-    console.log('   Минимальное время: ' + Math.round(totalMin) + ' мс');
-    console.log('   Максимальное время: ' + Math.round(totalMax) + ' мс');
-    console.log('   Протестировано эндпоинтов: ' + Object.keys(performanceStats).length);
 
     console.log('\nОтчеты сохранены в: ' + resultsDir);
 }
 
 function generateCSVReport(stats, timestamp) {
     const csvPath = path.join(resultsDir, 'springboot-performance-' + timestamp + '.csv');
-    let csv = 'Method,Endpoint,Request,Iterations,Avg(ms),Min(ms),Max(ms),Median(ms),StdDev,SuccessRate\n';
+    let csv = 'Method,Endpoint,Request,Iterations,Avg(ms),Min(ms),Max(ms),Median(ms),StdDev\n';
 
     Object.values(stats).forEach(stat => {
-        csv += stat.method + ',' + stat.endpoint + ',' + stat.request + ',' + stat.iterations + ',' + stat.average + ',' + stat.min + ',' + stat.max + ',' + stat.median + ',' + stat.stdDev + ',' + stat.successRate + '\n';
+        csv += stat.method + ',' + stat.endpoint + ',' + stat.request + ',' + stat.iterations + ',' + stat.average + ',' + stat.min + ',' + stat.max + ',' + stat.median + ',' + stat.stdDev + '\n';
     });
 
     fs.writeFileSync(csvPath, csv);
@@ -196,34 +178,14 @@ function generateMarkdownTable(stats, timestamp) {
     markdown += '**Итераций на запрос:** 10  \n\n';
 
     markdown += '## Таблица скорости выполнения запросов (время в мс)\n\n';
-    markdown += '| № | Метод | Эндпоинт | Запрос | Ср. время | Мин | Макс | Медиана | Успех |\n';
-    markdown += '|---|-------|----------|--------|-----------|-----|------|---------|-------|\n';
+    markdown += '| № | Метод | Эндпоинт | Запрос | Ср. время | Мин | Макс | Медиана |\n';
+    markdown += '|---|-------|----------|--------|-----------|-----|------|---------|\n';
 
     let counter = 1;
     Object.values(stats).forEach(stat => {
-        markdown += '| ' + counter + ' | ' + stat.method + ' | ' + stat.endpoint + ' | ' + stat.request + ' | ' + stat.average + ' | ' + stat.min + ' | ' + stat.max + ' | ' + stat.median + ' | ' + stat.successRate + ' |\n';
+        markdown += '| ' + counter + ' | ' + stat.method + ' | ' + stat.endpoint + ' | ' + stat.request + ' | ' + stat.average + ' | ' + stat.min + ' | ' + stat.max + ' | ' + stat.median + ' |\n';
         counter++;
     });
-
-    // Сводная статистика
-    const allTimes = Object.values(stats).flatMap(stat => {
-        // Создаем массив времен на основе среднего значения
-        return Array(stat.iterations).fill(stat.average);
-    });
-
-    const totalAvg = allTimes.reduce((a, b) => a + b, 0) / allTimes.length;
-    const totalMin = Math.min(...Object.values(stats).map(stat => stat.min));
-    const totalMax = Math.max(...Object.values(stats).map(stat => stat.max));
-
-    markdown += '\n## Сводная статистика\n\n';
-    markdown += '| Показатель | Значение |\n';
-    markdown += '|------------|----------|\n';
-    markdown += '| Всего запросов | ' + allTimes.length + ' |\n';
-    markdown += '| Протестировано эндпоинтов | ' + Object.keys(stats).length + ' |\n';
-    markdown += '| Среднее время ответа | ' + Math.round(totalAvg) + ' мс |\n';
-    markdown += '| Минимальное время | ' + totalMin + ' мс |\n';
-    markdown += '| Максимальное время | ' + totalMax + ' мс |\n';
-    markdown += '| Технология | Spring Boot + Spring Data JPA |\n';
 
     fs.writeFileSync(mdPath, markdown);
     console.log('   Markdown таблица: ' + mdPath);
