@@ -54,6 +54,7 @@
     </dependencies>
 
     <build>
+        <finalName>lab5-framework</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
