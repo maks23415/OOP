@@ -14,28 +14,22 @@ public class PointDAO {
     private static final Logger logger = LoggerFactory.getLogger(PointDAO.class);
 
     public Long createPoint(PointDTO point) {
-        String sql = "INSERT INTO points (f_id, x_value, y_value) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO points (f_id, x_value, y_value) VALUES (?, ?, ?) RETURNING id";
 
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, point.getFunctionId());
             stmt.setDouble(2, point.getXValue());
             stmt.setDouble(3, point.getYValue());
 
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Создание точки не удалось");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    Long id = generatedKeys.getLong(1);
-                    logger.debug("Создана точка с ID: {}, f_id: {}, x: {}", id, point.getFunctionId(), point.getXValue());
-                    return id;
-                } else {
-                    throw new SQLException("Создание точки не удалось, ID не получен");
-                }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Long id = rs.getLong(1);
+                logger.debug("Создана точка с ID: {}, f_id: {}, x: {}", id, point.getFunctionId(), point.getXValue());
+                return id;
+            } else {
+                throw new SQLException("Создание точки не удалось, ID не получен");
             }
         } catch (SQLException e) {
             logger.error("Ошибка при создании точки для функции {}: x={}, y={}",
@@ -70,7 +64,7 @@ public class PointDAO {
     }
 
     public Optional<PointDTO> findById(Long id) {
-        String sql = "SELECT * FROM points WHERE id = ?";
+        String sql = "SELECT id, f_id, x_value, y_value FROM points WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -90,7 +84,7 @@ public class PointDAO {
     }
 
     public List<PointDTO> findByFunctionId(Long functionId) {
-        String sql = "SELECT * FROM points WHERE f_id = ? ORDER BY x_value";
+        String sql = "SELECT id, f_id, x_value, y_value FROM points WHERE f_id = ? ORDER BY x_value";
         List<PointDTO> points = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -111,7 +105,7 @@ public class PointDAO {
     }
 
     public List<PointDTO> findByXRange(Long functionId, Double minX, Double maxX) {
-        String sql = "SELECT * FROM points WHERE f_id = ? AND x_value BETWEEN ? AND ? ORDER BY x_value";
+        String sql = "SELECT id, f_id, x_value, y_value FROM points WHERE f_id = ? AND x_value BETWEEN ? AND ? ORDER BY x_value";
         List<PointDTO> points = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -135,7 +129,7 @@ public class PointDAO {
     }
 
     public List<PointDTO> findByYRange(Long functionId, Double minY, Double maxY) {
-        String sql = "SELECT * FROM points WHERE f_id = ? AND y_value BETWEEN ? AND ? ORDER BY y_value";
+        String sql = "SELECT id, f_id, x_value, y_value FROM points WHERE f_id = ? AND y_value BETWEEN ? AND ? ORDER BY y_value";
         List<PointDTO> points = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -157,7 +151,7 @@ public class PointDAO {
     }
 
     public List<PointDTO> findAll() {
-        String sql = "SELECT * FROM points ORDER BY f_id, x_value";
+        String sql = "SELECT id, f_id, x_value, y_value FROM points ORDER BY f_id, x_value";
         List<PointDTO> points = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();

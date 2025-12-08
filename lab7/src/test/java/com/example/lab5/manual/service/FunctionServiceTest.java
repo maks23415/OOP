@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,7 +43,8 @@ class FunctionServiceTest {
     void tearDown() {
         if (testUserId != null) {
             try {
-                functionDAO.deleteFunctionsByUserId(testUserId);
+                // Используем существующий метод deleteByUserId вместо deleteFunctionsByUserId
+                functionDAO.deleteByUserId(testUserId);
 
                 userDAO.deleteUser(testUserId);
                 logger.info("Удален тестовый пользователь с ID: {}", testUserId);
@@ -65,7 +67,8 @@ class FunctionServiceTest {
         Optional<FunctionDTO> createdFunction = functionService.getFunctionById(functionId);
         assertTrue(createdFunction.isPresent(), "Функция должна быть найдена в базе данных");
         assertEquals(functionName, createdFunction.get().getName(), "Имя функции должно совпадать");
-
+        assertEquals(functionExpression, createdFunction.get().getSignature(), "Сигнатура функции должна совпадать");
+        assertEquals(testUserId, createdFunction.get().getUserId(), "ID пользователя должно совпадать");
     }
 
     @Test
@@ -82,6 +85,8 @@ class FunctionServiceTest {
         assertEquals(11, stats.getPointCount(), "Количество точек должно быть 11 (от -5 до 5 включительно)");
         assertEquals(-5.0, stats.getMinX(), 0.001, "Минимальное значение X должно быть -5");
         assertEquals(5.0, stats.getMaxX(), 0.001, "Максимальное значение X должно быть 5");
+        assertEquals(-5.0, stats.getMinY(), 0.001, "Минимальное значение Y должно быть -5");
+        assertEquals(5.0, stats.getMaxY(), 0.001, "Максимальное значение Y должно быть 5");
     }
 
     @Test
@@ -108,5 +113,67 @@ class FunctionServiceTest {
 
         Optional<FunctionDTO> result = functionService.getFunctionById(nonExistentFunctionId);
         assertFalse(result.isPresent(), "Для несуществующего ID функция не должна быть найдена");
+    }
+
+    @Test
+    void testGetFunctionsByUserId() {
+        // Создаем несколько функций для пользователя
+        String functionName1 = "func1_" + UUID.randomUUID().toString().substring(0, 8);
+        String functionName2 = "func2_" + UUID.randomUUID().toString().substring(0, 8);
+
+        functionService.createFunction(testUserId, functionName1, "f(x) = x^2");
+        functionService.createFunction(testUserId, functionName2, "f(x) = x^3");
+
+        List<FunctionDTO> functions = functionService.getFunctionsByUserId(testUserId);
+
+        assertNotNull(functions, "Список функций не должен быть null");
+        assertEquals(2, functions.size(), "Должно быть 2 функции для пользователя");
+    }
+
+    @Test
+    void testUpdateFunction() {
+        String functionName = "update_test_" + UUID.randomUUID().toString().substring(0, 8);
+        Long functionId = functionService.createFunction(testUserId, functionName, "f(x) = x");
+
+        boolean updated = functionService.updateFunction(functionId, testUserId, "updated_function", "f(x) = x^2");
+
+        assertTrue(updated, "Функция должна быть успешно обновлена");
+
+        Optional<FunctionDTO> updatedFunction = functionService.getFunctionById(functionId);
+        assertTrue(updatedFunction.isPresent(), "Обновленная функция должна существовать");
+        assertEquals("updated_function", updatedFunction.get().getName(), "Имя функции должно быть обновлено");
+        assertEquals("f(x) = x^2", updatedFunction.get().getSignature(), "Сигнатура функции должна быть обновлена");
+    }
+
+    @Test
+    void testDeleteFunction() {
+        String functionName = "delete_test_" + UUID.randomUUID().toString().substring(0, 8);
+        Long functionId = functionService.createFunction(testUserId, functionName, "f(x) = x");
+
+        // Создаем точки для функции
+        PointService pointService = new PointService(pointDAO, functionDAO);
+        pointService.generateFunctionPoints(functionId, "linear", -2, 2, 1);
+
+        boolean deleted = functionService.deleteFunction(functionId);
+
+        assertTrue(deleted, "Функция должна быть успешно удалена");
+
+        Optional<FunctionDTO> deletedFunction = functionService.getFunctionById(functionId);
+        assertFalse(deletedFunction.isPresent(), "Удаленная функция не должна существовать");
+    }
+
+    @Test
+    void testValidateFunctionName() {
+        String functionName = "unique_func_" + UUID.randomUUID().toString().substring(0, 8);
+
+        // Создаем функцию с уникальным именем
+        functionService.createFunction(testUserId, functionName, "f(x) = x");
+
+        // Проверяем валидацию имени
+        boolean isValid = functionService.validateFunctionName(testUserId, functionName);
+        assertFalse(isValid, "Имя функции не должно быть валидным (уже существует)");
+
+        boolean isValidNew = functionService.validateFunctionName(testUserId, "completely_new_name");
+        assertTrue(isValidNew, "Новое имя функции должно быть валидным");
     }
 }

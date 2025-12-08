@@ -14,28 +14,22 @@ public class FunctionDAO {
     private static final Logger logger = LoggerFactory.getLogger(FunctionDAO.class);
 
     public Long createFunction(FunctionDTO function) {
-        String sql = "INSERT INTO functions (u_id, name, signature) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO functions (u_id, name, signature) VALUES (?, ?, ?) RETURNING id";
 
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, function.getUserId());
             stmt.setString(2, function.getName());
             stmt.setString(3, function.getSignature());
 
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Создание функции не удалось");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    Long id = generatedKeys.getLong(1);
-                    logger.info("Создана функция с ID: {}, название: {}", id, function.getName());
-                    return id;
-                } else {
-                    throw new SQLException("Создание функции не удалось, ID не получен");
-                }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Long id = rs.getLong(1);
+                logger.info("Создана функция с ID: {}, название: {}", id, function.getName());
+                return id;
+            } else {
+                throw new SQLException("Создание функции не удалось, ID не получен");
             }
         } catch (SQLException e) {
             logger.error("Ошибка при создании функции: {}", function.getName(), e);
@@ -44,7 +38,7 @@ public class FunctionDAO {
     }
 
     public Optional<FunctionDTO> findById(Long id) {
-        String sql = "SELECT * FROM functions WHERE id = ?";
+        String sql = "SELECT id, u_id, name, signature FROM functions WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -64,21 +58,8 @@ public class FunctionDAO {
         }
     }
 
-    public void deleteFunctionsByUserId(Long userId) {
-        String sql = "DELETE FROM functions WHERE u_id = ?";
-        try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, userId);
-            pstmt.executeUpdate();
-            logger.info("Удалены функции пользователя с ID: {}", userId);
-        } catch (SQLException e) {
-            logger.error("Ошибка при удалении функций пользователя с ID: {}", userId, e);
-            throw new RuntimeException("Database error", e);
-        }
-    }
-
     public List<FunctionDTO> findByUserId(Long userId) {
-        String sql = "SELECT * FROM functions WHERE u_id = ? ORDER BY name";
+        String sql = "SELECT id, u_id, name, signature FROM functions WHERE u_id = ? ORDER BY name";
         List<FunctionDTO> functions = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -99,7 +80,7 @@ public class FunctionDAO {
     }
 
     public List<FunctionDTO> findByName(String name) {
-        String sql = "SELECT * FROM functions WHERE name LIKE ? ORDER BY name";
+        String sql = "SELECT id, u_id, name, signature FROM functions WHERE name LIKE ? ORDER BY name";
         List<FunctionDTO> functions = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -120,7 +101,7 @@ public class FunctionDAO {
     }
 
     public List<FunctionDTO> findAll() {
-        String sql = "SELECT * FROM functions ORDER BY u_id, name";
+        String sql = "SELECT id, u_id, name, signature FROM functions ORDER BY u_id, name";
         List<FunctionDTO> functions = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -201,7 +182,6 @@ public class FunctionDAO {
             throw new RuntimeException("Database error", e);
         }
     }
-
 
     private FunctionDTO mapResultSetToFunction(ResultSet rs) throws SQLException {
         FunctionDTO function = new FunctionDTO();

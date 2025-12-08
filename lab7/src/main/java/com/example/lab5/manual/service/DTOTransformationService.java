@@ -5,11 +5,9 @@ import com.example.lab5.manual.dto.PointDTO;
 import com.example.lab5.manual.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service
 public class DTOTransformationService {
     private static final Logger logger = LoggerFactory.getLogger(DTOTransformationService.class);
 

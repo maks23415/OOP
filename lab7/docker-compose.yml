@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: lab5-postgres
+    environment:
+      POSTGRES_DB: lab5db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/sql/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lab5-network
+
+  lab5-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lab5-manual-app
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/lab5db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - JAVA_OPTS=-Xmx512m -Dlogging.level.com.example.lab5=INFO
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./logs:/usr/local/tomcat/logs
+      - app_logs:/app/logs
+    networks:
+      - lab5-network
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  app_logs:
+
+networks:
+  lab5-network:
+    driver: bridge
