@@ -5,10 +5,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 import java.util.logging.Logger;
 
-/**
- * Manual версия приложения - инициализатор контекста
- * Заменяет Spring Boot для manual реализации
- */
 @WebListener
 public class Lab5Application implements ServletContextListener {
     private static final Logger logger = Logger.getLogger(Lab5Application.class.getName());
