@@ -1,9 +1,0 @@
-DataSize,Operation,Field,Direction,TimeMs
-100,UserSorting,login,ASC,2,026
-100,UserSorting,role,ASC,0,842
-100,UserSorting,login,DESC,0,558
-100,UserSorting,role_login,MULTI,0,819
-100,FunctionSorting,name,ASC,0,840
-100,FunctionSorting,user_id,ASC,1,203
-100,PointSorting,x_value,ASC,1,223
-100,PointSorting,y_value,DESC,0,990
