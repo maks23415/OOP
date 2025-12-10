@@ -6,7 +6,7 @@ import java.util.List;
 @Data
 public class CreateFromArraysRequest {
     private List<PointData> points;
-    private String factoryType; // "array" или "linked_list"
+    private String factoryType;
     private String name;
     private Long userId;
 

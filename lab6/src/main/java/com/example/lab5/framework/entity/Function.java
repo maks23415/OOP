@@ -24,6 +24,25 @@ public class Function {
     @OneToMany(mappedBy = "function", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Point> points = new ArrayList<>();
 
+    // НОВЫЕ ПОЛЯ ДЛЯ LAB 7
+    @Column(name = "factory_type")
+    private String factoryType; // "array" или "linked_list"
+
+    @Column(name = "math_function_key")
+    private String mathFunctionKey; // Ключ математической функции
+
+    @Column(name = "creation_method")
+    private String creationMethod; // "from_arrays" или "from_math_function"
+
+    @Column(name = "left_bound")
+    private Double leftBound;
+
+    @Column(name = "right_bound")
+    private Double rightBound;
+
+    @Column(name = "points_count")
+    private Integer pointsCount;
+
     // Конструкторы
     public Function() {}
 
@@ -31,6 +50,21 @@ public class Function {
         this.name = name;
         this.signature = signature;
         this.user = user;
+    }
+
+    // Полный конструктор для Lab 7
+    public Function(String name, String signature, User user, String factoryType,
+                    String mathFunctionKey, String creationMethod, Double leftBound,
+                    Double rightBound, Integer pointsCount) {
+        this.name = name;
+        this.signature = signature;
+        this.user = user;
+        this.factoryType = factoryType;
+        this.mathFunctionKey = mathFunctionKey;
+        this.creationMethod = creationMethod;
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
+        this.pointsCount = pointsCount;
     }
 
     // Геттеры и сеттеры
@@ -48,6 +82,25 @@ public class Function {
 
     public List<Point> getPoints() { return points; }
     public void setPoints(List<Point> points) { this.points = points; }
+
+    // Новые геттеры и сеттеры для Lab 7
+    public String getFactoryType() { return factoryType; }
+    public void setFactoryType(String factoryType) { this.factoryType = factoryType; }
+
+    public String getMathFunctionKey() { return mathFunctionKey; }
+    public void setMathFunctionKey(String mathFunctionKey) { this.mathFunctionKey = mathFunctionKey; }
+
+    public String getCreationMethod() { return creationMethod; }
+    public void setCreationMethod(String creationMethod) { this.creationMethod = creationMethod; }
+
+    public Double getLeftBound() { return leftBound; }
+    public void setLeftBound(Double leftBound) { this.leftBound = leftBound; }
+
+    public Double getRightBound() { return rightBound; }
+    public void setRightBound(Double rightBound) { this.rightBound = rightBound; }
+
+    public Integer getPointsCount() { return pointsCount; }
+    public void setPointsCount(Integer pointsCount) { this.pointsCount = pointsCount; }
 
     public void addPoint(Point point) {
         points.add(point);
