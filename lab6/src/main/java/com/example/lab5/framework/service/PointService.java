@@ -66,6 +66,49 @@ public class PointService {
 
         return pointCount;
     }
+    public Point updatePoint(Long id, Long functionId, Double xValue, Double yValue) {
+        logger.info("Обновление точки с ID: {}", id);
+
+        Optional<Point> existingPoint = pointRepository.findById(id);
+        if (existingPoint.isPresent()) {
+            Point point = existingPoint.get();
+
+            // Обновляем функцию если изменилась
+            if (!point.getFunction().getId().equals(functionId)) {
+                Optional<Function> function = functionRepository.findById(functionId);
+                if (function.isPresent()) {
+                    point.setFunction(function.get());
+                } else {
+                    logger.error("Функция с ID {} не существует", functionId);
+                    return null;
+                }
+            }
+
+            point.setXValue(xValue);
+            point.setYValue(yValue);
+
+            Point updated = pointRepository.save(point);
+            logger.info("Точка с ID {} успешно обновлена", id);
+            return updated;
+        }
+
+        logger.warn("Точка с ID {} не найдена для обновления", id);
+        return null;
+    }
+
+
+    public boolean deletePoint(Long id) {
+        logger.info("Удаление точки с ID: {}", id);
+
+        if (pointRepository.existsById(id)) {
+            pointRepository.deleteById(id);
+            logger.info("Точка с ID {} удалена", id);
+            return true;
+        }
+
+        logger.warn("Точка с ID {} не найдена для удаления", id);
+        return false;
+    }
 
     private double calculateFunction(String functionType, double x) {
         return switch (functionType.toLowerCase()) {

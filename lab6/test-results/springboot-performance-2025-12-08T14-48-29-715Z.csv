@@ -1,0 +1,11 @@
+Method,Endpoint,Request,Iterations,Avg(ms),Min(ms),Max(ms),Median(ms),StdDev
+GET,/api/v1/users,GET Все пользователи,10,4,2,19,3,5
+POST,/api/v1/users,POST Создать пользователя,10,3,2,5,3,1
+GET,/api/v1/users/439,GET Пользователь по ID (существующий),10,3,2,3,3,0
+GET,/api/v1/users/%7B%7BcreatedUserId%7D%7D,GET Пользователь по ID (созданный),10,3,2,4,3,1
+DELETE,/api/v1/users/%7B%7BcreatedUserId%7D%7D,DELETE Удалить пользователя,10,4,2,17,3,4
+GET,/api/v1/functions,GET Все функции,10,2,2,3,2,0
+GET,/api/v1/functions/2223,GET Функция по ID,10,3,2,3,3,1
+GET,/api/v1/users/439/functions,GET Функции пользователя,10,3,2,3,3,0
+GET,/api/v1/points,GET Все точки,10,3,2,3,3,0
+GET,/api/v1/functions/2223/points,GET Точки функции,10,3,2,3,3,0

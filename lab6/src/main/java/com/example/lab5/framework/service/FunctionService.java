@@ -1,5 +1,6 @@
 package com.example.lab5.framework.service;
 
+import com.example.lab5.framework.dto.*;
 import com.example.lab5.framework.entity.Function;
 import com.example.lab5.framework.entity.Point;
 import com.example.lab5.framework.entity.User;
@@ -29,6 +30,8 @@ public class FunctionService {
     @Autowired
     private PointRepository pointRepository;
 
+    // Существующие методы...
+
     public Function createFunction(Long userId, String name, String signature) {
         logger.info("Создание функции: user={}, name={}, signature={}", userId, name, signature);
 
@@ -44,6 +47,194 @@ public class FunctionService {
         return savedFunction;
     }
 
+    // НОВЫЕ МЕТОДЫ ДЛЯ LAB 7
+    @Transactional
+    public Function createFromArrays(Long userId, String name,
+                                     List<CreateFromArraysRequest.PointData> pointsData,
+                                     String factoryType) {
+        logger.info("Создание функции из массивов: user={}, name={}, points={}, factory={}",
+                userId, name, pointsData.size(), factoryType);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    logger.error("Пользователь с ID {} не найден", userId);
+                    return new IllegalArgumentException("Пользователь не найден");
+                });
+
+        // Создаем функцию
+        Function function = new Function();
+        function.setName(name);
+        function.setUser(user);
+        function.setSignature("tabulated");
+        function.setFactoryType(factoryType);
+        function.setCreationMethod("from_arrays");
+        function.setPointsCount(pointsData.size());
+
+        // Находим min/max X для границ
+        double minX = pointsData.stream().mapToDouble(CreateFromArraysRequest.PointData::getX).min().orElse(0);
+        double maxX = pointsData.stream().mapToDouble(CreateFromArraysRequest.PointData::getX).max().orElse(0);
+        function.setLeftBound(minX);
+        function.setRightBound(maxX);
+
+        Function savedFunction = functionRepository.save(function);
+        logger.info("Функция создана с ID: {}", savedFunction.getId());
+
+        // Создаем точки
+        for (CreateFromArraysRequest.PointData pointData : pointsData) {
+            Point point = new Point();
+            point.setXValue(pointData.getX());
+            point.setYValue(pointData.getY());
+            point.setFunction(savedFunction);
+            pointRepository.save(point);
+        }
+
+        logger.info("Создано {} точек для функции {}", pointsData.size(), savedFunction.getId());
+        return savedFunction;
+    }
+
+    @Transactional
+    public Function createFromMathFunction(Long userId, String name, String mathFunctionKey,
+                                           Integer pointsCount, Double leftBound, Double rightBound,
+                                           String factoryType) {
+        logger.info("Создание функции из MathFunction: user={}, name={}, functionKey={}, points={}, bounds=[{}, {}], factory={}",
+                userId, name, mathFunctionKey, pointsCount, leftBound, rightBound, factoryType);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    logger.error("Пользователь с ID {} не найден", userId);
+                    return new IllegalArgumentException("Пользователь не найден");
+                });
+
+        // Проверяем корректность параметров
+        if (pointsCount < 2) {
+            throw new IllegalArgumentException("Количество точек должно быть не менее 2");
+        }
+        if (leftBound >= rightBound) {
+            throw new IllegalArgumentException("Левая граница должна быть меньше правой");
+        }
+
+        // Создаем функцию
+        Function function = new Function();
+        function.setName(name);
+        function.setUser(user);
+        function.setSignature("math_function_tabulated");
+        function.setMathFunctionKey(mathFunctionKey);
+        function.setFactoryType(factoryType);
+        function.setCreationMethod("from_math_function");
+        function.setPointsCount(pointsCount);
+        function.setLeftBound(leftBound);
+        function.setRightBound(rightBound);
+
+        Function savedFunction = functionRepository.save(function);
+        logger.info("Функция создана с ID: {}", savedFunction.getId());
+
+        // Генерируем точки из математической функции
+        double step = (rightBound - leftBound) / (pointsCount - 1);
+
+        for (int i = 0; i < pointsCount; i++) {
+            double x = leftBound + i * step;
+            double y = calculateMathFunction(mathFunctionKey, x);
+
+            Point point = new Point();
+            point.setXValue(x);
+            point.setYValue(y);
+            point.setFunction(savedFunction);
+            pointRepository.save(point);
+
+            // Логируем каждые 100 точек
+            if (i % 100 == 0 || i == pointsCount - 1) {
+                logger.debug("Создана точка {}: x={}, y={}", i, x, y);
+            }
+        }
+
+        logger.info("Сгенерировано {} точек для функции {}", pointsCount, savedFunction.getId());
+        return savedFunction;
+    }
+
+    public EvaluateResponse evaluateFunction(Long functionId, Double x) {
+        logger.debug("Вычисление значения функции {} в точке x={}", functionId, x);
+
+        Optional<Function> functionOpt = functionRepository.findById(functionId);
+        if (!functionOpt.isPresent()) {
+            logger.warn("Функция с ID {} не найдена", functionId);
+            return null;
+        }
+
+        Function function = functionOpt.get();
+
+        // Если это табулированная функция, ищем ближайшую точку или интерполируем
+        if ("tabulated".equals(function.getSignature()) ||
+                "math_function_tabulated".equals(function.getSignature())) {
+
+            List<Point> points = pointRepository.findByFunctionIdOrderByXValueAsc(functionId);
+
+            if (points.isEmpty()) {
+                logger.warn("У функции {} нет точек", functionId);
+                return null;
+            }
+
+            // Если x меньше минимального или больше максимального значения
+            if (x < points.get(0).getXValue()) {
+                logger.debug("x={} меньше минимального значения {}", x, points.get(0).getXValue());
+                return new EvaluateResponse(x, points.get(0).getYValue(), function.getName(), functionId);
+            }
+
+            if (x > points.get(points.size() - 1).getXValue()) {
+                logger.debug("x={} больше максимального значения {}", x, points.get(points.size() - 1).getXValue());
+                return new EvaluateResponse(x, points.get(points.size() - 1).getYValue(), function.getName(), functionId);
+            }
+
+            // Поиск интервала для интерполяции
+            for (int i = 0; i < points.size() - 1; i++) {
+                Point p1 = points.get(i);
+                Point p2 = points.get(i + 1);
+
+                if (x >= p1.getXValue() && x <= p2.getXValue()) {
+                    // Линейная интерполяция
+                    double ratio = (x - p1.getXValue()) / (p2.getXValue() - p1.getXValue());
+                    double y = p1.getYValue() + ratio * (p2.getYValue() - p1.getYValue());
+
+                    logger.debug("Интерполяция: x={} между [{}, {}], y={}",
+                            x, p1.getXValue(), p2.getXValue(), y);
+
+                    return new EvaluateResponse(x, y, function.getName(), functionId);
+                }
+            }
+
+            // Точечное совпадение
+            for (Point point : points) {
+                if (Math.abs(point.getXValue() - x) < 1e-10) {
+                    logger.debug("Точное совпадение: x={}, y={}", x, point.getYValue());
+                    return new EvaluateResponse(x, point.getYValue(), function.getName(), functionId);
+                }
+            }
+        }
+
+        logger.warn("Не удалось вычислить значение функции {} в точке {}", functionId, x);
+        return null;
+    }
+
+    private double calculateMathFunction(String functionKey, double x) {
+        switch (functionKey) {
+            case "sqr":
+                return x * x;
+            case "identity":
+                return x;
+            case "sin":
+                return Math.sin(x);
+            case "cos":
+                return Math.cos(x);
+            case "exp":
+                return Math.exp(x);
+            case "log":
+                return x > 0 ? Math.log(x) : Double.NaN;
+            default:
+                logger.warn("Неизвестная функция: {}", functionKey);
+                return 0;
+        }
+    }
+
+    // Остальные существующие методы...
     public Optional<Function> getFunctionById(Long id) {
         logger.debug("Поиск функции по ID: {}", id);
         return functionRepository.findById(id);

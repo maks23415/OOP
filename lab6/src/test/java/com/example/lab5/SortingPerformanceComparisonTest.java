@@ -5,11 +5,6 @@ import com.example.lab5.framework.search.DepthFirstSearch;
 import com.example.lab5.framework.search.HierarchySearch;
 import com.example.lab5.framework.entity.User;
 import com.example.lab5.framework.repository.UserRepository;
-import com.example.lab5.manual.search.SearchService;
-import com.example.lab5.manual.dao.UserDAO;
-import com.example.lab5.manual.dao.FunctionDAO;
-import com.example.lab5.manual.dao.PointDAO;
-import com.example.lab5.manual.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,8 +45,6 @@ public class SortingPerformanceComparisonTest {
         // Тестируем Framework реализацию
         testFrameworkPerformance();
 
-        // Тестируем Manual реализацию
-        testManualPerformance();
 
         // Генерируем общую таблицу результатов
         generateResultsTable();
@@ -87,32 +80,6 @@ public class SortingPerformanceComparisonTest {
         );
     }
 
-    private void testManualPerformance() {
-        SearchService searchService = new SearchService(new UserDAO(), new FunctionDAO(), new PointDAO());
-        List<UserDTO> testData = createManualTestData();
-
-        // Manual сортировка по логину
-        long manualLoginTime = measurePerformance(() ->
-                        searchService.sortUsers(new ArrayList<>(testData), "login", "asc"),
-                "Manual", "JDBC", "login_ASC"
-        );
-
-        // Manual сортировка по роли
-        long manualRoleTime = measurePerformance(() ->
-                        searchService.sortUsers(new ArrayList<>(testData), "role", "asc"),
-                "Manual", "JDBC", "role_ASC"
-        );
-
-        // Manual множественная сортировка
-        Map<String, String> multiSort = new LinkedHashMap<>();
-        multiSort.put("role", "asc");
-        multiSort.put("login", "asc");
-
-        long manualMultiTime = measurePerformance(() ->
-                        searchService.sortUsersByMultipleFields(new ArrayList<>(testData), multiSort),
-                "Manual", "JDBC", "multi_sort"
-        );
-    }
 
     private long measurePerformance(Runnable operation, String implementation, String algorithm, String sortType) {
         // Прогрев
@@ -195,22 +162,6 @@ public class SortingPerformanceComparisonTest {
 
             userRepository.saveAll(users);
         }
-    }
-
-    private List<UserDTO> createManualTestData() {
-        List<UserDTO> users = new ArrayList<>();
-        Random random = new Random();
-        String[] roles = {"USER", "ADMIN", "MODERATOR"};
-
-        for (int i = 0; i < DATASET_SIZE; i++) {
-            String login = "user_" + i + "_" + random.nextInt(10000);
-            String role = roles[random.nextInt(roles.length)];
-            UserDTO user = new UserDTO(login, role, "password" + i);
-            user.setId((long) i);
-            users.add(user);
-        }
-
-        return users;
     }
 
     private record PerformanceResult(String implementation, String algorithm, String sortType, long duration) {}

@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "Spring Boot API Performance Tests",
+    "description": "Тесты всех эндпоинтов Spring Boot для измерения скорости",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. ТЕСТЫ ПОЛЬЗОВАТЕЛЕЙ",
+      "item": [
+        {
+          "name": "GET Все пользователи",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = Date.now();",
+                  "pm.variables.set('timestamp', timestamp);",
+                  "pm.variables.set('uniqueLogin', 'test_' + timestamp);",
+                  "pm.variables.set('uniqueFunc', 'func_' + timestamp);",
+                  "",
+                  "console.log('Начало тестов Spring Boot');",
+                  "console.log('Base URL: ' + pm.variables.get('baseUrl'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Создать пользователя",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"{{uniqueLogin}}\",\n  \"password\": \"TestPass123!\",\n  \"role\": \"TEST_ROLE\"\n}"
+            },
+            "url": "{{baseUrl}}/users"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Сохраняем ID созданного пользователя",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.variables.set('createdUserId', jsonData.id);",
+                  "    console.log('Создан пользователь ID: ' + jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Пользователь по ID (существующий)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/439"
+          }
+        },
+        {
+          "name": "GET Пользователь по ID (созданный)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{createdUserId}}"
+          }
+        },
+        {
+          "name": "DELETE Удалить пользователя",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/users/{{createdUserId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. ТЕСТЫ ФУНКЦИЙ",
+      "item": [
+        {
+          "name": "GET Все функции",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/functions"
+          }
+        },
+        {
+          "name": "GET Функция по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/functions/2223"
+          }
+        },
+        {
+          "name": "GET Функции пользователя",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/users/439/functions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. ТЕСТЫ ТОЧЕК",
+      "item": [
+        {
+          "name": "GET Все точки",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/points"
+          }
+        },
+        {
+          "name": "GET Точки функции",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/functions/2223/points"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    }
+  ]
+}
