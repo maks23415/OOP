@@ -1,0 +1,180 @@
+2025-12-04 00:08:33.898 [http-bio-8080-exec-2] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788914, role=USER
+2025-12-04 00:08:34.002 [http-bio-8080-exec-2] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65261, логин: testuser_1764788914
+2025-12-04 00:08:34.096 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.097 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.187 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.187 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.267 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.267 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.374 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.375 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.482 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.482 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.584 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.584 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.674 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.674 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.768 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:34.768 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:34.972 [http-bio-8080-exec-2] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788915, role=USER
+2025-12-04 00:08:35.034 [http-bio-8080-exec-2] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65262, логин: testuser_1764788915
+2025-12-04 00:08:35.126 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.126 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.221 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.221 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.309 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.310 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.360 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.360 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.434 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.434 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.530 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.530 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.637 [http-bio-8080-exec-2] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.638 [http-bio-8080-exec-2] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.731 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:35.731 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:35.915 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788916, role=USER
+2025-12-04 00:08:35.976 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65263, логин: testuser_1764788916
+2025-12-04 00:08:36.074 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.074 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.166 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.166 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.259 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.259 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.362 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.362 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.444 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.444 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.540 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.540 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.632 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.632 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.727 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:36.727 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:36.913 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788917, role=USER
+2025-12-04 00:08:36.994 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65264, логин: testuser_1764788917
+2025-12-04 00:08:37.090 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.090 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.182 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.182 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.261 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.262 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.338 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.338 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.432 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.432 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.540 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.540 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.648 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.648 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.725 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:37.725 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:37.912 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788918, role=USER
+2025-12-04 00:08:37.976 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65265, логин: testuser_1764788918
+2025-12-04 00:08:38.069 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.069 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.186 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.186 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.274 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.274 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.431 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.431 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.588 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.588 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.682 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.682 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.790 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.790 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:38.883 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:38.883 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.086 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788919, role=USER
+2025-12-04 00:08:39.151 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65266, логин: testuser_1764788919
+2025-12-04 00:08:39.224 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.225 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.318 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.319 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.414 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.414 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.516 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.516 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.629 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.629 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.737 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.738 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.848 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.848 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:39.941 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:39.941 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.129 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788920, role=USER
+2025-12-04 00:08:40.198 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65267, логин: testuser_1764788920
+2025-12-04 00:08:40.268 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.268 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.361 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.361 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.454 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.455 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.538 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.538 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.627 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.627 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.706 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.706 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.816 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.816 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:40.908 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:40.908 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.142 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788921, role=USER
+2025-12-04 00:08:41.203 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65268, логин: testuser_1764788921
+2025-12-04 00:08:41.296 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.296 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.387 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.388 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.480 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.480 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.570 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.570 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.633 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.633 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.714 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.715 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.821 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.822 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:41.900 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:41.900 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.081 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788922, role=USER
+2025-12-04 00:08:42.256 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65269, логин: testuser_1764788922
+2025-12-04 00:08:42.335 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.335 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.443 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.444 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.537 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.537 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.650 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.650 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.741 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.742 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.852 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.852 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:42.959 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:42.959 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.053 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.053 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.242 [http-bio-8080-exec-3] INFO  c.e.lab5.manual.service.UserService - Создание пользователя: login=testuser_1764788923, role=USER
+2025-12-04 00:08:43.309 [http-bio-8080-exec-3] INFO  com.example.lab5.manual.dao.UserDAO - Создан пользователь с ID: 65270, логин: testuser_1764788923
+2025-12-04 00:08:43.399 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.399 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.506 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.506 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.598 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.598 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.697 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.697 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.807 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.807 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.895 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.895 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:43.989 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:43.989 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
+2025-12-04 00:08:44.084 [http-bio-8080-exec-3] WARN  SECURITY - AUTH_FAILURE - User: unknown, Reason: Missing Authorization header, IP: 0:0:0:0:0:0:0:1
+2025-12-04 00:08:44.084 [http-bio-8080-exec-3] WARN  c.e.lab5.servlets.BaseAuthServlet - Unauthorized access: Authentication required
