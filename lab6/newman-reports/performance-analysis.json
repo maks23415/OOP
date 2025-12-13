@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-12-13T12:39:57.748Z",
+  "environment": "Manual API (Tomcat + Servlets)",
+  "testConfig": {
+    "iterations": 10,
+    "collection": "Lab5 Manual API Tests"
+  },
+  "performanceStats": {
+    "Health Check": {
+      "min": 3,
+      "max": 97,
+      "avg": 13,
+      "median": 3,
+      "stdDev": 28,
+      "count": 10
+    },
+    "POST Create User": {
+      "min": 2,
+      "max": 5,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 1,
+      "count": 10
+    },
+    "GET All Users": {
+      "min": 3,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 0,
+      "count": 10
+    },
+    "GET User by ID": {
+      "min": 3,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 0,
+      "count": 10
+    },
+    "PUT Update User": {
+      "min": 3,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 0,
+      "count": 10
+    },
+    "DELETE User": {
+      "min": 2,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 1,
+      "count": 10
+    },
+    "POST Create Function": {
+      "min": 2,
+      "max": 5,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 1,
+      "count": 10
+    },
+    "GET All Functions": {
+      "min": 2,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 1,
+      "count": 10
+    },
+    "GET Function by ID": {
+      "min": 3,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 0,
+      "count": 10
+    },
+    "GET Functions by User ID": {
+      "min": 2,
+      "max": 4,
+      "avg": 3,
+      "median": 3,
+      "stdDev": 1,
+      "count": 10
+    }
+  }
+}
