@@ -1,16 +1,3 @@
-{
-  "name": "newman-tests",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "newman": "^6.2.1"
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:f31476761f18526968178ad6eab36f8eae8e4f8ca16651240f70f77302b2135e
+size 296
