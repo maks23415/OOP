@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Неоморфный лист персонажа D&D</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="neumorph">
+<div class="layout sheet-layout">
+    <header class="panel sheet-hero">
+        <div>
+            <p class="eyebrow">Лист персонажа • Университетские хроники</p>
+            <h1>Неоморфный лист студента-приключенца</h1>
+            <p class="muted">Мягкие тени, аккуратные карточки и быстрые броски d20. Все расчёты происходят на клиенте.</p>
+        </div>
+        <div class="actions">
+            <button id="themeToggle" class="ghost" type="button">Темная тема</button>
+            <div class="level-pill" aria-label="Уровень персонажа"><span id="levelValue">1</span> уровень</div>
+            <a class="button ghost" href="/index.html">Вернуться в основное приложение</a>
+        </div>
+    </header>
+
+    <section class="card sheet-card">
+        <div class="card-header">
+            <div>
+                <h2>Основа персонажа</h2>
+                <p class="muted">Все поля обязательны: имя, предыстория, класс и номер группы.</p>
+            </div>
+            <button id="newCharacter" class="ghost" type="button">Создать нового</button>
+        </div>
+        <div class="sheet-grid">
+            <label>Имя персонажа<input id="charName" type="text" placeholder="Например, Алиса" required></label>
+            <label>Предыстория<textarea id="charBackground" rows="3" placeholder="Бывший спортсмен, активист или ночной кодер" required></textarea></label>
+            <label>Класс
+                <select id="charClass" required>
+                    <option value="">Выберите класс</option>
+                    <option value="leader">Староста</option>
+                    <option value="nerd">Умник</option>
+                    <option value="vibe">Вайбкодер</option>
+                </select>
+            </label>
+            <label>Номер группы<input id="charGroup" type="text" placeholder="ИСП-204" required></label>
+        </div>
+        <div id="classDetails" class="class-callout" role="status" aria-live="polite"></div>
+        <div id="validationMessage" class="status-line" role="alert"></div>
+    </section>
+
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <h2>Характеристики и броски</h2>
+                <p class="muted">Бросайте отдельные кубы, создавайте общий бросок и назначайте его в нужную характеристику.</p>
+            </div>
+            <div class="actions">
+                <button id="rollAll" type="button">Бросить все характеристики</button>
+                <button id="saveCharacter" class="ghost" type="button">Сохранить персонажа</button>
+            </div>
+        </div>
+        <div class="sheet-note">Модификаторы зависят от выбранного класса и сразу учитываются в итоговом значении.</div>
+        <div class="sheet-note">Свободный бросок d20 можно применить к выбранной характеристике без повторного переброса остальных.</div>
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card" data-stat="strength">
+                <div class="stat-head">
+                    <div class="stat-name">Сила</div>
+                    <div class="stat-hint">Физическая мощь</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="strength" type="button">🎲 Бросить d20</button>
+            </div>
+            <div class="stat-card" data-stat="dexterity">
+                <div class="stat-head">
+                    <div class="stat-name">Ловкость</div>
+                    <div class="stat-hint">Скорость и координация</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="dexterity" type="button">🎲 Бросить d20</button>
+            </div>
+            <div class="stat-card" data-stat="constitution">
+                <div class="stat-head">
+                    <div class="stat-name">Выносливость</div>
+                    <div class="stat-hint">Здоровье и стойкость</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="constitution" type="button">🎲 Бросить d20</button>
+            </div>
+            <div class="stat-card" data-stat="intelligence">
+                <div class="stat-head">
+                    <div class="stat-name">Интеллект</div>
+                    <div class="stat-hint">Знания и логика</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="intelligence" type="button">🎲 Бросить d20</button>
+            </div>
+            <div class="stat-card" data-stat="charisma">
+                <div class="stat-head">
+                    <div class="stat-name">Харизма</div>
+                    <div class="stat-hint">Обаяние и коммуникабельность</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="charisma" type="button">🎲 Бросить d20</button>
+            </div>
+            <div class="stat-card" data-stat="luck">
+                <div class="stat-head">
+                    <div class="stat-name">Удача</div>
+                    <div class="stat-hint">Везение в сложных ситуациях</div>
+                </div>
+                <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+                <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+                <div class="stat-row total"><span>Итог</span><span class="stat-total">—</span></div>
+                <button class="mini-roll" data-roll="luck" type="button">🎲 Бросить d20</button>
+            </div>
+        </div>
+        <div class="sheet-grid">
+            <div class="class-callout">
+                <div class="stat-head">
+                    <div class="stat-name">Свободный бросок d20</div>
+                    <div class="stat-hint">Сначала бросьте, затем выберите, куда применить.</div>
+                </div>
+                <div class="actions">
+                    <button id="freeRoll" type="button">🎲 Свободный бросок d20</button>
+                    <div id="freeRollValue" class="muted">—</div>
+                </div>
+                <div class="sheet-grid">
+                    <label>Назначить в характеристику
+                        <select id="assignSelect">
+                            <option value="">Не выбрано</option>
+                            <option value="strength">Сила</option>
+                            <option value="dexterity">Ловкость</option>
+                            <option value="constitution">Выносливость</option>
+                            <option value="intelligence">Интеллект</option>
+                            <option value="charisma">Харизма</option>
+                            <option value="luck">Удача</option>
+                        </select>
+                    </label>
+                    <div class="actions">
+                        <button id="assignRoll" type="button" class="ghost">Назначить свободный бросок</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="statusMessage" class="status-line" aria-live="polite"></div>
+    </section>
+
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <h2>Боевые показатели</h2>
+                <p class="muted">Автоматически рассчитываемые значения на основе итоговых характеристик.</p>
+            </div>
+        </div>
+        <div class="sheet-metrics">
+            <div class="metric">
+                <div class="metric-title">Хит-пойнты (ХП)</div>
+                <div class="metric-value" id="hpValue">—</div>
+                <small>Формула: (Выносливость × 2) + Сила</small>
+            </div>
+            <div class="metric">
+                <div class="metric-title">Урон (логика)</div>
+                <div class="metric-value" id="damageIntValue">—</div>
+                <small>Интеллект / 2 + 1d6</small>
+                <div class="actions"><button id="rollDamageInt" type="button" class="ghost">Бросок урона</button></div>
+            </div>
+            <div class="metric">
+                <div class="metric-title">Урон (харизма)</div>
+                <div class="metric-value" id="damageChaValue">—</div>
+                <small>Харизма / 2 + Удача / 4 + 1d6</small>
+                <div class="actions"><button id="rollDamageCha" type="button" class="ghost">Бросок урона</button></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="battleSection">
+        <div class="card-header">
+            <div>
+                <h2>Боёвка: Лабы против героя</h2>
+                <p class="muted">Сразитесь последовательно с 7 лабами и финальным боссом. Используются ваши характеристики.</p>
+            </div>
+        </div>
+        <div class="sheet-note">После каждой победы — усталость (-10% HP). У вас есть 3 отдыха для полного восстановления между боями.</div>
+        <div class="sheet-grid">
+            <div class="class-callout" id="battleStatus" aria-live="polite"></div>
+            <div class="class-callout" id="enemyStatus" aria-live="polite"></div>
+        </div>
+        <div class="actions">
+            <button id="battleStart">Начать / следующая лаба</button>
+            <button id="battleAttack" class="ghost" disabled>Атаковать</button>
+            <button id="battleRest" class="ghost">Отдохнуть</button>
+        </div>
+        <div id="battleLog" class="game-log"></div>
+    </section>
+
+    <section class="card class-legend">
+        <h2>Памятка по классам</h2>
+        <div class="legend-grid">
+            <div class="legend-card">
+                <div class="legend-title">Староста (Leader)</div>
+                <p class="muted">Ответственный студент, организующий мероприятия и помогающий группе.</p>
+                <ul>
+                    <li>+2 к Харизме</li>
+                    <li>+1 к Удаче</li>
+                </ul>
+            </div>
+            <div class="legend-card">
+                <div class="legend-title">Умник (Nerd)</div>
+                <p class="muted">Отличник, знающий все предметы и живущий между парами и лабораторками.</p>
+                <ul>
+                    <li>+2 к Интеллекту</li>
+                    <li>-1 к Удаче</li>
+                    <li>-1 к Харизме</li>
+                </ul>
+            </div>
+            <div class="legend-card">
+                <div class="legend-title">Вайбкодер (Vibe Coder)</div>
+                <p class="muted">Расслабленный программист, пишущий код под хорошую музыку.</p>
+                <ul>
+                    <li>+2 к Ловкости</li>
+                    <li>+2 к Удаче</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="assets/dnd.js"></script>
+</body>
+</html>
