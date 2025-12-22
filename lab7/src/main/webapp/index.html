@@ -11,44 +11,38 @@
     <header class="panel">
         <div>
             <h1>Лабораторная работа №7</h1>
-            <p class="muted">Табулированные функции • арифметика • дифференцирование • интеграл • графики</p>
         </div>
         <div class="actions">
             <button id="authPageBtn" class="ghost">Войти / Сменить учётку</button>
             <a class="button ghost" href="/dnd.html" target="_blank">Лист ДнД</a>
             <a class="button ghost" href="/witcher.html" target="_blank">Тест по Ведьмаку</a>
-            <button id="syncBtn" class="ghost">Синхронизировать</button>
+            <button id="darkModeButton" type="button" class="ghost">Тёмная тема</button>
             <div class="badge" id="authStatus">Не авторизован</div>
         </div>
     </header>
 
     <main class="grid main-grid">
-        <section class="card" data-mobile-collapse="true">
+        <section class="card">
             <div class="card-header">
                 <div>
                     <h2>Настройки фабрики</h2>
                     <p class="muted">Выберите реализацию табулированной функции</p>
                 </div>
-                <button class="collapse-toggle" type="button" aria-label="Свернуть настройки"></button>
             </div>
             <div class="card-body">
                 <div class="segmented">
                     <button data-factory="ARRAY" class="active">Массив</button>
                     <button data-factory="LINKED_LIST">Связный список</button>
                 </div>
-                <div class="actions">
-                    <button id="darkModeButton" type="button">Тёмная тема</button>
-                </div>
             </div>
         </section>
 
-        <section class="card span-2" data-mobile-collapse="true">
+        <section class="card span-2">
             <div class="card-header">
                 <h2>Создать функцию из точек</h2>
                 <div class="actions">
                     <button id="addPointRow" class="ghost">Добавить строку</button>
                     <button id="shufflePoints" class="ghost">Случайные точки</button>
-                    <button class="collapse-toggle" type="button" aria-label="Свернуть создание из точек"></button>
                 </div>
             </div>
             <div class="card-body">
@@ -67,15 +61,11 @@
             </div>
         </section>
 
-        <section class="card span-2" data-mobile-collapse="true">
+        <section class="card span-2">
             <div class="card-header">
                 <h2>Создать функцию из базовой</h2>
-                <div class="actions">
-                    <button class="collapse-toggle" type="button" aria-label="Свернуть создание из базовой"></button>
-                </div>
             </div>
             <div class="card-body">
-                <div class="fn-gallery" id="simpleGallery"></div>
                 <div class="grid half">
                     <label>Функция<select id="simpleFunctionSelect"></select><div id="simpleFunctionFancy"></div></label>
                     <label>Название<input id="simpleName" type="text" placeholder="g(x)"></label>
@@ -89,13 +79,9 @@
             </div>
         </section>
 
-        <section class="card span-2" data-mobile-collapse="true">
+        <section class="card span-2">
             <div class="card-header">
                 <h2>Операции над функциями</h2>
-                <div class="actions">
-                    <div class="chip">Сложение / Вычитание / Умножение / Деление</div>
-                    <button class="collapse-toggle" type="button" aria-label="Свернуть операции"></button>
-                </div>
             </div>
             <div class="card-body">
                 <div class="grid half">
@@ -116,10 +102,9 @@
             </div>
         </section>
 
-        <section class="card" data-mobile-collapse="true">
+        <section class="card">
             <div class="card-header">
                 <h2>Дифференцирование</h2>
-                <button class="collapse-toggle" type="button" aria-label="Свернуть дифференцирование"></button>
             </div>
             <div class="card-body">
                 <label>Исходная функция<select id="diffSource"></select><div id="diffSourceFancy"></div></label>
@@ -130,10 +115,9 @@
             </div>
         </section>
 
-        <section class="card" data-mobile-collapse="true">
+        <section class="card">
             <div class="card-header">
                 <h2>Интеграл</h2>
-                <button class="collapse-toggle" type="button" aria-label="Свернуть интеграл"></button>
             </div>
             <div class="card-body">
                 <label>Функция<select id="integralSource"></select><div id="integralSourceFancy"></div></label>
@@ -145,20 +129,15 @@
             </div>
         </section>
 
-        <section class="card span-2" data-mobile-collapse="true">
+        <section class="card span-2">
             <div class="card-header">
                 <h2>График функции и apply()</h2>
-                <div class="actions">
-                    <div class="chip">Масштабирование + подсказки</div>
-                    <button class="collapse-toggle" type="button" aria-label="Свернуть график"></button>
-                </div>
             </div>
             <div class="card-body">
                 <div class="stack" id="chartPickerWrap">
                     <div class="compact-row">
                         <label class="visually-hidden">Функция<select id="chartSource"></select></label>
                         <div id="chartPicker" class="dropdown"></div>
-                        <button id="chartPickerCollapse" class="ghost" type="button">Свернуть список</button>
                     </div>
                 </div>
                 <div class="chart-wrap">
@@ -181,27 +160,9 @@
             </div>
         </section>
 
-        <section class="card span-2" data-mobile-collapse="true">
-            <div class="card-header">
-                <h2>Сложные функции (Composite)</h2>
-                <div class="actions">
-                    <button id="addCompositeStep" class="ghost">Добавить шаг</button>
-                    <button class="collapse-toggle" type="button" aria-label="Свернуть сложные функции"></button>
-                </div>
-            </div>
-            <div class="card-body">
-                <div id="compositeSteps" class="stack"></div>
-                <div class="actions">
-                    <button id="buildComposite">Собрать</button>
-                </div>
-                <div id="compositeResult" class="muted"></div>
-            </div>
-        </section>
-
-        <section class="card" data-mobile-collapse="true">
+        <section class="card">
             <div class="card-header">
                 <h2>Файлы</h2>
-                <button class="collapse-toggle" type="button" aria-label="Свернуть файловые операции"></button>
             </div>
             <div class="card-body">
                 <label>Сохранить функцию<select id="saveSource"></select><div id="saveSourceFancy"></div></label>

@@ -4,7 +4,6 @@ const state = {
     functions: [],
     tooltip: null,
     chartView: null,
-    gallerySelection: null,
 };
 
 let chartDropdownListenerBound = false;
@@ -136,40 +135,7 @@ const simpleFunctions = [
             return (x) => deBoorEvaluate(x, knots, ctrl, degree);
         },
     },
-    {
-        key: 'compositeDoubleSin',
-        label: 'Сложная: 2·sin(x) (CompositeFunction)',
-        build: () => (x) => 2 * Math.sin(x),
-    },
 ];
-
-function renderSimpleGallery() {
-    const gallery = document.getElementById('simpleGallery');
-    if (!gallery) return;
-    gallery.innerHTML = '';
-    const sorted = simpleFunctions.slice().sort((a, b) => a.label.localeCompare(b.label));
-    sorted.forEach(def => {
-        const card = document.createElement('button');
-        card.type = 'button';
-        card.className = 'fn-card';
-        card.dataset.key = def.key;
-        const params = def.params?.length ? `${def.params.length} параметров` : 'Без параметров';
-        card.innerHTML = `
-            <div class="fn-card__title">${def.label}</div>
-            <div class="fn-card__meta">${params}</div>
-        `;
-        card.addEventListener('click', () => {
-            const select = document.getElementById('simpleFunctionSelect');
-            select.value = def.key;
-            state.gallerySelection = def.key;
-            document.querySelectorAll('.fn-card').forEach(c => c.classList.toggle('active', c.dataset.key === def.key));
-            renderSimpleParams();
-        });
-        gallery.appendChild(card);
-    });
-    const activeKey = document.getElementById('simpleFunctionSelect').value;
-    document.querySelectorAll('.fn-card').forEach(c => c.classList.toggle('active', c.dataset.key === activeKey));
-}
 
 function bootstrapDemoFunctions() {
     if (state.functions.length) return;
@@ -612,7 +578,6 @@ function syncFunctionSelects() {
             select.value = state.functions[0].id;
         }
     });
-    syncComposite();
     renderAllDropdowns();
     renderChartPicker();
 }
@@ -714,7 +679,8 @@ function renderFancySelect(selectId, options = {}) {
         menu.hidden = true;
     }
 
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
         const isFolded = dropdown.classList.contains('folded');
         if (isFolded) {
             dropdown.classList.remove('folded');
@@ -843,7 +809,8 @@ function renderChartPicker() {
         menu.hidden = true;
     }
 
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
         if (!state.functions.length) return;
         const isFolded = dropdown.classList.contains('folded');
         if (isFolded) {
@@ -966,7 +933,6 @@ function refreshSimpleList() {
             select.appendChild(option);
         });
     renderSimpleParams();
-    renderSimpleGallery();
     renderAllDropdowns();
 }
 
@@ -1510,74 +1476,10 @@ bind('chartAuto', 'click', () => {
     document.getElementById('chartRangeY').value = `${Math.min(...ys)};${Math.max(...ys)}`;
     drawChart();
 });
-bind('chartPickerCollapse', 'click', () => {
-    const wrap = document.getElementById('chartPickerWrap');
-    if (!wrap) return;
-    const collapsed = wrap.classList.toggle('collapsed');
-    const btn = document.getElementById('chartPickerCollapse');
-    if (btn) btn.textContent = collapsed ? 'Показать список' : 'Свернуть список';
-});
-
 window.addEventListener('resize', () => {
     if (state.functions.length) {
         drawChart();
     }
-});
-
-function syncComposite() {
-    const container = document.getElementById('compositeSteps');
-    container.querySelectorAll('select[data-kind="fn"]').forEach(sel => {
-        sel.innerHTML = '';
-        state.functions.forEach(fn => {
-            const option = document.createElement('option');
-            option.value = fn.id;
-            option.textContent = fn.name;
-            sel.appendChild(option);
-        });
-        renderFancyForElement(sel, { placeholder: 'Шаг' });
-    });
-    container.querySelectorAll('select[data-kind="op"]').forEach(sel => renderFancyForElement(sel, { placeholder: 'Операция' }));
-}
-
-bind('addCompositeStep', 'click', () => {
-    const div = document.createElement('div');
-    div.className = 'card muted';
-    div.innerHTML = `
-        <label>Функция<select data-kind="fn"></select></label>
-        <label>Операция<select data-kind="op">
-            <option value="identity">Без изменения</option>
-            <option value="diff">Производная</option>
-            <option value="double">Удвоить значения</option>
-        </select></label>
-    `;
-    document.getElementById('compositeSteps').appendChild(div);
-    syncComposite();
-});
-
-bind('buildComposite', 'click', () => {
-    const steps = Array.from(document.querySelectorAll('#compositeSteps div'));
-    if (steps.length === 0) return showModal('Ошибка', 'Добавьте хотя бы один шаг.');
-    let resultPoints = null;
-    steps.forEach(step => {
-        const fnId = step.querySelector('[data-kind="fn"]').value;
-        const op = step.querySelector('[data-kind="op"]').value;
-        const fn = state.functions.find(f => f.id === fnId);
-        if (!fn) return;
-        let current = fn.points.map(p => ({ ...p }));
-        if (op === 'diff') {
-            current = current.slice(0, -1).map((p, i) => {
-                const next = fn.points[i + 1];
-                return { x: p.x, y: (next.y - p.y) / (next.x - p.x) };
-            });
-        } else if (op === 'double') {
-            current = current.map(p => ({ x: p.x, y: p.y * 2 }));
-        }
-        resultPoints = resultPoints ? resultPoints.map((p, idx) => ({ x: p.x, y: p.y + (current[idx]?.y ?? 0) })) : current;
-    });
-    const name = `Composite-${uid().slice(0, 4)}`;
-    persistFunction(name, resultPoints || [])
-        .then(fn => document.getElementById('compositeResult').textContent = `Создана сложная функция: ${fn.name}`)
-        .catch(error => showModal('Ошибка сохранения', error.message));
 });
 
 function saveFunction() {
@@ -1640,44 +1542,6 @@ bind('loadBtn', 'click', () => {
 
 bind('syncBtn', 'click', syncFromServer);
 
-function setupCollapsibles() {
-    const cards = Array.from(document.querySelectorAll('[data-mobile-collapse]'));
-    const media = window.matchMedia('(max-width: 768px)');
-
-    const apply = () => {
-        cards.forEach((card, idx) => {
-            const body = card.querySelector('.card-body');
-            if (!body) return;
-            if (!media.matches) {
-                card.classList.remove('collapsed');
-                body.hidden = false;
-                return;
-            }
-            if (!card.dataset.initCollapse) {
-                const collapseByDefault = idx > 1;
-                card.classList.toggle('collapsed', collapseByDefault);
-                body.hidden = collapseByDefault;
-                card.dataset.initCollapse = 'true';
-            } else {
-                body.hidden = card.classList.contains('collapsed');
-            }
-        });
-    };
-
-    cards.forEach(card => {
-        const body = card.querySelector('.card-body');
-        const toggle = card.querySelector('.collapse-toggle');
-        if (!body || !toggle) return;
-        toggle.addEventListener('click', () => {
-            const collapsed = card.classList.toggle('collapsed');
-            if (media.matches) body.hidden = collapsed; else body.hidden = false;
-        });
-    });
-
-    media.addEventListener('change', apply);
-    apply();
-}
-
 function seedDefaults() {
     addPointRow(0, 0);
     addPointRow(1, 1);
@@ -1693,7 +1557,6 @@ function seedDefaults() {
 
 ready(() => {
     seedDefaults();
-    setupCollapsibles();
 });
 
 // API для тестов
