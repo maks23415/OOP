@@ -33,7 +33,7 @@ body.dark {
 
 body {
     margin: 0;
-    background: radial-gradient(circle at 18% 18%, rgba(31,75,255,0.07), transparent 30%), var(--bg);
+    background: var(--bg);
     color: var(--text);
     transition: background-color .3s ease, color .3s ease, background .3s ease;
 }

@@ -755,6 +755,7 @@
         }
 
         function renderStatsValues() {
+            deriveStats();
             statList.forEach(({ key }) => {
                 const card = elements.statsGrid.querySelector(`[data-stat="${key}"]`);
                 const baseEl = card.querySelector('.stat-base');
@@ -767,7 +768,6 @@
                 modEl.textContent = mod >= 0 ? `+${mod}` : mod;
                 totalEl.textContent = total === null ? '—' : total;
             });
-            deriveStats();
         }
 
         function setClassDetails() {
