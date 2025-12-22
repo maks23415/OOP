@@ -211,10 +211,10 @@ if (savedAuth) {
 if (savedOffline) {
     state.offline = true;
 }
-if (savedTheme === 'light') {
-    document.body.classList.add('light');
-    const toggle = document.getElementById('darkModeToggle');
-    if (toggle) toggle.checked = false;
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+} else if (savedTheme === 'light') {
+    document.body.classList.remove('dark');
 }
 
 function parseNumberList(value) {
@@ -488,14 +488,26 @@ function setFactory(factory) {
     });
 }
 
-function setDarkMode(enabled) {
-    document.body.classList.toggle('light', !enabled);
-    localStorage.setItem('lab7Theme', enabled ? 'dark' : 'light');
+function syncDarkButton() {
+    const button = document.getElementById('darkModeButton');
+    if (!button) return;
+    const isDark = document.body.classList.contains('dark');
+    button.textContent = isDark ? 'Светлая тема' : 'Тёмная тема';
 }
 
-const darkToggle = document.getElementById('darkModeToggle');
-if (darkToggle) {
-    darkToggle.addEventListener('change', e => setDarkMode(e.target.checked));
+function setDarkMode(enabled) {
+    document.body.classList.toggle('dark', enabled);
+    localStorage.setItem('lab7Theme', enabled ? 'dark' : 'light');
+    syncDarkButton();
+}
+
+const darkModeButton = document.getElementById('darkModeButton');
+if (darkModeButton) {
+    darkModeButton.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('dark');
+        setDarkMode(!isDark);
+    });
+    syncDarkButton();
 }
 document.querySelectorAll('.segmented button').forEach(btn => {
     btn.addEventListener('click', () => setFactory(btn.dataset.factory));
@@ -529,6 +541,7 @@ async function syncFromServer() {
         });
         syncFunctionSelects();
         persistLocalFunctions();
+        drawChart();
     }
 
     catch (error) {
@@ -583,6 +596,7 @@ function gatherPoints() {
 function syncFunctionSelects() {
     ['opFirst', 'opSecond', 'diffSource', 'integralSource', 'chartSource', 'saveSource'].forEach(id => {
         const select = document.getElementById(id);
+        const prevValue = select.value;
         select.innerHTML = '';
         state.functions.forEach(fn => {
             const option = document.createElement('option');
@@ -590,6 +604,13 @@ function syncFunctionSelects() {
             option.textContent = `${fn.name} (${fn.points.length} тчк)`;
             select.appendChild(option);
         });
+        if (prevValue && state.functions.some(fn => fn.id === prevValue)) {
+            select.value = prevValue;
+        } else if (id === 'opSecond' && state.functions[1]) {
+            select.value = state.functions[1].id;
+        } else if (state.functions[0]) {
+            select.value = state.functions[0].id;
+        }
     });
     syncComposite();
     renderAllDropdowns();
@@ -949,7 +970,6 @@ function refreshSimpleList() {
     renderAllDropdowns();
 }
 
-bind('refreshSimpleFunctions', 'click', refreshSimpleList);
 refreshSimpleList();
 
 function renderSimpleParams() {
@@ -1001,8 +1021,14 @@ function createFunctionFromSimple() {
 bind('buildSimple', 'click', createFunctionFromSimple);
 
 function binaryOp(op) {
-    const first = state.functions.find(f => f.id === document.getElementById('opFirst').value);
-    const second = state.functions.find(f => f.id === document.getElementById('opSecond').value);
+    let first = state.functions.find(f => f.id === document.getElementById('opFirst').value);
+    let second = state.functions.find(f => f.id === document.getElementById('opSecond').value);
+    if (!first && state.functions[0]) first = state.functions[0];
+    if ((!second || second.id === first?.id) && state.functions[1]) {
+        second = state.functions[1];
+        const select = document.getElementById('opSecond');
+        if (select) select.value = second.id;
+    }
     if (!first || !second) return showModal('Ошибка', 'Нужно выбрать обе функции.');
 
     if (state.auth?.user && first.persisted && second.persisted) {

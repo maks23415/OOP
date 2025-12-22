@@ -120,6 +120,27 @@ const regBtn = document.getElementById('authRegister');
 if (regBtn) regBtn.addEventListener('click', registerUser);
 const offBtn = document.getElementById('authOffline');
 if (offBtn) offBtn.addEventListener('click', goOffline);
+const themeBtn = document.getElementById('authThemeToggle');
+const THEME_KEY = 'lab7Theme';
+
+function applyTheme(mode) {
+    if (mode === 'dark') {
+        document.body.classList.add('dark');
+        if (themeBtn) themeBtn.textContent = 'Светлая тема';
+    } else {
+        document.body.classList.remove('dark');
+        if (themeBtn) themeBtn.textContent = 'Темная тема';
+    }
+    localStorage.setItem(THEME_KEY, mode);
+}
+
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+        applyTheme(next);
+    });
+    applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+}
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {

@@ -10,6 +10,9 @@
 <div class="auth-card">
     <h1>Лабораторная №7</h1>
     <p class="muted">Сначала авторизуйтесь или зарегистрируйтесь, потом откроется основной интерфейс.</p>
+    <div class="actions">
+        <button id="authThemeToggle" class="ghost" type="button">Темная тема</button>
+    </div>
     <label>Имя<input id="authUsername" type="text" autocomplete="username" placeholder="имя"></label>
     <label>Пароль<input id="authPassword" type="password" autocomplete="new-password" placeholder="•••••"></label>
     <label>Подтверждение пароля<input id="authConfirm" type="password" autocomplete="new-password" placeholder="повторите пароль"></label>
@@ -21,7 +24,7 @@
     </div>
     <div id="authMessage" class="muted"></div>
     <div class="actions spaced">
-        <a class="button ghost" href="/dnd.html" target="_blank">Пасхалки</a>
+        <a class="button ghost" href="/dnd.html" target="_blank">Лист ДнД</a>
     </div>
 </div>
 <script src="assets/auth.js"></script>

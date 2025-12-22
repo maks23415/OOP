@@ -15,13 +15,14 @@
         </div>
         <div class="actions">
             <button id="authPageBtn" class="ghost">Войти / Сменить учётку</button>
-            <a class="button ghost" href="/dnd.html" target="_blank">Пасхалки (D&D)</a>
+            <a class="button ghost" href="/dnd.html" target="_blank">Лист ДнД</a>
+            <a class="button ghost" href="/witcher.html" target="_blank">Тест по Ведьмаку</a>
             <button id="syncBtn" class="ghost">Синхронизировать</button>
             <div class="badge" id="authStatus">Не авторизован</div>
         </div>
     </header>
 
-    <main class="grid">
+    <main class="grid main-grid">
         <section class="card" data-mobile-collapse="true">
             <div class="card-header">
                 <div>
@@ -35,10 +36,9 @@
                     <button data-factory="ARRAY" class="active">Массив</button>
                     <button data-factory="LINKED_LIST">Связный список</button>
                 </div>
-                <label class="switch fancy">
-                    <input id="darkModeToggle" type="checkbox" checked>
-                    <span>Тёмная тема (в стиле подземелий)</span>
-                </label>
+                <div class="actions">
+                    <button id="darkModeButton" type="button">Тёмная тема</button>
+                </div>
             </div>
         </section>
 
@@ -71,7 +71,6 @@
             <div class="card-header">
                 <h2>Создать функцию из базовой</h2>
                 <div class="actions">
-                    <button id="refreshSimpleFunctions" class="ghost">Сканировать заклинания</button>
                     <button class="collapse-toggle" type="button" aria-label="Свернуть создание из базовой"></button>
                 </div>
             </div>

@@ -7,7 +7,12 @@
 </head>
 <body>
 <div class="layout">
-    <header class="panel"><h1>Клиентские тесты</h1></header>
+    <header class="panel">
+        <h1>Клиентские тесты</h1>
+        <div class="actions">
+            <button id="testsThemeToggle" class="ghost" type="button">Темная тема</button>
+        </div>
+    </header>
     <main class="card">
         <p id="status" class="muted">Запуск...</p>
         <div style="display:none">
@@ -85,6 +90,24 @@
             statusEl.style.color = 'var(--danger)';
         }
     });
+</script>
+<script>
+    (() => {
+        const btn = document.getElementById('testsThemeToggle');
+        const THEME_KEY = 'lab7Theme';
+        function apply(mode) {
+            document.body.classList.toggle('dark', mode === 'dark');
+            if (btn) btn.textContent = mode === 'dark' ? 'Светлая тема' : 'Темная тема';
+            localStorage.setItem(THEME_KEY, mode);
+        }
+        if (btn) {
+            btn.addEventListener('click', () => {
+                const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+                apply(next);
+            });
+        }
+        apply(localStorage.getItem(THEME_KEY) || 'light');
+    })();
 </script>
 </body>
 </html>
