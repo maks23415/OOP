@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест по Ведьмаку</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    body { padding: 24px; }
+    .quiz {
+      width: min(960px, 95vw);
+      display: grid;
+      gap: 14px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .question {
+      background: transparent;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      display: grid;
+      gap: 10px;
+      transition: border-color .15s ease, transform .1s ease;
+    }
+    .question.correct { border-color: var(--accent); }
+    .question.incorrect { border-color: var(--danger); }
+    .question h3 { margin: 0; }
+    .options { display: grid; gap: 6px; }
+    label.option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: border-color .12s ease, background-color .12s ease;
+    }
+    label.option:hover { border-color: var(--accent); }
+    label.option span { flex: 1; text-align: left; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .header {
+      text-align: center;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <header class="panel">
+    <div>
+      <h1>Тест по Ведьмаку</h1>
+      <p class="muted">Выберите ответы и проверьте себя</p>
+    </div>
+    <div class="actions">
+      <a class="button ghost" href="/index.html">← На главную</a>
+      <button id="themeToggle" type="button">Тёмная тема</button>
+    </div>
+  </header>
+  <section class="card">
+    <div class="quiz" id="quiz">
+      <div class="topbar">
+        <div class="header">
+          <h2>Вопросы</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const THEME_KEY = 'lab7Theme';
+  const questions = [
+    {
+      text: 'Как Геральт нашел джина?',
+      options: [
+        'Выловил в реке',
+        'Купил у купца',
+        'Выйграл в гвинт',
+      ],
+      correct: 0,
+    },
+    {
+      text: 'Талер кто это?',
+      options: [
+        'Никто',
+        'Легенда',
+        'Тайлер Дерден',
+      ],
+      correct: 1,
+    },
+    {
+      text: 'Трисс или Йеннефер?',
+      options: [
+        'Трисс',
+        'Йеннефер',
+      ],
+      correct: 1,
+    },
+    {
+      text: 'Что Геральт сделал с Золотым Драконом?',
+      options: [
+        'Бухал с ним',
+        'Убил',
+        'Спас',
+      ],
+      correct: 0,
+    },
+    {
+      text: 'Какую броню носит Геральт?',
+      options: [
+        'Тяжелую',
+        'Среднюю',
+        'Легкую',
+        'Никакую',
+      ],
+      correct: 3,
+    },
+    {
+      text: 'Сколько мечей для чудовищ у ведьмака?',
+      options: [
+        'Один',
+        'Два',
+        'Нисколько',
+      ],
+      correct: 1,
+    },
+    {
+      text: 'Какой из этих даров самый лучший для ведьмака?',
+      options: [
+        'Идеальное седло',
+        'Бесконечный алкоголь',
+        'Куча денег',
+      ],
+      correct: 1,
+    },
+    {
+      text: 'Кто такой Равикс из Черторога?',
+      options: [
+        'Рыцарь',
+        'Никто',
+        'Геральт',
+        'Король',
+        'Шпион',
+      ],
+      correct: 2,
+    },
+    {
+      text: 'Столица Темерии?',
+      options: [
+        'Вызима',
+        'Лок Муинне',
+        'Боклер',
+      ],
+      correct: 0,
+    },
+    {
+      text: 'Какого знака не существует?',
+      options: [
+        'Игни',
+        'Квен',
+        'Аард',
+        'Аксий',
+        'Ирден',
+        'Сомне',
+      ],
+      correct: 5,
+    },
+  ];
+
+  const quiz = document.getElementById('quiz');
+
+  questions.forEach((q, index) => {
+    const block = document.createElement('div');
+    block.className = 'question';
+    block.dataset.index = index;
+    block.innerHTML = `
+        <div>
+          <h3>Вопрос ${index + 1}</h3>
+          <p class="muted">${q.text}</p>
+        </div>
+        <div class="options">
+          ${q.options.map((opt, i) => `
+            <label class="option">
+              <input type="radio" name="q${index}" value="${i}">
+              <span>${opt}</span>
+            </label>
+          `).join('')}
+        </div>
+        <div class="actions">
+          <button type="button" data-check="${index}">Проверить ответ</button>
+        </div>
+      `;
+    quiz.appendChild(block);
+  });
+
+  quiz.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-check]');
+    if (!button) return;
+    const idx = Number(button.dataset.check);
+    const block = quiz.querySelector(`.question[data-index="${idx}"]`);
+    const selected = block.querySelector(`input[name="q${idx}"]:checked`);
+    block.classList.remove('correct', 'incorrect');
+    if (!selected) return;
+    const isCorrect = Number(selected.value) === questions[idx].correct;
+    block.classList.add(isCorrect ? 'correct' : 'incorrect');
+  });
+
+  function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark') document.body.classList.add('dark');
+    updateThemeButton();
+  }
+
+  function updateThemeButton() {
+    const button = document.getElementById('themeToggle');
+    if (!button) return;
+    const isDark = document.body.classList.contains('dark');
+    button.textContent = isDark ? 'Светлая тема' : 'Тёмная тема';
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = !document.body.classList.contains('dark');
+    document.body.classList.toggle('dark', next);
+    localStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
+    updateThemeButton();
+  });
+
+  initTheme();
+</script>
+</body>
+</html>

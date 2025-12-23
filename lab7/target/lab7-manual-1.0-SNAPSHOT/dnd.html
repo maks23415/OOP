@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D&D Лист персонажа с визуальной боёвкой</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE0x1r3ZLr3I8aH3V9Wf0R7WkG7rG3f67j6c6Ww5q3P6lz1Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --bg: #f5f8ff;
+            --text: #0f1a3d;
+            --card: #ffffff;
+            --surface: #f0f3ff;
+            --border: #d8e2ff;
+            --hover: #ebf0ff;
+            --active: #d5ddff;
+            --shadow-dark: #c7d2f3;
+            --shadow-light: #ffffff;
+            --accent: #1f4bff;
+            --success: #34c759;
+            --danger: #ff5e57;
+            --warning: #f7b500;
+            --info: #4ba3ff;
+            --muted: #5d6a85;
+        }
+        body.dark {
+            --bg: #0f172a;
+            --text: #e8f0ff;
+            --card: #121c36;
+            --surface: #0d162d;
+            --border: #1f2b46;
+            --hover: #18243f;
+            --active: #1f2f52;
+            --shadow-dark: #0a1124;
+            --shadow-light: #18243f;
+            --accent: #7ba3ff;
+            --success: #50e3c2;
+            --danger: #ff7b7b;
+            --warning: #f5c06d;
+            --info: #8ab6ff;
+            --muted: #9fb4d7;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Titillium Web', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background .3s ease, color .3s ease;
+            padding: 16px;
+        }
+        h1,h2,h3,h4 { margin: 0; }
+        a { color: inherit; }
+
+        .layout {
+            max-width: 1200px;
+            margin: 0 auto 64px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .panel, .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .panel::after {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: none;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        button {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(31,75,255,0.18), rgba(31,75,255,0.32));
+            color: var(--text);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            transition: transform .12s ease, box-shadow .12s ease, filter .2s ease;
+        }
+        button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        button:active { transform: translateY(0); }
+        button.ghost {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(31,75,255,0.12));
+        }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        input, select, textarea {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        textarea { resize: vertical; }
+
+        .badge {
+            background: linear-gradient(135deg, rgba(31,75,255,0.25), rgba(76,111,255,0.35));
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
+            box-shadow: 4px 4px 12px var(--shadow-dark), -4px -4px 12px var(--shadow-light);
+        }
+        .sheet-note {
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px dashed var(--border);
+            background: var(--surface);
+            color: var(--muted);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .stat-card {
+            padding: 12px;
+            border-radius: 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            display: grid;
+            gap: 6px;
+            position: relative;
+        }
+        .stat-card.pulse { animation: pulse 0.8s ease; }
+        .stat-head { display: flex; flex-direction: column; gap: 2px; }
+        .stat-name { font-weight: 800; }
+        .stat-hint { color: var(--muted); font-size: 13px; }
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 8px;
+            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .section-title { display: flex; align-items: center; gap: 8px; }
+        .hp-summary { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 8px; margin-top: 8px; }
+        .metric {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        .battle-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+            align-items: stretch;
+        }
+        .combatant {
+            padding: 16px;
+            border-radius: 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .combatant.attacking { animation: attackAnimation .3s ease; }
+        .combatant.damaging { animation: damageFlash .5s ease; }
+        .combatant.healing { animation: healFlash .5s ease; }
+        .combatant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .hp-wrap { margin-top: 10px; }
+        .hp-row { display: flex; justify-content: space-between; align-items: center; }
+        .hp-bar {
+            width: 100%;
+            height: 16px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .hp-fill {
+            height: 100%;
+            width: 100%;
+            transition: width .5s ease, background .3s ease;
+            background: linear-gradient(90deg, #34c759, #ffcc00);
+        }
+        .vs {
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            font-size: 20px;
+            color: var(--accent);
+        }
+        .combat-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .stat-pill {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .progress {
+            margin-top: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #1f4bff, #6c8dff);
+            transition: width .4s ease;
+        }
+        .log {
+            margin-top: 12px;
+            height: 220px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .log-entry {
+            padding: 8px 10px;
+            margin: 6px 0;
+            border-radius: 10px;
+            background: var(--card);
+            border-left: 4px solid var(--info);
+            animation: slideIn .3s ease;
+        }
+        .log-entry.damage { border-left-color: var(--danger); background: rgba(255,94,87,0.08); }
+        .log-entry.heal { border-left-color: var(--success); background: rgba(52,199,89,0.1); }
+        .log-entry.victory { border-left-color: var(--accent); font-weight: 800; }
+        .log-entry.defeat { border-left-color: var(--danger); font-weight: 800; }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            backdrop-filter: blur(6px);
+            animation: modalAppear .25s ease;
+        }
+        .modal[hidden] { display: none !important; }
+        .modal-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            width: min(520px, 92vw);
+            border: 1px solid var(--border);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .choice {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+        }
+        .choice.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(31,75,255,0.2);
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes dice-roll { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalAppear { from { opacity: 0; transform: scale(.96);} to { opacity: 1; transform: scale(1);} }
+        @keyframes damageFlash { 0%,100% { background: transparent;} 50% { background: rgba(255,94,87,0.25);} }
+        @keyframes healFlash { 0%,100% { background: transparent;} 50% { background: rgba(52,199,89,0.25);} }
+        @keyframes attackAnimation { 0%{transform: translateX(0);}50%{transform: translateX(-6px);}100%{transform: translateX(0);} }
+
+        @media (max-width: 768px) {
+            .panel { flex-direction: column; align-items: flex-start; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <header class="panel">
+        <div>
+            <h1>D&D Лист персонажа</h1>
+            <p class="muted">Неоморфный лист с боёвкой лабораторий.</p>
+        </div>
+        <div class="actions">
+            <button id="newCharacterBtn" class="ghost" type="button">🆕 Новый персонаж</button>
+            <button id="themeToggle" class="ghost" type="button"><i class="fa-regular fa-moon"></i> Тёмная тема</button>
+            <a class="button ghost" href="/index.html">Главная</a>
+        </div>
+    </header>
+
+    <section class="card">
+        <div class="section-title">
+            <h2>Лист персонажа</h2>
+            <span class="badge">Уровень <span id="levelValue">1</span></span>
+        </div>
+        <div class="grid">
+            <label>Имя персонажа<input id="charName" type="text" placeholder="Например, Алиса"></label>
+            <label>Предыстория
+                <select id="charBackground">
+                    <option value="">Выберите предысторию</option>
+                    <option>Бывший спортсмен</option>
+                    <option>Любитель игр</option>
+                    <option>Местный активист</option>
+                </select>
+            </label>
+            <label>Класс
+                <select id="charClass">
+                    <option value="">Выберите класс</option>
+                    <option value="leader">Староста</option>
+                    <option value="nerd">Умник</option>
+                    <option value="vibe">Вайбкодер</option>
+                </select>
+            </label>
+            <label>Номер группы<input id="charGroup" type="text" placeholder="ИСП-204"></label>
+        </div>
+        <div class="sheet-note" id="classDetails">Выберите класс, чтобы увидеть бонусы.</div>
+        <div class="sheet-note">Все поля обязательны. Бросьте характеристики или используйте свободный бросок.</div>
+        <div class="stats-grid" id="statsGrid">
+            <!-- cards injected -->
+        </div>
+        <div class="actions">
+            <button id="rollAll">🎲 Бросить все характеристики</button>
+            <button id="saveCharacter" class="ghost">Сохранить персонажа</button>
+        </div>
+        <div class="grid">
+            <div class="class-callout stat-card">
+                <div class="stat-head">
+                    <div class="stat-name">Свободный бросок d20</div>
+                    <div class="stat-hint">Сделайте бросок и назначьте в нужную характеристику.</div>
+                </div>
+                <div class="actions" style="margin-top:8px;">
+                    <button id="freeRoll" type="button">🎲 Свободный бросок</button>
+                    <div id="freeRollValue" class="badge">—</div>
+                </div>
+                <label style="margin-top:8px;">Назначить в характеристику
+                    <select id="assignSelect">
+                        <option value="">Не выбрано</option>
+                        <option value="strength">Сила</option>
+                        <option value="dexterity">Ловкость</option>
+                        <option value="constitution">Выносливость</option>
+                        <option value="intelligence">Интеллект</option>
+                        <option value="charisma">Харизма</option>
+                        <option value="luck">Удача</option>
+                    </select>
+                </label>
+                <div class="actions" style="margin-top:8px;">
+                    <button id="assignRoll" class="ghost">Назначить</button>
+                </div>
+            </div>
+            <div class="class-callout stat-card">
+                <div class="stat-head">
+                    <div class="stat-name">Боевые показатели</div>
+                </div>
+                <div class="hp-summary">
+                    <div class="metric">
+                        <div class="stat-name">HP (лист)</div>
+                        <div id="hpSheet">—</div>
+                    </div>
+                    <div class="metric">
+                        <div class="stat-name">HP (бой)</div>
+                        <div id="hpBattle">—</div>
+                    </div>
+                </div>
+                <div class="hp-summary">
+                    <div class="metric">
+                        <div class="stat-name">Урон (логика)</div>
+                        <div id="damageIntValue">—</div>
+                    </div>
+                    <div class="metric">
+                        <div class="stat-name">Урон (харизма)</div>
+                        <div id="damageChaValue">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card" id="battleSection">
+        <div class="section-title">
+            <h2>Боёвка лабораторий</h2>
+            <span class="badge">Прогресс <span id="progressText">0 / 8</span></span>
+        </div>
+        <div class="battle-container">
+            <div class="combatant player" id="playerBox">
+                <div class="combatant-header">
+                    <h3 id="playerNameDisplay">Игрок</h3>
+                    <span class="badge">Lvl <span id="combatLevel">1</span></span>
+                </div>
+                <div class="hp-wrap">
+                    <div class="hp-row"><span>❤️ HP</span><span id="playerHPText">0/0</span></div>
+                    <div class="hp-bar"><div class="hp-fill" id="playerHPFill"></div></div>
+                </div>
+                <div class="combat-stats">
+                    <div class="stat-pill">⚔️ Атака: <span id="playerAttack">0</span></div>
+                    <div class="stat-pill">🛡️ Защита: <span id="playerDefense">0</span></div>
+                    <div class="stat-pill">🍀 Удача: <span id="playerLuck">0</span></div>
+                </div>
+            </div>
+            <div class="vs"><span>VS</span></div>
+            <div class="combatant enemy" id="enemyBox">
+                <div class="combatant-header">
+                    <h3 id="enemyNameDisplay">Противник</h3>
+                    <span class="badge" id="enemyDifficulty">—</span>
+                </div>
+                <div class="hp-wrap">
+                    <div class="hp-row"><span>💀 HP</span><span id="enemyHPText">0/0</span></div>
+                    <div class="hp-bar"><div class="hp-fill" id="enemyHPFill"></div></div>
+                </div>
+                <div class="combat-stats">
+                    <div class="stat-pill">⚔️ Урон: <span id="enemyDamage">—</span></div>
+                    <div class="stat-pill">🛡️ Защита: <span id="enemyDefense">—</span></div>
+                    <div class="stat-pill">⭐ Награда: <span id="enemyReward">—</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="progress">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span>Прогресс лаб</span><span id="labProgressText">0/8</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="labProgressFill"></div></div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+                <span>XP: <strong id="progressXP">0</strong></span>
+                <span>Отдыхов: <strong id="restCount">3</strong></span>
+            </div>
+        </div>
+        <div class="actions" style="margin-top:10px; flex-wrap: wrap;">
+            <button id="battleStart" class="ghost">Начать / Следующая лаба</button>
+            <button id="battleAttack">⚔️ Атаковать</button>
+            <button id="useAbility" class="ghost">✨ Способность</button>
+            <button id="battleRest" class="ghost">💤 Отдохнуть</button>
+        </div>
+        <div class="log" id="battleLog"></div>
+    </section>
+</div>
+
+<div class="modal" id="victoryModal" hidden>
+    <div class="modal-card">
+        <h3>🎉 Победа!</h3>
+        <p>Вы одолели: <strong id="victoryName"></strong></p>
+        <p>Получено <strong id="victoryXP">0</strong> XP. HP восстановлены.</p>
+        <div class="actions">
+            <button id="nextLabBtn">Следующая лаба</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="defeatModal" hidden>
+    <div class="modal-card">
+        <h3>💀 Поражение</h3>
+        <p>Ваш персонаж пал. Создайте нового героя и начните путь заново.</p>
+        <div class="actions">
+            <button id="openResetBtn">Открыть создание персонажа</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="levelModal" hidden>
+    <div class="modal-card">
+        <h3>🎊 Уровень повышен!</h3>
+        <p>Все характеристики +1. Выберите характеристику для +2:</p>
+        <div class="choice-grid" id="levelChoices"></div>
+        <div class="actions" style="margin-top:10px;">
+            <button id="confirmLevelUp" disabled>Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="resetModal" hidden>
+    <div class="modal-card">
+        <h3 id="resetTitle">🆕 Новый персонаж</h3>
+        <p id="resetMessage">Сбросьте текущего героя и начните прохождение лабораторий сначала.</p>
+        <div class="actions" style="margin-top:10px;">
+            <button id="confirmReset">Создать заново</button>
+            <button id="cancelReset" class="ghost">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        // ---------- State ----------
+        const state = {
+            level: 1,
+            xp: 0,
+            rests: 3,
+            stats: {
+                strength: { base: null, total: null },
+                dexterity: { base: null, total: null },
+                constitution: { base: null, total: null },
+                intelligence: { base: null, total: null },
+                charisma: { base: null, total: null },
+                luck: { base: null, total: null },
+            },
+            classId: '',
+            freeRoll: null,
+            playerHp: null,
+            enemy: null,
+            enemyIndex: 0,
+            abilityCooldown: 0,
+            buffTurns: 0,
+            buffs: { luck: 0, intelligence: 0 },
+            enemyDebuff: 0,
+        };
+
+        const STORAGE_KEY = 'neo-dnd-sheet';
+        const THEME_KEY = 'lab7Theme';
+
+        const classMap = {
+            leader: { name: 'Староста', mods: { charisma: 2, luck: 1 }, ability: 'Удача старосты' },
+            nerd: { name: 'Умник', mods: { intelligence: 2, luck: -1, charisma: -1 }, ability: 'Скан уязвимостей' },
+            vibe: { name: 'Вайбкодер', mods: { dexterity: 2, luck: 2 }, ability: 'Код разума' },
+        };
+
+        const enemies = [
+            { name: 'Hello World', hp: 30, ac: 10, dmg: '1d6+1', xp: 50 },
+            { name: 'Калькулятор', hp: 40, ac: 12, dmg: '1d6+2', xp: 75 },
+            { name: 'Массив данных', hp: 50, ac: 14, dmg: '1d8+2', xp: 100 },
+            { name: 'База данных', hp: 60, ac: 16, dmg: '1d8+3', xp: 125 },
+            { name: 'Веб-сервер', hp: 70, ac: 18, dmg: '1d10+4', xp: 150 },
+            { name: 'Многопоточность', hp: 80, ac: 20, dmg: '1d10+5', xp: 175 },
+            { name: 'Искусственный интеллект', hp: 90, ac: 22, dmg: '1d12+6', xp: 200 },
+            { name: 'Экзаменационная комиссия', hp: 150, ac: 24, dmg: '2d8+8', xp: 500 },
+        ];
+
+        const statList = [
+            { key: 'strength', label: 'Сила', hint: '💪 Урон ближнего боя' },
+            { key: 'dexterity', label: 'Ловкость', hint: '🏃 Защита/точность' },
+            { key: 'constitution', label: 'Выносливость', hint: '❤️ Здоровье' },
+            { key: 'intelligence', label: 'Интеллект', hint: '🧠 Умник урон' },
+            { key: 'charisma', label: 'Харизма', hint: '😎 Староста урон' },
+            { key: 'luck', label: 'Удача', hint: '🍀 Бонус к атакам' },
+        ];
+
+        const elements = {
+            levelValue: document.getElementById('levelValue'),
+            classDetails: document.getElementById('classDetails'),
+            statsGrid: document.getElementById('statsGrid'),
+            rollAll: document.getElementById('rollAll'),
+            saveCharacter: document.getElementById('saveCharacter'),
+            freeRoll: document.getElementById('freeRoll'),
+            freeRollValue: document.getElementById('freeRollValue'),
+            assignSelect: document.getElementById('assignSelect'),
+            assignRoll: document.getElementById('assignRoll'),
+            hpSheet: document.getElementById('hpSheet'),
+            hpBattle: document.getElementById('hpBattle'),
+            damageIntValue: document.getElementById('damageIntValue'),
+            damageChaValue: document.getElementById('damageChaValue'),
+            playerNameDisplay: document.getElementById('playerNameDisplay'),
+            combatLevel: document.getElementById('combatLevel'),
+            playerAttack: document.getElementById('playerAttack'),
+            playerDefense: document.getElementById('playerDefense'),
+            playerLuck: document.getElementById('playerLuck'),
+            playerHPText: document.getElementById('playerHPText'),
+            playerHPFill: document.getElementById('playerHPFill'),
+            enemyNameDisplay: document.getElementById('enemyNameDisplay'),
+            enemyDifficulty: document.getElementById('enemyDifficulty'),
+            enemyHPText: document.getElementById('enemyHPText'),
+            enemyHPFill: document.getElementById('enemyHPFill'),
+            enemyDamage: document.getElementById('enemyDamage'),
+            enemyDefense: document.getElementById('enemyDefense'),
+            enemyReward: document.getElementById('enemyReward'),
+            labProgressFill: document.getElementById('labProgressFill'),
+            labProgressText: document.getElementById('labProgressText'),
+            progressXP: document.getElementById('progressXP'),
+            progressText: document.getElementById('progressText'),
+            restCount: document.getElementById('restCount'),
+            battleStart: document.getElementById('battleStart'),
+            battleAttack: document.getElementById('battleAttack'),
+            useAbility: document.getElementById('useAbility'),
+            battleRest: document.getElementById('battleRest'),
+            battleLog: document.getElementById('battleLog'),
+            victoryModal: document.getElementById('victoryModal'),
+            defeatModal: document.getElementById('defeatModal'),
+            levelModal: document.getElementById('levelModal'),
+            victoryName: document.getElementById('victoryName'),
+            victoryXP: document.getElementById('victoryXP'),
+            nextLabBtn: document.getElementById('nextLabBtn'),
+            confirmLevelUp: document.getElementById('confirmLevelUp'),
+            levelChoices: document.getElementById('levelChoices'),
+            progressLevelBadge: document.getElementById('progressLevel'),
+            themeToggle: document.getElementById('themeToggle'),
+            battleSection: document.getElementById('battleSection'),
+            newCharacterBtn: document.getElementById('newCharacterBtn'),
+            resetModal: document.getElementById('resetModal'),
+            confirmReset: document.getElementById('confirmReset'),
+            cancelReset: document.getElementById('cancelReset'),
+            resetTitle: document.getElementById('resetTitle'),
+            resetMessage: document.getElementById('resetMessage'),
+            openResetBtn: document.getElementById('openResetBtn'),
+        };
+
+        // ---------- Helpers ----------
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function rollD20() { return randInt(1, 20); }
+
+        function rollDiceString(expr) {
+            // supports "2d8+3" or "1d6"
+            const match = expr.match(/(\d+)d(\d+)(\+(\d+))?/i);
+            if (!match) return 0;
+            const count = parseInt(match[1], 10);
+            const faces = parseInt(match[2], 10);
+            const bonus = parseInt(match[4] || '0', 10);
+            let total = 0;
+            for (let i = 0; i < count; i++) total += randInt(1, faces);
+            return total + bonus;
+        }
+
+        function classStatKey() {
+            if (state.classId === 'leader') return 'charisma';
+            if (state.classId === 'nerd') return 'intelligence';
+            return 'dexterity';
+        }
+
+        function effectiveStat(key) {
+            const total = state.stats[key].total || 0;
+            const buff = state.buffTurns > 0 ? (state.buffs[key] || 0) : 0;
+            return total + buff;
+        }
+
+        function updateAbilityButton() {
+            const abilityName = classMap[state.classId]?.ability || 'Способность';
+            if (!elements.useAbility) return;
+            const cd = state.abilityCooldown;
+            elements.useAbility.textContent = cd > 0 ? `✨ ${abilityName} (CD ${cd})` : `✨ ${abilityName}`;
+            elements.useAbility.disabled = !state.classId || cd > 0;
+        }
+
+        // ---------- Rendering ----------
+        function renderStatCards() {
+            elements.statsGrid.innerHTML = '';
+            statList.forEach(({ key, label, hint }) => {
+                const card = document.createElement('div');
+                card.className = 'stat-card';
+                card.dataset.stat = key;
+                card.innerHTML = `
+            <div class="stat-head">
+              <div class="stat-name">${label}</div>
+              <div class="stat-hint">${hint}</div>
+            </div>
+            <div class="stat-row"><span>Базовое</span><span class="stat-base">—</span></div>
+            <div class="stat-row"><span>Модификатор класса</span><span class="stat-mod">+0</span></div>
+            <div class="stat-row"><span>Итог</span><span class="stat-total">—</span></div>
+            <button class="mini-roll" data-roll="${key}">🎲 Бросить d20</button>
+          `;
+                elements.statsGrid.appendChild(card);
+            });
+        }
+
+        function classBonus(stat) {
+            const info = classMap[state.classId];
+            if (!info) return 0;
+            return info.mods[stat] || 0;
+        }
+
+        function deriveStats() {
+            statList.forEach(({ key }) => {
+                const base = state.stats[key].base;
+                const mod = classBonus(key);
+                state.stats[key].total = base === null ? null : base + mod;
+            });
+            updateDerived();
+        }
+
+        function updateDerived() {
+            const totals = state.stats;
+            const hpSheet = (totals.constitution.total || 0) * 2 + (totals.strength.total || 0);
+            const hpBattle = 20 + (totals.constitution.total || 0) * 3;
+            elements.hpSheet.textContent = hpSheet || '—';
+            elements.hpBattle.textContent = hpBattle || '—';
+
+            const intStat = state.stats.intelligence.total === null && state.buffTurns === 0 ? null : effectiveStat('intelligence');
+            elements.damageIntValue.textContent = intStat === null ? '—' :
+                `${Math.floor(intStat / 2)} + 1d6`;
+            const luckStat = state.stats.luck.total === null && state.buffTurns === 0 ? null : effectiveStat('luck');
+            if (state.stats.charisma.total === null || luckStat === null) {
+                elements.damageChaValue.textContent = '—';
+            } else {
+                const base = Math.floor(state.stats.charisma.total / 2) + Math.floor(luckStat / 4);
+                elements.damageChaValue.textContent = `${base} + 1d6`;
+            }
+            updateBattleUI();
+        }
+
+        function renderStatsValues() {
+            deriveStats();
+            statList.forEach(({ key }) => {
+                const card = elements.statsGrid.querySelector(`[data-stat="${key}"]`);
+                const baseEl = card.querySelector('.stat-base');
+                const modEl = card.querySelector('.stat-mod');
+                const totalEl = card.querySelector('.stat-total');
+                const base = state.stats[key].base;
+                const mod = classBonus(key);
+                const total = state.stats[key].total;
+                baseEl.textContent = base === null ? '—' : base;
+                modEl.textContent = mod >= 0 ? `+${mod}` : mod;
+                totalEl.textContent = total === null ? '—' : total;
+            });
+        }
+
+        function setClassDetails() {
+            const info = classMap[state.classId];
+            if (!info) {
+                elements.classDetails.textContent = 'Выберите класс, чтобы увидеть бонусы.';
+                updateAbilityButton();
+                return;
+            }
+            const mods = Object.entries(info.mods).map(([k,v]) => `${k}: ${v>0?'+':''}${v}`).join(', ');
+            elements.classDetails.textContent = `${info.name}. Бонусы: ${mods}. Способность: ${info.ability}`;
+            elements.useAbility.textContent = `✨ ${info.ability}`;
+            updateAbilityButton();
+        }
+
+        // ---------- Storage ----------
+        function saveToStorage() {
+            const payload = {
+                level: state.level,
+                xp: state.xp,
+                rests: state.rests,
+                stats: state.stats,
+                classId: state.classId,
+                enemyIndex: state.enemyIndex,
+                abilityCooldown: state.abilityCooldown,
+                buffTurns: state.buffTurns,
+                buffs: state.buffs,
+                enemyDebuff: state.enemyDebuff,
+                playerHp: state.playerHp,
+                freeRoll: state.freeRoll,
+                name: document.getElementById('charName').value,
+                background: document.getElementById('charBackground').value,
+                group: document.getElementById('charGroup').value,
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+        }
+
+        function loadFromStorage() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            try {
+                const data = JSON.parse(raw);
+                state.level = data.level || 1;
+                state.xp = data.xp || 0;
+                state.rests = data.rests ?? 3;
+                state.stats = data.stats || state.stats;
+                state.classId = data.classId || '';
+                state.enemyIndex = data.enemyIndex || 0;
+                state.abilityCooldown = data.abilityCooldown || 0;
+                state.buffTurns = data.buffTurns || 0;
+                state.buffs = data.buffs || { luck: 0, intelligence: 0 };
+                state.enemyDebuff = data.enemyDebuff || 0;
+                state.playerHp = data.playerHp || null;
+                state.freeRoll = data.freeRoll ?? null;
+                document.getElementById('charName').value = data.name || '';
+                document.getElementById('charBackground').value = data.background || '';
+                document.getElementById('charGroup').value = data.group || '';
+                document.getElementById('charClass').value = state.classId;
+            } catch (e) { console.warn('load failed', e); }
+        }
+
+        // ---------- Character ----------
+        function rollStat(key) {
+            const value = rollD20();
+            state.stats[key].base = value;
+            const card = elements.statsGrid.querySelector(`[data-stat="${key}"]`);
+            card.classList.add('pulse');
+            setTimeout(() => card.classList.remove('pulse'), 500);
+            renderStatsValues();
+            log(`🎲 ${key} = ${value}`, 'info');
+            saveToStorage();
+        }
+
+        function rollAll() {
+            statList.forEach(({ key }) => rollStat(key));
+        }
+
+        function assignFree() {
+            if (state.freeRoll === null) {
+                log('Сначала сделайте свободный бросок.', 'info');
+                return;
+            }
+            const target = elements.assignSelect.value;
+            if (!target) return;
+            state.stats[target].base = state.freeRoll;
+            state.freeRoll = null;
+            elements.freeRollValue.textContent = '—';
+            renderStatsValues();
+            saveToStorage();
+        }
+
+        function validateForm() {
+            if (!document.getElementById('charName').value.trim()) return false;
+            if (!document.getElementById('charBackground').value) return false;
+            if (!document.getElementById('charClass').value) return false;
+            if (!document.getElementById('charGroup').value.trim()) return false;
+            const unrolled = statList.some(({ key }) => state.stats[key].base === null);
+            return !unrolled;
+        }
+
+        function resetCharacter(logReset = true) {
+            state.level = 1;
+            state.xp = 0;
+            state.rests = 3;
+            state.classId = '';
+            state.enemy = null;
+            state.enemyIndex = 0;
+            state.playerHp = null;
+            state.freeRoll = null;
+            state.enemyDebuff = 0;
+            state.abilityCooldown = 0;
+            state.buffTurns = 0;
+            state.buffs = { luck: 0, intelligence: 0 };
+            statList.forEach(({ key }) => state.stats[key] = { base: null, total: null });
+            document.getElementById('charName').value = '';
+            document.getElementById('charBackground').value = '';
+            document.getElementById('charClass').value = '';
+            document.getElementById('charGroup').value = '';
+            elements.freeRollValue.textContent = '—';
+            elements.assignSelect.value = '';
+            elements.classDetails.textContent = 'Выберите класс, чтобы увидеть бонусы.';
+            elements.victoryModal.hidden = true;
+            elements.levelModal.hidden = true;
+            elements.defeatModal.hidden = true;
+            elements.resetModal.hidden = true;
+            localStorage.removeItem(STORAGE_KEY);
+            renderStatsValues();
+            updateAbilityButton();
+            updateBattleUI();
+            if (elements.battleLog) elements.battleLog.innerHTML = '';
+            if (logReset) log('Персонаж сброшен. Заполните лист заново.', 'info');
+        }
+
+        function openResetModal(fromDefeat = false) {
+            if (fromDefeat) {
+                elements.resetTitle.textContent = 'Поражение — новый герой';
+                elements.resetMessage.textContent = 'Прогресс лабораторий сброшен. Начните с первого уровня.';
+            } else {
+                elements.resetTitle.textContent = 'Новый персонаж';
+                elements.resetMessage.textContent = 'Все характеристики и прогресс будут очищены.';
+            }
+            elements.resetModal.hidden = false;
+        }
+
+        // ---------- Battle ----------
+        function deriveCombat() {
+            const mainKey = classStatKey();
+            const mainStat = effectiveStat(mainKey);
+            const luck = effectiveStat('luck');
+            const dex = effectiveStat('dexterity');
+            const con = state.stats.constitution.total || 0;
+            const maxHp = 20 + con * 3;
+            const attackBonus = Math.floor(mainStat / 4) + Math.floor(luck / 6);
+            const rollLuck = Math.floor(luck / 3);
+            const baseDamageBonus = Math.floor(mainStat / 3);
+            const ac = 10 + Math.floor(dex / 4);
+            return { maxHp, attackBonus, rollLuck, baseDamageBonus, ac, mainStat, luck };
+        }
+
+        function ensureEnemy() {
+            if (state.enemy && state.enemy.hp > 0) return state.enemy;
+            const enemy = enemies[state.enemyIndex];
+            if (!enemy) return null;
+            state.enemy = {
+                ...enemy,
+                hp: enemy.hp,
+                maxHp: enemy.hp,
+                ac: enemy.ac,
+            };
+            return state.enemy;
+        }
+
+        function updateBattleUI() {
+            elements.levelValue.textContent = state.level;
+            elements.combatLevel.textContent = state.level;
+            elements.progressText.textContent = `${state.enemyIndex} / ${enemies.length}`;
+            elements.progressXP.textContent = state.xp;
+            elements.restCount.textContent = state.rests;
+            const playerName = document.getElementById('charName').value || 'Игрок';
+            elements.playerNameDisplay.textContent = playerName;
+
+            const derived = deriveCombat();
+            const currentEnemy = state.enemy || enemies[state.enemyIndex];
+            if (state.playerHp === null) state.playerHp = derived.maxHp;
+            const hpPercent = Math.max(0, Math.min(100, (state.playerHp / derived.maxHp) * 100));
+            elements.playerHPText.textContent = `${state.playerHp}/${derived.maxHp}`;
+            elements.playerHPFill.style.width = `${hpPercent}%`;
+            elements.playerHPFill.style.background = hpPercent < 30 ? 'linear-gradient(90deg,#ff5e57,#ff9f0a)' :
+                hpPercent < 60 ? 'linear-gradient(90deg,#ff9f0a,#ffd60a)' : 'linear-gradient(90deg,#34c759,#a0f35a)';
+            elements.playerAttack.textContent = derived.attackBonus;
+            elements.playerDefense.textContent = derived.ac;
+            elements.playerLuck.textContent = derived.rollLuck;
+
+            if (currentEnemy) {
+                elements.enemyNameDisplay.textContent = currentEnemy.name;
+                const ep = state.enemy ? (state.enemy.hp / state.enemy.maxHp) * 100 : 100;
+                const ePercent = Math.max(0, Math.min(100, ep));
+                elements.enemyHPText.textContent = state.enemy ? `${state.enemy.hp}/${state.enemy.maxHp}` : `${currentEnemy.hp}/${currentEnemy.hp}`;
+                elements.enemyHPFill.style.width = `${ePercent}%`;
+                elements.enemyHPFill.style.background = ePercent < 30 ? 'linear-gradient(90deg,#ff5e57,#ff9f0a)' :
+                    ePercent < 60 ? 'linear-gradient(90deg,#ff9f0a,#ffd60a)' : 'linear-gradient(90deg,#34c759,#a0f35a)';
+                elements.enemyDamage.textContent = currentEnemy.dmg;
+                elements.enemyDefense.textContent = (state.enemy?.ac ?? currentEnemy.ac);
+                elements.enemyReward.textContent = `${currentEnemy.xp} XP`;
+                const stars = '★'.repeat(Math.min(5, state.enemyIndex + 1)) + '☆'.repeat(Math.max(0, 5 - state.enemyIndex - 1));
+                elements.enemyDifficulty.textContent = stars;
+            } else {
+                elements.enemyNameDisplay.textContent = 'Пройдено все';
+            }
+
+            const progress = (state.enemyIndex / enemies.length) * 100;
+            elements.labProgressFill.style.width = `${progress}%`;
+            elements.labProgressText.textContent = `${state.enemyIndex}/${enemies.length}`;
+            updateAbilityButton();
+        }
+
+        function log(message, type = 'info') {
+            if (!elements.battleLog) return;
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = message;
+            elements.battleLog.appendChild(entry);
+            elements.battleLog.scrollTop = elements.battleLog.scrollHeight;
+        }
+
+        function consumeBuffTurn() {
+            if (state.buffTurns > 0) {
+                state.buffTurns -= 1;
+                if (state.buffTurns === 0) state.buffs = { luck: 0, intelligence: 0 };
+            }
+        }
+
+        function advanceTurn() {
+            consumeBuffTurn();
+            if (state.abilityCooldown > 0) state.abilityCooldown -= 1;
+            updateAbilityButton();
+        }
+
+        function playerAttack() {
+            const enemy = ensureEnemy();
+            if (!enemy) { log('Все лабы пройдены!', 'victory'); return; }
+            if (!validateForm()) { log('Заполните лист и бросьте характеристики.', 'info'); return; }
+            const derived = deriveCombat();
+            const roll = rollD20();
+            const attackTotal = roll + derived.attackBonus + derived.rollLuck;
+            const enemyAc = enemy.ac - state.enemyDebuff;
+            if (roll === 20) log('Критический успех!', 'victory');
+            if (attackTotal >= enemyAc) {
+                const damage = rollDiceString('1d6') + derived.baseDamageBonus;
+                enemy.hp = Math.max(0, enemy.hp - damage);
+                log(`Вы атакуете (${roll}+${derived.attackBonus}+${derived.rollLuck}) ≥ ${enemyAc}. Урон: ${damage}.`, 'damage');
+                if (enemy.hp <= 0) {
+                    handleVictory(enemy);
+                    return;
+                }
+            } else {
+                log(`Промах (${attackTotal} < ${enemyAc}).`, 'info');
+            }
+            enemyAttack();
+            state.enemyDebuff = 0;
+            advanceTurn();
+            saveToStorage();
+            updateBattleUI();
+        }
+
+        function enemyAttack() {
+            const enemy = state.enemy;
+            const derived = deriveCombat();
+            const roll = rollD20();
+            const hit = roll + 2 >= derived.ac;
+            if (hit) {
+                const dmg = rollDiceString(enemy.dmg);
+                state.playerHp = Math.max(0, state.playerHp - dmg);
+                log(`${enemy.name} бьёт (${roll+2} против ${derived.ac}) на ${dmg} урона.`, 'damage');
+                if (state.playerHp <= 0) {
+                    handleDefeat();
+                }
+            } else {
+                log(`${enemy.name} промахивается (${roll+2} < ${derived.ac}).`, 'info');
+            }
+        }
+
+        function handleVictory(enemy) {
+            state.xp += enemy.xp;
+            log(`Победа над ${enemy.name}! +${enemy.xp} XP`, 'victory');
+            elements.victoryName.textContent = enemy.name;
+            elements.victoryXP.textContent = enemy.xp;
+            elements.victoryModal.hidden = false;
+            state.enemy = null;
+            state.enemyIndex = Math.min(enemies.length, state.enemyIndex + 1);
+            const derived = deriveCombat();
+            state.playerHp = derived.maxHp;
+            state.buffTurns = 0;
+            state.buffs = { luck: 0, intelligence: 0 };
+            maybeLevelUp();
+            advanceTurn();
+            saveToStorage();
+            updateBattleUI();
+        }
+
+        function handleDefeat() {
+            log('Вы пали в бою.', 'defeat');
+            resetCharacter(false);
+            openResetModal(true);
+        }
+
+        function restPlayer() {
+            if (state.rests <= 0) { log('Отдыхов больше нет.', 'info'); return; }
+            state.rests -= 1;
+            state.playerHp = deriveCombat().maxHp;
+            log('Отдых восстановил HP.', 'heal');
+            advanceTurn();
+            saveToStorage();
+            updateBattleUI();
+        }
+
+        function useAbility() {
+            if (!state.classId) { log('Выберите класс.', 'info'); return; }
+            if (!validateForm()) { log('Заполните лист и бросьте характеристики.', 'info'); return; }
+            if (state.abilityCooldown > 0) {
+                log(`Способность будет готова через ${state.abilityCooldown} хода(ов).`, 'info');
+                return;
+            }
+            const cls = state.classId;
+            state.buffs = { luck: 0, intelligence: 0 };
+            if (cls === 'leader') {
+                state.buffs.luck = 10;
+                state.buffTurns = 1;
+                log('Удача старосты: +10 к удаче на следующий ход.', 'info');
+            } else if (cls === 'nerd') {
+                state.enemyDebuff = 2;
+                state.buffTurns = 0;
+                log('Скан уязвимостей: защита врага -2 на ход.', 'info');
+            } else if (cls === 'vibe') {
+                state.buffs.intelligence = 10;
+                state.buffTurns = 1;
+                log('Код разума: +10 к интеллекту на следующий ход.', 'info');
+            }
+            state.abilityCooldown = 3;
+            updateAbilityButton();
+            saveToStorage();
+            updateBattleUI();
+        }
+
+        function maybeLevelUp() {
+            while (state.xp >= 100) {
+                state.xp -= 100;
+                state.level += 1;
+                // +1 ко всем
+                statList.forEach(({ key }) => {
+                    if (state.stats[key].base !== null) state.stats[key].base += 1;
+                });
+                renderStatsValues();
+                openLevelModal();
+            }
+        }
+
+        function openLevelModal() {
+            elements.levelChoices.innerHTML = '';
+            statList.forEach(({ key, label }) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice';
+                btn.dataset.stat = key;
+                btn.textContent = `${label} +2`;
+                btn.addEventListener('click', () => {
+                    elements.levelChoices.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    elements.confirmLevelUp.disabled = false;
+                    elements.confirmLevelUp.dataset.stat = key;
+                });
+                elements.levelChoices.appendChild(btn);
+            });
+            elements.levelModal.hidden = false;
+        }
+
+        function confirmLevelUp() {
+            const stat = elements.confirmLevelUp.dataset.stat;
+            if (!stat) return;
+            if (state.stats[stat].base !== null) state.stats[stat].base += 2;
+            elements.levelModal.hidden = true;
+            renderStatsValues();
+            const derived = deriveCombat();
+            state.playerHp = derived.maxHp;
+            log(`Уровень ${state.level}: +2 к ${stat}`, 'victory');
+            saveToStorage();
+        }
+
+        // ---------- Events ----------
+        function bindEvents() {
+            document.getElementById('charClass').addEventListener('change', (e) => {
+                state.classId = e.target.value;
+                setClassDetails();
+                renderStatsValues();
+                saveToStorage();
+            });
+            elements.rollAll.addEventListener('click', rollAll);
+            elements.saveCharacter.addEventListener('click', () => { saveToStorage(); log('Лист сохранён', 'info'); });
+            elements.freeRoll.addEventListener('click', () => {
+                state.freeRoll = rollD20();
+                elements.freeRollValue.textContent = state.freeRoll;
+                elements.freeRollValue.style.animation = 'dice-roll .5s ease';
+                setTimeout(() => elements.freeRollValue.style.animation = '', 500);
+                saveToStorage();
+            });
+            elements.assignRoll.addEventListener('click', assignFree);
+            elements.statsGrid.addEventListener('click', (e) => {
+                const btn = e.target.closest('.mini-roll');
+                if (btn) rollStat(btn.dataset.roll);
+            });
+            elements.battleStart.addEventListener('click', () => { ensureEnemy(); updateBattleUI(); log('Бой начат.', 'info'); });
+            elements.battleAttack.addEventListener('click', playerAttack);
+            elements.useAbility.addEventListener('click', useAbility);
+            elements.battleRest.addEventListener('click', restPlayer);
+            elements.nextLabBtn.addEventListener('click', () => { elements.victoryModal.hidden = true; ensureEnemy(); updateBattleUI(); });
+            elements.confirmLevelUp.addEventListener('click', confirmLevelUp);
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            elements.battleLog.addEventListener('dblclick', () => { elements.battleLog.innerHTML = ''; });
+            elements.newCharacterBtn.addEventListener('click', () => { openResetModal(false); });
+            elements.confirmReset.addEventListener('click', () => { resetCharacter(); });
+            elements.cancelReset.addEventListener('click', () => { elements.resetModal.hidden = true; });
+            elements.openResetBtn?.addEventListener('click', () => { elements.defeatModal.hidden = true; openResetModal(true); });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && document.activeElement.tagName === 'INPUT') {
+                    saveToStorage();
+                }
+            });
+        }
+
+        function toggleTheme() {
+            const next = document.body.classList.contains('dark') ? 'light' : 'dark';
+            document.body.classList.toggle('dark', next === 'dark');
+            localStorage.setItem(THEME_KEY, next);
+            elements.themeToggle.innerHTML = next === 'dark' ? '<i class="fa-regular fa-sun"></i> Светлая тема' : '<i class="fa-regular fa-moon"></i> Тёмная тема';
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem(THEME_KEY);
+            if (saved === 'dark') document.body.classList.add('dark');
+            elements.themeToggle.innerHTML = document.body.classList.contains('dark') ? '<i class="fa-regular fa-sun"></i> Светлая тема' : '<i class="fa-regular fa-moon"></i> Тёмная тема';
+        }
+
+        // ---------- Init ----------
+        function init() {
+            renderStatCards();
+            loadFromStorage();
+            setClassDetails();
+            renderStatsValues();
+            initTheme();
+            bindEvents();
+            updateBattleUI();
+            log('Добро пожаловать! Заполните лист и начните бой.', 'info');
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
